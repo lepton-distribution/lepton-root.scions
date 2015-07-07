@@ -70,7 +70,7 @@ Global Declaration
 =============================================*/
 static const char banner[] = "\
 lepton (tauon) posix os\r\n\
-$Revision: 1.3 $ $Date: 2009-06-18 13:43:22 $\r\n\
+scion version\r\n\
 ";
 
 

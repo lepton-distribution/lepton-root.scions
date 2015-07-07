@@ -27,10 +27,8 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/ioctl_eth.h"
 //#include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
-//#include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx_eth.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4x7_eth.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
-#include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/eth.h"
 #include <string.h>

@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -978,22 +978,10 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_eth.c</name>
               </file>
               <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_olimex_board.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_3.c</name>
-              </file>
-              <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.c</name>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_uart_1.c</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_uart_6.c</name>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_uart_x.c</name>
@@ -1226,12 +1214,6 @@
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\stm32f4x7_eth_conf.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\target.h</name>
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\types.h</name>

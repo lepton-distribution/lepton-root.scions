@@ -2,6 +2,9 @@
 
 <workspace>
   <project>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\bsp\discovery_f4\bsp_discovery_f4_7.30.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\dev_stm32f4xx_7.20.ewp</path>
   </project>
   <project>
@@ -13,6 +16,10 @@
   <batchBuild>
     <batchDefinition>
       <name>all debug</name>
+      <member>
+        <project>bsp_discovery_f4_7.30</project>
+        <configuration>Debug</configuration>
+      </member>
       <member>
         <project>dev_stm32f4xx_7.20</project>
         <configuration>Debug</configuration>

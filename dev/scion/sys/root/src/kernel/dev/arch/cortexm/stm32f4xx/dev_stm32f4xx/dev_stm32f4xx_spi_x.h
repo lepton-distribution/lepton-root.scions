@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef __DEV_STM32F4XX_UART_X_H__
-#define __DEV_STM32F4XX_UART_X_H__
+#ifndef __DEV_STM32F4XX_SPI_X_H__
+#define __DEV_STM32F4XX_SPI_X_H__
 
 
 /*============================================

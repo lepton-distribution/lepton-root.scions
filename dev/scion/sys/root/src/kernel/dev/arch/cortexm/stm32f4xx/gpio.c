@@ -29,7 +29,6 @@ either the MPL or the [eCos GPL] License."
 /* Includes ------------------------------------------------------------------*/
 #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
-#include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
 
 /* Private define ------------------------------------------------------------*/
@@ -58,6 +57,8 @@ typedef __packed union
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
+
+#if 0
 /*******************************************************************************
 * Function Name  : gpio_startup_init
 * Description    : Initialize all defined GPIOs
@@ -76,6 +77,7 @@ void gpio_startup_init(void)
   /* Initialize GPIO */
   for (i = 0 ; i < GPIO_NB ; i++) if (Gpio_Descriptor[i].Init) gpio_init((&Gpio_Descriptor[i]));
 }
+#endif
 
 /*******************************************************************************
 * Function Name  : gpio_set_mode

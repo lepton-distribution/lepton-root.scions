@@ -32,8 +32,7 @@ Compiler Directive
 #define USE_LWIP
 #define USE_IF_ETHERNET
 //specific target include for pinout definition
-
-#include "kernel/dev/arch/cortexm/stm32f4xx/target.h"
+#include "kernel/dev/bsp/olimex_p407/dev_olimex_p407_board/dev_olimex_p407_board.h"
 
 #define __USER_MONGOOSE_PTHREAD_STACK_SIZE   (8*1024)
 #define __USER_MONGOOSE_CGI_ENVIRONMENT_SIZE (2*1024)

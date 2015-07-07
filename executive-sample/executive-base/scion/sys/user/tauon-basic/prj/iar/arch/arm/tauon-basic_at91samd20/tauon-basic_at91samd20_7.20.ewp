@@ -29,7 +29,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.30.1.7765</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -1012,7 +1012,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
@@ -1120,12 +1120,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
@@ -1953,7 +1953,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -2061,12 +2061,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -3037,49 +3037,6 @@
         </group>
       </group>
     </group>
-  </group>
-  <group>
-    <name>test</name>
-    <excluded>
-      <configuration>Debug</configuration>
-      <configuration>freertos-debug</configuration>
-    </excluded>
-    <group>
-      <name>portable</name>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\port.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\portasm.s</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\IAR\ARM_CM0\portmacro.h</name>
-      </file>
-    </group>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\croutine.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\event_groups.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\portable\MemMang\heap_3.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\lepton_test.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\list.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\queue.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\tasks.c</name>
-    </file>
-    <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\freeRTOS_8-0-0\source\timers.c</name>
-    </file>
   </group>
 </project>
 

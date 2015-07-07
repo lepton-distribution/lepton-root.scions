@@ -2864,11 +2864,7 @@
     <group>
       <name>lib</name>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\Debug\Exe\dev_stm32f4xx_6.21.a</name>
-        <excluded>
-          <configuration>Debug</configuration>
-          <configuration>freertos-debug</configuration>
-        </excluded>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\bsp_discovery_f4_7.30\Debug\Exe\bsp_discovery_f4_7.30.a</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\Debug\Exe\dev_stm32f4xx_7.20.a</name>
@@ -2876,20 +2872,6 @@
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM4_386\Lib\os7m_tl__sp.a</name>
         <excluded>
-          <configuration>freertos-debug</configuration>
-        </excluded>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4-debug\Exe\tauon_6.21.a</name>
-        <excluded>
-          <configuration>Debug</configuration>
-          <configuration>freertos-debug</configuration>
-        </excluded>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_6.21.a</name>
-        <excluded>
-          <configuration>Debug</configuration>
           <configuration>freertos-debug</configuration>
         </excluded>
       </file>
