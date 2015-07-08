@@ -2011,7 +2011,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.30.1.7765</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -2913,6 +2913,9 @@
     <name>tauon</name>
     <group>
       <name>lib</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\bsp_samd20xplained_pro_7.30\Debug\Exe\bsp_samd20xplained_pro_7.30.a</name>
+      </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\at91samd20\Debug\Exe\dev_at91samd20_7.20.a</name>
       </file>

@@ -100,15 +100,15 @@
       <!-- /dev/cpu0 cortexM0+ cpu device -->
       <dev name="dev_at91_map"                   use="off"/>
       <!-- /dev/cpu0 -->
-	   <dev name="dev_lm3s_cpu_map"               use="on"/>
+	   <dev name="dev_lm3s_cpu_map"               use="off"/>
 	   <!-- /dev/board -->
-	   <dev name="dev_at91samd20_xplained_pro_board_map" use="on"/>
+	   <dev name="dev_samd20xplained_pro_board_map" use="on"/>
       <!-- /dev/ttys3 -->
-      <dev name="dev_at91samd20_uart_s3_map"      use="on"/>
+      <dev name="dev_samd20xplained_pro_uart_3_map"      use="on"/>
 	   <!-- /dev/itm0 -->
-      <dev name="dev_cmsis_itm0_map"             use="on"/>
+      <dev name="dev_cmsis_itm0_map"             use="off"/>
 	   <!-- /dev/debug -->
-      <dev name="dev_os_debug_map"               use="on"/>
+      <dev name="dev_os_debug_map"               use="off"/>
    </devices>
 </target>
 

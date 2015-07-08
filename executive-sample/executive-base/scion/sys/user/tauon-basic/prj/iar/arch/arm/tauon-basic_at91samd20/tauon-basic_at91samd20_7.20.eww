@@ -2,6 +2,9 @@
 
 <workspace>
   <project>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\bsp\samd20xplained_pro\bsp_samd20xplained_pro_7.30.ewp</path>
+  </project>
+  <project>
     <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\at91samd20\dev_at91samd20_7.20.ewp</path>
   </project>
   <project>
@@ -13,6 +16,10 @@
   <batchBuild>
     <batchDefinition>
       <name>freertos-debug</name>
+      <member>
+        <project>bsp_samd20xplained_pro_7.30</project>
+        <configuration>Debug</configuration>
+      </member>
       <member>
         <project>dev_at91samd20_7.20</project>
         <configuration>Debug</configuration>

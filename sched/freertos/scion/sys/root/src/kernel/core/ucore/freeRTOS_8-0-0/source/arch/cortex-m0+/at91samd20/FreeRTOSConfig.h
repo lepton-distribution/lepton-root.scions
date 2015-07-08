@@ -84,7 +84,7 @@
 #define configUSE_TIME_SLICING      1
 #define configUSE_IDLE_HOOK				0
 #define configUSE_TICK_HOOK				1
-#define configCPU_CLOCK_HZ				( dev_at91samd20_xplained_pro_board_clock_source_get_hz() )
+#define configCPU_CLOCK_HZ				( dev_samd20xplained_pro_board_clock_source_get_hz() )
 #define configTICK_RATE_HZ				( ( portTickType ) 1000 )
 #define configMAX_PRIORITIES			( ( unsigned portBASE_TYPE ) 8 )
 #define configMINIMAL_STACK_SIZE		( ( unsigned short ) 70 )

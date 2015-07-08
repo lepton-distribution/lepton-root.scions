@@ -4,6 +4,10 @@ Compiler Directive
 #ifndef _USER_KERNEL_MKCONF_H_
 #define _USER_KERNEL_MKCONF_H_
 
+//force definition of realtime kernel
+#define __KERNEL_UCORE_FREERTOS
+//#define __KERNEL_UCORE_EMBOS
+
 //see kernel/core/kernelconf.h
 //specific target include for at91samd20 xplaind pro board
 extern unsigned int dev_at91samd20_xplained_pro_board_clock_source_get_hz(void);

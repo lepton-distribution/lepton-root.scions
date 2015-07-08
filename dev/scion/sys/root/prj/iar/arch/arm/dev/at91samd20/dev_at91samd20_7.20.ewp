@@ -29,7 +29,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.30.1.7765</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -1008,7 +1008,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
@@ -1116,12 +1116,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>0</state>
         </option>
         <option>
@@ -2053,31 +2053,10 @@
           <group>
             <name>at91samd20_uart</name>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_3.c</name>
-            </file>
-            <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.c</name>
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.h</name>
-            </file>
-          </group>
-          <group>
-            <name>at91samd20_xplained_pro_board</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_xplained_pro_board\at91samd20_xplained_pro_board.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_xplained_pro_board\at91samd20_xplained_pro_board_clock.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_xplained_pro_board\at91samd20_xplained_pro_board_conf_clocks.h</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_xplained_pro_board\at91samd20_xplained_pro_board_init.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_xplained_pro_board\dev_at91samd20_xplained_pro_board.c</name>
             </file>
           </group>
         </group>
