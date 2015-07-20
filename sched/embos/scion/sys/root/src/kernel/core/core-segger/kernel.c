@@ -360,6 +360,48 @@ void _kernel_warmup_rootfs(void){
 }
 
 /*--------------------------------------------
+| Name:        _kernel_warmup_cpu
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void _kernel_warmup_cpu(void){
+   desc_t desc;
+   char ref[16];
+   dev_t dev;
+
+   for(dev=0; dev<max_dev; dev++) { //(MAX_DEV-1) last dev is NULL
+      if(!pdev_lst[dev]) continue;
+      //
+      if(   pdev_lst[dev]->dev_name[0]=='c'
+            && pdev_lst[dev]->dev_name[1]=='p'
+            && pdev_lst[dev]->dev_name[2]=='u'
+            && pdev_lst[dev]->dev_name[3]=='0') {
+
+         //load dev
+         if(pdev_lst[dev]->fdev_load)
+            if(pdev_lst[dev]->fdev_load()<0)
+               continue;
+
+         //spi interface
+         strcpy(ref,"/dev/");
+         strcat(ref,pdev_lst[dev]->dev_name);
+         _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
+         //
+         __set_cpu((fdev_map_t*)pdev_lst[dev]); 
+      }
+   }
+   
+   //
+   if((desc = _vfs_open("/dev/cpu0",O_RDWR,0))<0)
+      return;  //cpu device not available
+   //
+   __set_cpu_desc(desc);
+}
+
+/*--------------------------------------------
 | Name:        _kernel_warmup_load_mount_cpufs
 | Description:
 | Parameters:  none
@@ -557,18 +599,7 @@ void _kernel_warmup_dev(void){
               && pdev_lst[dev]->dev_name[1]=='p'
               && pdev_lst[dev]->dev_name[2]=='u'
               && pdev_lst[dev]->dev_name[3]=='0') {
-         //cpu device
-
-         //load dev
-         if(pdev_lst[dev]->fdev_load)
-            if(pdev_lst[dev]->fdev_load()<0)
-               continue;
-
-         strcpy(ref,"/dev/");
-         strcat(ref,pdev_lst[dev]->dev_name);
-
-         _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
-         __set_cpu((fdev_map_t*)pdev_lst[dev]);
+         //already mount see _kernel_warmup_cpu
 
       }else{
          //load dev
@@ -636,21 +667,6 @@ int _kernel_warmup_object_manager(void){
    int kernel_object_no = __KERNEL_OBJECT_POOL_MAX;
 
    return kernel_object_manager_pool(kernel_object_no);
-}
-
-/*--------------------------------------------
-| Name:        _kernel_warmup_cpu
-| Description:
-| Parameters:  none
-| Return Type: none
-| Comments:
-| See:
-----------------------------------------------*/
-void _kernel_warmup_cpu(void){
-   desc_t desc;
-   if((desc = _vfs_open("/dev/cpu0",O_RDWR,0))<0)
-      return;  //cpu device not available
-   __set_cpu_desc(desc);
 }
 
 
@@ -1071,6 +1087,8 @@ void _start_kernel(char* arg){
    //detect and create devices in /dev
    _kernel_warmup_rootfs();
    //
+   _kernel_warmup_cpu();
+   //
    _kernel_warmup_load_mount_cpufs();
    //
    _kernel_warmup_i2c();
@@ -1082,8 +1100,6 @@ void _start_kernel(char* arg){
    _kernel_warmup_stream();
    //
    _kernel_warmup_object_manager();
-   //
-   _kernel_warmup_cpu();
    //
    _kernel_warmup_rtc();
    //
