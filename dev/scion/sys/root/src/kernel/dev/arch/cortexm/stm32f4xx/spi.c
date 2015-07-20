@@ -54,11 +54,23 @@ void spi_open(const _Spi_Descriptor *Spi)
   (*Spi->RCC_APBxPeriphClockCmd)(Spi->RCC_APBxPeriph, ENABLE);
 
   /* Init GPIO */
-  gpio_set_function(Spi->MISO, Spi->GPIO_AF);
-  gpio_set_function(Spi->MOSI, Spi->GPIO_AF);
+  if(Spi->MISO!=(_Gpio_Descriptor*)0){
+     gpio_set_function(Spi->MISO, Spi->GPIO_AF);
+  }
+  if(Spi->MOSI!=(_Gpio_Descriptor*)0){
+     gpio_set_function(Spi->MOSI, Spi->GPIO_AF);
+  }
+  //
   gpio_set_function(Spi->SCK, Spi->GPIO_AF);
-  gpio_set_mode(Spi->MISO, GPIO_MODE_AF, 0);
-  gpio_set_mode(Spi->MOSI, GPIO_MODE_AF, 0);
+  //
+  if(Spi->MISO!=(_Gpio_Descriptor*)0){
+     gpio_set_mode(Spi->MISO, GPIO_MODE_AF, 0);
+  }
+  //
+  if(Spi->MOSI!=(_Gpio_Descriptor*)0){
+     gpio_set_mode(Spi->MOSI, GPIO_MODE_AF, 0);
+  }
+  //
   gpio_set_mode(Spi->SCK, GPIO_MODE_AF, 0);
 
   /* Init SPI peripheral */
@@ -94,8 +106,10 @@ void spi_open(const _Spi_Descriptor *Spi)
   }
     /* Set clock speed */
   RCC_GetClocksFreq(&rcc_clocks);
-  if (Spi->RCC_APBxPeriphClockCmd == RCC_APB2PeriphClockCmd) pclk = rcc_clocks.PCLK2_Frequency / 2;
-  else pclk = rcc_clocks.PCLK1_Frequency / 2;
+  if (Spi->RCC_APBxPeriphClockCmd == RCC_APB2PeriphClockCmd) 
+    pclk = rcc_clocks.PCLK2_Frequency / 2;
+  else 
+    pclk = rcc_clocks.PCLK1_Frequency / 2;
   while ((pclk > Spi->MaxFreq) && (spi_init_structure.SPI_BaudRatePrescaler < SPI_BaudRatePrescaler_256))
   {
     pclk /= 2;
