@@ -17,19 +17,19 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>lib-debug\lib</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Lib</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>lib-debug\obj</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>lib-debug\list</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\List</state>
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
@@ -87,7 +87,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.30.1.7765</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -99,7 +99,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -137,12 +137,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
@@ -973,19 +973,19 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>tauon-kernel-cortex-m4-debug\Exe</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Lib</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>tauon-kernel-cortex-m4-debug\Obj</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>tauon-kernel-cortex-m4-debug\List</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\List</state>
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
@@ -1043,7 +1043,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.30.1.7765</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1055,7 +1055,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -1093,12 +1093,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>39</state>
         </option>
         <option>
@@ -1907,7 +1907,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\tauon\sys\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4-debug\Exe\tauon_7.20.a</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Lib\tauon_7.20.a</state>
         </option>
       </data>
     </settings>
@@ -1944,7 +1944,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
@@ -2052,12 +2052,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
@@ -2902,7 +2902,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
@@ -3010,12 +3010,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>38</state>
         </option>
         <option>
@@ -3861,7 +3861,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
@@ -3969,12 +3969,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>40</state>
         </option>
         <option>
@@ -4821,7 +4821,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
@@ -4929,12 +4929,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>12</state>
         </option>
         <option>
@@ -5781,7 +5781,7 @@
         </option>
         <option>
           <name>Variant</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -5889,12 +5889,12 @@
         </option>
         <option>
           <name>GFPUCoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>20</version>
+          <version>21</version>
           <state>35</state>
         </option>
         <option>
@@ -9499,6 +9499,15 @@
             </file>
           </group>
           <group>
+            <name>lcd</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\lcd\dev_oled_ssd1322.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\lcd\dev_oled_ssd1322.h</name>
+            </file>
+          </group>
+          <group>
             <name>ppp</name>
             <group>
               <name>dev_ppp_uip</name>
@@ -9702,6 +9711,12 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\dev_tty\tty_font-8x16.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\dev_tty\tty_font-8x8.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\dev_tty\tty_font.h</name>
         </file>
       </group>
     </group>
