@@ -330,6 +330,7 @@ typedef struct
   */ 
 #define GPIO_AF_EVENTOUT      ((uint8_t)0x0F)  /* EVENTOUT Alternate Function mapping */
 
+#if !defined(STM32F429xx) /* see in stm32f4xx_hal_gpio_ex.h */
 #define IS_GPIO_AF(AF)   (((AF) == GPIO_AF_RTC_50Hz)  || ((AF) == GPIO_AF_TIM14)  || \
                           ((AF) == GPIO_AF_MCO)       || ((AF) == GPIO_AF_TAMPER) || \
                           ((AF) == GPIO_AF_SWJ)       || ((AF) == GPIO_AF_TRACE)  || \
@@ -348,6 +349,7 @@ typedef struct
                           ((AF) == GPIO_AF_ETH)       || ((AF) == GPIO_AF_FSMC)   || \
                           ((AF) == GPIO_AF_OTG_HS_FS) || ((AF) == GPIO_AF_SDIO)   || \
                           ((AF) == GPIO_AF_DCMI)      || ((AF) == GPIO_AF_EVENTOUT))
+#endif
 /**
   * @}
   */ 
