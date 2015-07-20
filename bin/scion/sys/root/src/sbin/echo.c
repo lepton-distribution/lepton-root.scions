@@ -53,7 +53,7 @@ int echo_main(int argc,char* argv[]){
    char buf[32];
    int cb;
    int i;
-
+   //
    if(argc<1) {
       while((cb=read(0,buf,sizeof(buf)))) {
          int i;
@@ -63,7 +63,7 @@ int echo_main(int argc,char* argv[]){
          write(1,buf,cb);
       }
    }
-
+   //
    for(i=1; i<argc; i++) {
       int l=strlen(argv[i]);
       cb=0;
@@ -74,9 +74,9 @@ int echo_main(int argc,char* argv[]){
          cb+=w;
       }
    }
-
-   write(1,"\n\r\n",3);
-
+   //
+   write(1,"\r\n",2);
+   //
    return 0;
 }
 /*============================================
