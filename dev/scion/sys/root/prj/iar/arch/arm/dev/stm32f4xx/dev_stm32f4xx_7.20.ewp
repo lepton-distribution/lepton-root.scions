@@ -17,15 +17,15 @@
         <debug>1</debug>
         <option>
           <name>ExePath</name>
-          <state>Debug\Exe</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Lib</state>
         </option>
         <option>
           <name>ObjPath</name>
-          <state>Debug\Obj</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Obj</state>
         </option>
         <option>
           <name>ListPath</name>
-          <state>Debug\List</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\List</state>
         </option>
         <option>
           <name>Variant</name>
@@ -179,6 +179,7 @@
           <state>_OS_LIBMODE_R</state>
           <state>NDEBUG</state>
           <state>USE_STDPERIPH_DRIVER</state>
+          <state>STM32F429xx</state>
         </option>
         <option>
           <name>CCPreprocFile</name>
@@ -321,6 +322,8 @@
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
           <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+          <state>c:/tauon/sys/root/src/kernel/dev/arch/cortexm\stm32f4xx/cubemx_hal_driver/inc</state>
+          <state>c:/tauon/sys/root/src/kernel/dev/arch/cortexm\stm32f4xx/cubemx_hal_driver/inc/legacy</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -952,7 +955,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\tauon\sys\root\prj\iar\arch\arm\dev\stm32f4xx\Debug\Exe\dev_stm32f4xx_7.20.a</state>
+          <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\Lib\dev_stm32f4xx_7.20.a</state>
         </option>
       </data>
     </settings>
@@ -974,6 +977,9 @@
             <name>stm32f4xx</name>
             <group>
               <name>dev_stm32f4xx</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_cpu_x.c</name>
+              </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_eth.c</name>
               </file>
@@ -997,6 +1003,9 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\misc.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f429xx.h</name>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4x7_eth.c</name>
@@ -1033,6 +1042,9 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_cryp.c</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_cryp.h</name>
@@ -1093,6 +1105,9 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_fsmc.c</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_fsmc.h</name>
@@ -1105,6 +1120,9 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_hash.c</name>
+                <excluded>
+                  <configuration>Debug</configuration>
+                </excluded>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_hash.h</name>
@@ -1126,6 +1144,9 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_iwdg.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_legacy.h</name>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\stm32f4xx_pwr.c</name>
@@ -1189,6 +1210,201 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\driverlib\system_stm32f4xx.h</name>
+              </file>
+            </group>
+            <group>
+              <name>cubemx_hal_driver</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_adc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_adc_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_can.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_cec.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_cortex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_crc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_cryp.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_cryp_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dac.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dac_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dcmi.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dcmi_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dma.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dma2d.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_dma_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_eth.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_flash.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_flash_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_flash_ramfunc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_fmpi2c.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_fmpi2c_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_gpio.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_hash.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_hash_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_hcd.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_i2c.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_i2c_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_i2s.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_i2s_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_irda.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_iwdg.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_ltdc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_msp_template.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_nand.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_nor.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_pccard.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_pcd.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_pcd_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_pwr.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_pwr_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_qspi.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_rcc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_rcc_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_rng.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_rtc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_rtc_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_sai.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_sai_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_sd.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_sdram.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_smartcard.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_spdifrx.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_spi.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_sram.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_tim.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_tim_ex.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_uart.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_usart.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_hal_wwdg.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_ll_fmc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_ll_fsmc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_ll_sdmmc.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\cubemx_hal_driver\src\stm32f4xx_ll_usb.c</name>
               </file>
             </group>
             <file>
