@@ -26,22 +26,22 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-
+#include "kernel/core/kernelconf.h"
+#include "kernel/dev/dev_tty/tty_font.h"
 
 /*============================================
 | Global Declaration
 ==============================================*/
 
-#define CHAR_256 0
 
-#if CHAR_256==1
-   #define cmapsz  (16*256)
+#if __tauon_tty_font_map_full_sz__==1
+   #define __FONT_CMAP_SZ  (16*256)
 #else
-   #define cmapsz        (16*96)
+   #define __FONT_CMAP_SZ   (16*96)
 #endif
 
-unsigned char vga_font[cmapsz] = {
-#if CHAR_256==1
+static const unsigned char tty_font_cmap_vga_8x16[__FONT_CMAP_SZ] = {
+#if __tauon_tty_font_map_full_sz__==1
    /* 0 0x00 '^@' */
    0x00,      /* 00000000 */
    0x00,      /* 00000000 */
@@ -2345,7 +2345,7 @@ unsigned char vga_font[cmapsz] = {
    0x00,      /* 00000000 */
    0x00,      /* 00000000 */
    0x00,      /* 00000000 */
-#if CHAR_256==1
+#if __tauon_tty_font_map_full_sz__==1
    /* 128 0x80 '' */
    0x00,      /* 00000000 */
    0x00,      /* 00000000 */
@@ -4652,6 +4652,14 @@ unsigned char vga_font[cmapsz] = {
 #endif
 };
 
+
+const tty_font_info_t tty_font_info_vga_8x16 = {
+  .name="vga8x16",
+  .width=8,
+  .height=16,
+  .cmap_sz= __FONT_CMAP_SZ,
+  .cmap = tty_font_cmap_vga_8x16
+};
 
 
 /*============================================

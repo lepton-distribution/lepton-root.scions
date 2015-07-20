@@ -27,6 +27,7 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <string.h>
+#include "kernel/core/kernelconf.h"
 #include "kernel/core/system.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/process.h"
@@ -35,6 +36,9 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_lcd.h"
 
 #include "kernel/fs/vfs/vfsdev.h"
+
+#include "kernel/dev/dev_tty/tty_font.h"
+
 
 //fb test
 //#if defined(__GNUC__)
@@ -72,8 +76,8 @@ dev_map_t dev_tty_map={
 };
 
 //#if defined(__GNUC__)
-   #define SZ_FONT_X       8
-   #define SZ_FONT_Y       16
+   #define SZ_FONT_X       (tty_current_font->height)
+   #define SZ_FONT_Y       (tty_current_font->width)
 //#endif
 
 static uint32_t g_loc_X;
@@ -81,22 +85,19 @@ static uint32_t g_loc_Y;
 static uint32_t g_max_loc_X;
 static uint32_t g_max_loc_Y;
 
-#define CHAR_256 0
-
 #if !defined(__BIG_ENDIAN) && !defined(__LITTLE_ENDIAN)
    #define __LITTLE_ENDIAN
 #endif
-
-
-#if CHAR_256==1
-   #define cmapsz  (16*256)
-#else
-   #define cmapsz        (16*96)
-#endif
-
-extern unsigned char vga_font[cmapsz];
-
-
+//
+const tty_font_info_t* const tty_font_list[]={
+  &tty_font_info_vga_8x8,
+  &tty_font_info_vga_8x16
+};
+//
+static unsigned char* vga_font=(unsigned char*)0;
+static unsigned long cmapsz=(unsigned long)0;
+static tty_font_info_t* tty_current_font = (tty_font_info_t*)0;
+//
 typedef struct boot_infos {
    /* NEW (vers. 2) this holds the current _logical_ base addr of
    the frame buffer (for use by early boot message) */
@@ -105,7 +106,7 @@ typedef struct boot_infos {
    uint32_t dispDeviceRect[4];
    /* left,top,right,bottom */
    uint32_t dispDeviceDepth;
-   /* (8, 16 or 32) */
+   /* (2, 4, 8, 16 or 32) */
    uchar8_t*       dispDeviceBase;
    /* base address (physical) */
    uint32_t dispDeviceRowBytes;
@@ -133,8 +134,8 @@ static void btext_setup_display(uint32_t width, uint32_t height, uint32_t depth,
 
    g_loc_X = 0;
    g_loc_Y = 0;
-   g_max_loc_X = width / 8;
-   g_max_loc_Y = (height / 16)-1;
+   g_max_loc_X = width / SZ_FONT_X;
+   g_max_loc_Y = (height / SZ_FONT_Y)-1;
    bi->logicalDisplayBase = (unsigned char *)address;
    bi->dispDeviceBase = (unsigned char *)address;
    bi->dispDeviceRowBytes = pitch;
@@ -155,7 +156,10 @@ static unsigned char * calc_base(boot_infos_t *bi, uint32_t x, uint32_t y)
    base = bi->dispDeviceBase;
    if(bi->dispDeviceDepth<8 && bi->dispDeviceDepth==1) {
       base += ((x>>3) + bi->dispDeviceRect[0]);
-      base += ((y>>3) + bi->dispDeviceRect[1]) * bi->dispDeviceRowBytes;
+      base += ((y>>3) + bi->dispDeviceRect[1]) * bi->dispDeviceRowBytes; 
+   }else if(bi->dispDeviceDepth<8 && bi->dispDeviceDepth==4) {
+      base += ((x>>1) + bi->dispDeviceRect[0]);
+      base += ((y>>1) + bi->dispDeviceRect[1]) * bi->dispDeviceRowBytes;
    }else{
       base += (x + bi->dispDeviceRect[0]) * (bi->dispDeviceDepth >> 3);
       base += (y + bi->dispDeviceRect[1]) * bi->dispDeviceRowBytes;
@@ -192,13 +196,50 @@ static const uint32_t expand_bits_16[4]  = {
 #endif
 
 
+static const uchar8_t bits_depth2[16] = {
+       0x00,  /* 0  : 0000 -> 00000000 */
+       0x03,  /* 1  : 0001 -> 00000011 */
+       0x0c,  /* 2  : 0010 -> 00001100 */
+       0x0f,  /* 3  : 0011 -> 00001111 */
+       0x30,  /* 4  : 0100 -> 00110000 */
+       0x33,  /* 5  : 0101 -> 00110011 */
+       0x3c,  /* 6  : 0110 -> 00111100 */
+       0x3f,  /* 7  : 0111 -> 00111111 */
+       0xc0,  /* 8  : 1000 -> 11000000 */
+       0xc3,  /* 9  : 1001 -> 11000011 */
+       0xcc,  /* 10 : 1010 -> 11001100 */
+       0xcf,  /* 11 : 1011 -> 11001111 */
+       0xf0,  /* 12 : 1100 -> 11110000 */
+       0xf3,  /* 13 : 1101 -> 11110011 */
+       0xfc,  /* 14 : 1110 -> 11111100 */
+       0xff   /* 15 : 1111 -> 11111111 */
+};
+
+
+static const uchar8_t bits_depth4[4] = {
+       0x00,  /* 0 : 00 -> 00000000 */
+       0x0f,  /* 1 : 01 -> 00001111 */
+       0xf0,  /* 2 : 10 -> 11110000 */
+       0xFF   /* 3 : 11 -> 11111111 */
+};
+
+
+#if 0
+static const uchar8_t bits_depth4[4] = {
+       0x00,  /* 0 : 00 -> 00000000 */
+       0x01,  /* 1 : 01 -> 00001111 */
+       0x10,  /* 2 : 10 -> 11110000 */
+       0x11   /* 3 : 11 -> 11111111 */
+};
+#endif
+
 #if 0
 static void draw_byte_32(unsigned char *font, uint32_t *base, uint32_t rb){
    uint32_t l, bits;
    uint32_t fg = 0xFFFFFFFF;
    uint32_t bg = 0x00000000;
 
-   for (l = 0; l < 16; ++l)
+   for (l = 0; l < tty_current_font->height; ++l)
    {
       bits = *font++;
       base[0] = (-(bits >> 7) & fg) ^ bg;
@@ -219,7 +260,7 @@ static void draw_byte_16(unsigned char *font, uint32_t *base, uint32_t rb){
    uint32_t bg = 0x00000000;
    uint32_t *eb = expand_bits_16;
 
-   for (l = 0; l < 16; ++l)
+   for (l = 0; l < tty_current_font->height; ++l)
    {
       bits = *font++;
       base[0] = (eb[bits >> 6] & fg) ^ bg;
@@ -237,7 +278,7 @@ static void draw_byte_8(unsigned char *font, uint32_t *base, uint32_t rb){
    uint32_t bg = 0x00000000;
    uint32_t *eb = expand_bits_8;
 
-   for (l = 0; l < 16; ++l)
+   for (l = 0; l < tty_current_font->height; ++l)
    {
       bits = *font++;
       base[0] = (eb[bits >> 4] & fg) ^ bg;
@@ -246,10 +287,35 @@ static void draw_byte_8(unsigned char *font, uint32_t *base, uint32_t rb){
    }
 }
 
-static void draw_byte_1(unsigned char *font, char *base, uint32_t rb){
+
+static void draw_byte_4(unsigned char *font, unsigned char *base,uint32_t rb )
+{
+   int l;
+   int bits;
+
+   for (l = 0 ; l < tty_current_font->height; l++)
+   {
+      bits = *font++;
+      //
+      base[3] = bits_depth4[(bits & 0x03)];
+      bits = bits >> 2;
+      //
+      base[2] = bits_depth4[(bits & 0x03)];
+      bits = bits >> 2;
+      //
+      base[1] = bits_depth4[(bits & 0x03)];
+      bits = bits >> 2;
+      //
+      base[0] = bits_depth4[(bits & 0x03)];
+      //
+      base =  ((base) + (rb>>1));
+   }
+}
+
+static void draw_byte_1(unsigned char *font,  unsigned char *base, uint32_t rb){
    uint32_t l;
    uchar8_t bits;
-   for (l = 0; l < 16; ++l)
+   for (l = 0; l < tty_current_font->height; ++l)
    {
       bits = *font++;
       base[0] = (bits);
@@ -258,13 +324,16 @@ static void draw_byte_1(unsigned char *font, char *base, uint32_t rb){
    }
 }
 
+
+
 static void draw_byte(unsigned char c, uint32_t locX, uint32_t locY){
    boot_infos_t* bi        = &disp_bi;
-   unsigned char *base     = calc_base(bi, locX << 3, locY << 4);
-#if CHAR_256==1
-   unsigned char *font     = &vga_font[((uint32_t)c) * 16];
+   unsigned char *base     = calc_base(bi, locX *tty_current_font->width, locY  *tty_current_font->height);
+#if __tauon_tty_font_map_full_sz__==1
+   unsigned char *font     = &vga_font[((uint32_t)c) *tty_current_font->height];
 #else
-   unsigned char *font     = &vga_font[((uint32_t)c-0x20) * 16];      // skip the first 0x20
+   //to do check if c> map_sz
+   unsigned char *font     = &vga_font[((uint32_t)c-0x20) *tty_current_font->height];      // skip the first 0x20
 #endif
    uint32_t rb                     = bi->dispDeviceRowBytes;
 
@@ -282,6 +351,11 @@ static void draw_byte(unsigned char c, uint32_t locX, uint32_t locY){
    case 8:
       draw_byte_8(font, (uint32_t *)base, rb);
       break;
+      
+   case 4:
+     draw_byte_4(font, (uint32_t *)base, rb);
+     break;
+     
    case 1:
       draw_byte_1(font, base, rb);
       break;
@@ -384,6 +458,11 @@ static int tty_ioctl_link (desc_t desc,int request,...){
 | See:
 ---------------------------------------------*/
 int dev_tty_load(void){
+  
+   tty_current_font =(tty_font_info_t*)tty_font_list[0];
+   vga_font=(unsigned char*)tty_current_font->cmap;
+   cmapsz=tty_current_font->cmap_sz;
+   
    return 0;
 }
 
@@ -476,7 +555,7 @@ int dev_tty_write(desc_t desc, const char* buf,int size){
    if(ofile_lst[desc].desc_nxt[1]<0)
       return -1;
 
-   //tty_ioctl_link(ofile_lst[desc].desc_nxt[1],LCDFLSBUF,0);
+   tty_ioctl_link(ofile_lst[desc].desc_nxt[1],LCDFLSBUF,0);
 
    return size;
 }

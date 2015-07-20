@@ -251,28 +251,7 @@ int _syscall_open(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    open_dt->fildes = -1;
    open_dt->attr = S_IFNULL;
 
-   //to remove: profiling test
-   /*__kernel_profiler_start();
-   {
-      int testfd=0;
-      int Nbcalcule=10000;
-      float resultat;
-      float cal1=10.23454646E3;
-      float cal2=0.231452424E-5;
-      for(testfd=2;testfd<Nbcalcule;testfd++)
-           {
-              cal2=cal1+cal2;
-              resultat=cal1-cal2;
-              cal1=cal1/cal2;
-              cal2=cal1*cal2;
-           }
-
-      //OS_Delay(50);
-      __kernel_profiler_stop(__get_syscall_owner_pthread_ptr());
-      __profiler_add_result(__get_syscall_owner_pthread_ptr(),_SYSCALL_CREAT,__kernel_profiler_get_counter(__get_syscall_owner_pthread_ptr()));
-   }*/
    //
-
    desc = _vfs_open(open_dt->path,open_dt->oflag,open_dt->mode);
    if(desc>=0)
       open_dt->fildes = _get_fd(pid,0);

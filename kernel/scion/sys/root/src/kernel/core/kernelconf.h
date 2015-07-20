@@ -433,6 +433,11 @@ Declaration
    #define __BOOT_DEVICE "/dev/hd/hda" //must be hda cpufs
 #endif
 
+//tty terminal font
+#ifndef __tauon_tty_font_map_full_sz__    
+   #define __tauon_tty_font_map_full_sz__ 0   
+#endif
+
 #define __tauon_stdio_profile_minimal__         0x0001
 #define __tauon_stdio_profile_classic__         0x0002
 #define __tauon_stdio_profile_full__            0x000F

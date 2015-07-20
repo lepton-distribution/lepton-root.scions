@@ -452,9 +452,13 @@ desc_t _vfs_open(const char* ref, int oflag, mode_t mode){
          kernel_pthread_t*  _owner_pthread_ptr_write = ofile_lst[_desc].owner_pthread_ptr_write;
          //to do: make copy for dev->desc) in _desc
          // or return dev-desc???
+         
          // _vfs_open() note 1: be aware: S_IFLNK flag is copied on new structure of desc from _attach_desc
          // see _vfs_close to remove this flag when device is closed definitly (nb_reader and nb_writer reach 0)
          memcpy(&ofile_lst[_desc],&ofile_lst[_attach_desc],sizeof(ofile_t));
+         //don't copy S_IFLNK flag see note 1 above.
+         ofile_lst[_desc].attr&=~(S_IFLNK);
+         //
          ofile_lst[_desc].owner_pid = _owner_pid;
          ofile_lst[_desc].owner_pthread_ptr_read  = _owner_pthread_ptr_read;
          ofile_lst[_desc].owner_pthread_ptr_write = _owner_pthread_ptr_write;
@@ -604,7 +608,8 @@ int _vfs_close(desc_t desc){
        || ofile_lst[desc].attr&S_IFBLK) {
 
       //only for linked or attached device
-      if(S_ISLNK(ofile_lst[desc].attr)) {
+      //remove S_ISLNK test check if ofile_lst[desc].desc_nxt[0]>=0 or ofile_lst[desc].desc_nxt[1]>=0
+      if(ofile_lst[desc].desc_nxt[0]!=INVALID_DESC || ofile_lst[desc].desc_nxt[1]!=INVALID_DESC) {
          desc_t _attach_desc;
          //read branch. only stream compatible mode in this branch  see(_vfs_link_desc() in vfs_core.c)
          _attach_desc=desc;
@@ -616,6 +621,7 @@ int _vfs_close(desc_t desc){
 
          //write branch. only stream compatible mode in this branch  see(_vfs_link_desc() in vfs_core.c)
          _attach_desc=desc;
+       
          if(ofile_lst[_attach_desc].oflag&O_WRONLY) {
             while((_attach_desc=ofile_lst[_attach_desc].desc_nxt[1])>=0) {
                ofile_lst[_attach_desc].nb_writer--;
@@ -623,11 +629,18 @@ int _vfs_close(desc_t desc){
          }
 
          //it's close operation from open operation on attached file (see _vfs_open() note 1 )
-         if((desc!=ofile_lst[desc].desc)) {
-            if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer)
-               ofile_lst[desc].attr&=~(S_IFLNK);
+         if(!S_ISLNK(ofile_lst[desc].attr)) {//fix stream: add this test
+            if((desc!=ofile_lst[desc].desc)) {
+              
+              if(!ofile_lst[desc].nb_reader && !ofile_lst[desc].nb_writer){
+                 ofile_lst[desc].desc_nxt[0]=INVALID_DESC;
+                 ofile_lst[desc].desc_nxt[1]=INVALID_DESC;
+              }
+                  
+            }
          }
-      }else if(!(S_ISLNK(ofile_lst[desc].attr)) ) {
+            
+      }else if(!S_ISLNK(ofile_lst[desc].attr)){//exclude last device in stream ( in this case ofile_lst[desc].desc_nxt[XX]==INVALID_DESC .
          //not linked or attached device
          if(ofile_lst[desc].pfsop->fdev.fdev_close)
             ofile_lst[desc].pfsop->fdev.fdev_close(desc);
