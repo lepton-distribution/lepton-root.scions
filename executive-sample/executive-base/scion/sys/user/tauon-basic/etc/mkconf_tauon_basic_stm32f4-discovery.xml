@@ -98,16 +98,16 @@
 <target name="cortexm_lepton">
    <devices>
       <!-- /dev/cpu0 -->
-	   <dev name="dev_lm3s_cpu_map"               use="on"/>
-	   <!-- /dev/board -->
-	   <dev name="dev_discovery_f4_board_map"     use="on"/>
+      <dev name="dev_stm32f4xx_cpu_x_map"        use="on"/>
+	    <!-- /dev/board -->
+	    <dev name="dev_discovery_f4_board_map"     use="on"/>
       <!-- /dev/ttys6 -->
       <dev name="dev_discovery_f4_uart_6_map"   use="on"/>
-	   <!-- /dev/itm0 -->
+	    <!-- /dev/itm0 -->
       <dev name="dev_cmsis_itm0_map"             use="on"/>
-	   <!-- /dev/debug -->
+	    <!-- /dev/debug -->
       <dev name="dev_os_debug_map"               use="on"/>
-       <!-- /dev/eth0 -->
+      <!-- /dev/eth0 -->
       <dev name="dev_stm32f4xx_eth_map"          use="off"/>
    </devices>
 </target>
