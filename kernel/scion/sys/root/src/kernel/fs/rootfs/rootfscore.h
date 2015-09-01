@@ -58,7 +58,11 @@ Declaration
 
 #define RTFS_BLOCK_ALLOC_SIZE   (RTFS_BLKTBL_SIZE/8)+1 //1 bits: free(0|1);
 
-#define RTFS_MAX_FILENAME 8 //12
+#ifndef __KERNEL_RTFS_MAX_FILENAME
+   #define RTFS_MAX_FILENAME 8 //12
+#else 
+   #define RTFS_MAX_FILENAME __KERNEL_RTFS_MAX_FILENAME
+#endif
 
 typedef unsigned short rtfs_attr_t;
 typedef unsigned short rtfs_size_t;
