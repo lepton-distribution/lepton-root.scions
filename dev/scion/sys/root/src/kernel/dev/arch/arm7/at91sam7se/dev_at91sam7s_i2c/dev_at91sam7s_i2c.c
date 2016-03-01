@@ -30,6 +30,8 @@ Includes
 #include "kernel/kernel.h"
 #include "kernel/system.h"
 #include "vfs/vfsdev.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 
 //I2C
 #include "at91sam7s_i2c_io.h"

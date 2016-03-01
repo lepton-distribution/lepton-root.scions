@@ -29,15 +29,18 @@ Includes
 =============================================*/
 #include <stdlib.h>
 #include <string.h>
-
+#include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/system.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/libstd.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/wait.h"
 #include "kernel/core/stat.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 
 //for cygwin unix test

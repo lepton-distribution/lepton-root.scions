@@ -7,6 +7,8 @@
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 
 #include "dev_os_debug.h"
 #if defined(__KERNEL_UCORE_EMBOS)

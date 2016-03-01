@@ -209,6 +209,8 @@ static int ssd1322_init(desc_t desc_w)
 {
 	uchar8_t data[3];
 	int i;
+   
+   ssd1322_reset(desc_w);
 
 	ssd1322_write_command(desc_w, SET_COMMAND_LOCK);
 	data[0] = 0x12;
@@ -231,7 +233,8 @@ static int ssd1322_init(desc_t desc_w)
 	ssd1322_write_command(desc_w, SET_DISPLAY_START_LINE);
 	data[0] = 0x00;
 	ssd1322_write_data(desc_w, &data[0], 1);
-
+   
+ 
 	ssd1322_write_command(desc_w, 0xa0);
 	data[0] = 0x14;
 	data[1] = 0x11;
@@ -255,14 +258,14 @@ static int ssd1322_init(desc_t desc_w)
 	ssd1322_write_data(desc_w, &data[0], 1);
    
 	ssd1322_write_command(desc_w, SET_CONTRAST_CURRENT);
-	data[0] = 0xBf;
+	data[0] = 0x9f;
 	ssd1322_write_data(desc_w, &data[0], 1);
 
-	//ssd1322_write_command(desc_w, SELECT_DEFAULT_GRAYSCALE);
-   ssd1322_set_gray_scale_table(desc_w);
+	ssd1322_write_command(desc_w, SELECT_DEFAULT_GRAYSCALE);
+   //ssd1322_set_gray_scale_table(desc_w);
 
 	ssd1322_write_command(desc_w, SET_PHASE_LENGTH);
-	data[0] = 0xee; /*0xe2*/;
+	data[0] = 0xe2; /*0xe2*/;
 	ssd1322_write_data(desc_w, &data[0], 1);
 
 	ssd1322_write_command(desc_w, 0xd1);
@@ -275,7 +278,7 @@ static int ssd1322_init(desc_t desc_w)
 	ssd1322_write_data(desc_w, &data[0], 1);
 
 	ssd1322_write_command(desc_w, SET_SECOND_PRECHARGE_PERIOD);
-	data[0] = 0x0e; /*0x08*/;
+	data[0] = 0x08; /*0x08*/;
 	ssd1322_write_data(desc_w, &data[0], 1);
 
 	ssd1322_write_command(desc_w, SET_VCOMH);
@@ -283,22 +286,25 @@ static int ssd1322_init(desc_t desc_w)
 	ssd1322_write_data(desc_w, &data[0], 1);
 
 	ssd1322_write_command(desc_w, SET_DISPLAY_MODE_NORMAL);
-
+   
+   //ssd1322_write_command(desc_w, EXIT_PARTIAL_DISPLAY);
+   
 	ssd1322_write_command(desc_w, SLEEP_MODE_OFF);
 
 
-	//! Set start line
+   //
+   //! Set the row
 	ssd1322_write_command(desc_w, SET_ROW_ADDRESS);
-	data[0] = 0;
-	data[1] = 0x3f;
+	data[0] = 0x00;
+	data[1] = 0x3f;//0x7F;//0x3f;
 	ssd1322_write_data(desc_w, &data[0], 2);
 
 	//! Set the column
 	ssd1322_write_command(desc_w, SET_COLUMN_ADDRESS);
-	data[0] = 0x1c;
-	data[1] = 0x5b;
+	data[0] = 0x1c;//0x00;//0x1c;
+	data[1] = 0x1c+0x3F;//0x77;//0x5b;
 	ssd1322_write_data(desc_w, &data[0], 2);
-
+   
    //to remove test: fill all
    ssd1322_write_command(desc_w, WRITE_RAM_COMMAND);
    //
@@ -309,6 +315,14 @@ static int ssd1322_init(desc_t desc_w)
    //
    memset(link_info_oled_ssd1322.p_fbuf,0x00,OLED_DISPLAY_SIZE/2);
 	ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2);
+   
+   //
+   memset(link_info_oled_ssd1322.p_fbuf,0x11,1);
+   memset(link_info_oled_ssd1322.p_fbuf+(256/2),0x11,1);
+   memset(link_info_oled_ssd1322.p_fbuf+2*(256/2),0x11,1);
+   memset(link_info_oled_ssd1322.p_fbuf+3*(256/2),0x11,1);
+   memset(link_info_oled_ssd1322.p_fbuf+4*(256/2),0x11,1);
+   ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2); 
    
 	return 0;
 }

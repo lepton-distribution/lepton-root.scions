@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _STDINT_H
-#define _STDINT_H
+#ifndef __STDINT_H__
+#define __STDINT_H__
 
 
 /*============================================

@@ -30,7 +30,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/system.h"
 #include "kernel/core/time.h"
 #include "kernel/core/systime.h"
-
+#include "kernel/core/stat.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"

@@ -427,7 +427,7 @@ pfsop_t _vfs_mntdev2fsop(mntdev_t* pmntdev);
             return -1; \
          } \
       } \
-      __pthread_ptr__->io_desc = (__desc__); \
+      if(__pthread_ptr__!=(void*)0){__pthread_ptr__->io_desc = (__desc__);} \
 }
 
 #define __unlock_io(__pthread_ptr__,__desc__,__oflag__){ \
@@ -435,7 +435,7 @@ pfsop_t _vfs_mntdev2fsop(mntdev_t* pmntdev);
          kernel_sem_post(&ofile_lst[(__desc__)].sem_read); \
       if((__oflag__)&O_WRONLY) \
          kernel_sem_post(&ofile_lst[(__desc__)].sem_write); \
-      __pthread_ptr__->io_desc = -1; \
+      if(__pthread_ptr__!=(void*)0){__pthread_ptr__->io_desc = -1;}\
 }
 
 //#define __trylock_io(__desc__) kernel_pthread_mutex_trylock(&ofile_lst[__desc__].mutex)

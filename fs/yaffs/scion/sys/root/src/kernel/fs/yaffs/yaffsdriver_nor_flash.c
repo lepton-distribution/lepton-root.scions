@@ -42,7 +42,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/ioctl.h"
 #include "kernel/core/ioctl_hd.h"
-#include "kernel/core/devio.h"
+#include "kernel/core/kernel_io.h"
 
 
 #include "kernel/fs/yaffs/core/yaffs_guts.h"

@@ -25,6 +25,8 @@
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"

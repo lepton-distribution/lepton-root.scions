@@ -58,11 +58,46 @@ Declaration
 
 //The values used for l_whence, SEEK_SET, SEEK_CUR and SEEK_END are defined as described in <unistd.h>.
 
+
+//prevent multiple declaration
+#ifdef O_RDONLY
+   #undef O_RDONLY
+#endif
+#ifdef O_WRONLY
+   #undef O_WRONLY
+#endif
+#ifdef O_RDWR
+   #undef O_RDWR
+#endif
+#ifdef O_CREAT
+   #undef O_CREAT
+#endif
+#ifdef O_APPEND
+   #undef O_APPEND
+#endif
+#ifdef O_SYNC
+   #undef O_SYNC
+#endif
+#ifdef O_NONBLOCK
+   #undef O_NONBLOCK
+#endif
+
+//file open flag
+#define O_RDONLY     0x0001
+#define O_WRONLY     0x0002
+#define O_RDWR       0x0003 //O_RDONLY|O_WRONLY
+#define O_CREAT      0x0004
+#define O_APPEND     0x0008
+#define O_SYNC       0x0010
+#define O_NONBLOCK   0x0020
+
 //The following four sets of values for oflag used by open() are bitwise distinct:
 //see kernel/system.h
 #define O_EXCL       0x0040 //Exclusive use flag.
 #define O_NOCTTY     0x0080 //Do not assign controlling terminal.
 #define O_TRUNC      0x0100 //Truncate flag.
+
+#define O_NSYNC      0x1000 //not sync operation. don't wait write completed, return immediatly.
 
 
 //Mask for use with file access modes:

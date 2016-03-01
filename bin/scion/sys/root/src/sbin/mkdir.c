@@ -29,8 +29,10 @@ Includes
 #include "kernel/core/libstd.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/statvfs.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/time.h"
+#include "kernel/core/fcntl.h"
+
+#include "lib/libc/unistd.h"
 
 /*===========================================
 Global Declaration

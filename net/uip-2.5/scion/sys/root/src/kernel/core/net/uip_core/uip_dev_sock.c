@@ -29,17 +29,16 @@ either the MPL or the [eCos GPL] License."
 | Includes    
 ==============================================*/
 #include <stdlib.h>
-
+#include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
+#include "kernel/core/errno.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/syscall.h"
-#include "kernel/core/kernelconf.h"
 #include "kernel/core/kernel.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/process.h"
 #include "kernel/core/kernel_pthread.h"
-#include "kernel/core/errno.h"
-
-#include "kernel/core/devio.h"
+#include "kernel/core/kernel_io.h"
 
 #include "kernel/fs/vfs/vfs.h"
 

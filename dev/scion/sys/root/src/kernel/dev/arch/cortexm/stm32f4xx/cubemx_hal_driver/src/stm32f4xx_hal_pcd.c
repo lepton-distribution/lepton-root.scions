@@ -177,7 +177,10 @@ HAL_StatusTypeDef HAL_PCD_Init(PCD_HandleTypeDef *hpcd)
  {
    hpcd->OUT_ep[i].is_in = 0;
    hpcd->OUT_ep[i].num = i;
+   //phlb lepton 
+   //why IN_ep??? : 
    hpcd->IN_ep[i].tx_fifo_num = i;
+   //hpcd->OUT_ep[i].tx_fifo_num = i;
    /* Control until ep is activated */
    hpcd->OUT_ep[i].type = EP_TYPE_CTRL;
    hpcd->OUT_ep[i].maxpacket = 0;

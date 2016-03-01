@@ -28,13 +28,14 @@ Includes
 =============================================*/
 
 #include "kernel/core/kernel.h"
+#include "kernel/core/system.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/libstd.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/wait.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/time.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 #include "lib/libc/termios/termios.h"
 

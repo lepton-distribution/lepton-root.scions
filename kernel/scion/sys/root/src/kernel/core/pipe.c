@@ -9,8 +9,11 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Chauvin-Arnoux.
-Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+All Rights Reserved.
+
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -54,6 +57,7 @@ Includes
 #include "kernel/core/kernel.h"
 #include "kernel/core/process.h"
 #include "kernel/core/pipe.h"
+#include "kernel/core/stat.h"
 #include "kernel/fs/vfs/vfs.h"
 
 
@@ -407,9 +411,9 @@ int _sys_pipe_write(desc_t desc,const char* buffer,int nbyte ){
    }
    //size available in pipe
    if(ofile_lst[desc].offset>=ofile_lst[desc_r].offset) {
-      size=(__PIPE_SIZE-ofile_lst[desc].offset)+ofile_lst[desc_r].offset-1;
+      size=(__PIPE_SIZE-ofile_lst[desc].offset)+ofile_lst[desc_r].offset/*-1*/;
    }else if(ofile_lst[desc].offset<ofile_lst[desc_r].offset) {
-      size=ofile_lst[desc_r].offset-ofile_lst[desc].offset-1;
+      size=ofile_lst[desc_r].offset-ofile_lst[desc].offset/*-1*/;
    }
    //
    if(nbyte>size)

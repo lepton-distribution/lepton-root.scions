@@ -32,6 +32,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/libstd.h"
 #include "kernel/core/sys/utsname.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 
 /*============================================

@@ -27,7 +27,7 @@ Includes
 =============================================*/
 #include "kernel/core/errno.h"
 #include "kernel/core/libstd.h"
-#include "kernel/core/devio.h"
+#include "lib/libc/unistd.h"
 #include "lib/libc/termios/termios.h"
 
 /*===========================================

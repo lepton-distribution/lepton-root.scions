@@ -31,7 +31,9 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/libstd.h"
 #include "kernel/core/time.h"
-#include "kernel/core/devio.h"
+#include "kernel/core/fcntl.h"
+
+#include "lib/libc/unistd.h"
 
 /*============================================
 | Global Declaration

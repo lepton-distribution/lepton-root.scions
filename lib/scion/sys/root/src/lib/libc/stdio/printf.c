@@ -52,9 +52,9 @@ Includes
 
 #include "kernel/core/types.h"
 #include "kernel/core/libstd.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/errno.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 #include "lib/libc/misc/ltostr.h"
 

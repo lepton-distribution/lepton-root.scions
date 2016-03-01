@@ -107,7 +107,7 @@ int dev_stm32f4xx_spi_x_open(desc_t desc, int o_flag,
          spi_info->desc_r = desc;
       }
       else
-         return -1;                //already open
+         return 0;                //already open
    }
 
    if(o_flag & O_WRONLY) {
@@ -115,7 +115,7 @@ int dev_stm32f4xx_spi_x_open(desc_t desc, int o_flag,
          spi_info->desc_w = desc;
       }
       else
-         return -1;                //already open
+         return 0;                //already open
    }
 
    if(!ofile_lst[desc].p)

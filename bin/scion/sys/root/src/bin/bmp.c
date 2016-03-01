@@ -28,9 +28,10 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 #include "kernel/core/signal.h"
 #include "kernel/core/libstd.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/ioctl_lcd.h"
 #include "kernel/core/fcntl.h"
+
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 
 

@@ -250,6 +250,18 @@ int _vfs_mknod(const char *path, mode_t mode, dev_t dev){
    return 0;
 }
 
+/*-------------------------------------------
+| Name:_vfs_mkfifo
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int _vfs_mkfifo(const char *path){
+  return _vfs_mknod(path,S_IFIFO,-1);
+}
+
 /*--------------------------------------------
 | Name:        _vfs_fattach
 | Description:

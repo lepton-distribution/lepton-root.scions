@@ -32,7 +32,7 @@ Includes
 #include <stdlib.h>
 
 #include "kernel/core/kernelconf.h"
-
+#include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -55,6 +55,8 @@ Includes
 
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
+
+#include "kernel/core/kernel_printk.h"
 
 #if defined (__KERNEL_NET_IPSTACK)
    #if defined(USE_UIP)
@@ -117,6 +119,9 @@ kernel_profiler_result_t kernel_profiler_result_lst[_SYSCALL_TOTAL_NB]={0};
 io_profiler_result_t*      io_profiler_result_lst;
 #endif
 
+//console device
+desc_t __g_kernel_desc_tty;
+
 //cpu device
 fdev_map_t*   __g_kernel_cpu;
 desc_t __g_kernel_desc_cpu;
@@ -131,6 +136,7 @@ desc_t __g_kernel_desc_if_spi_master;
 
 //kernel errno
 int __g_kernel_static_errno=0;
+
 
 kernel_syscall_t const kernel_syscall_lst[] = {
    __add_syscall(_syscall_waitpid),       //0
@@ -366,6 +372,48 @@ void _kernel_warmup_rootfs(void){
 }
 
 /*--------------------------------------------
+| Name:        _kernel_warmup_cpu
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void _kernel_warmup_cpu(void){
+   desc_t desc;
+   char ref[16];
+   dev_t dev;
+
+   for(dev=0; dev<max_dev; dev++) { //(MAX_DEV-1) last dev is NULL
+      if(!pdev_lst[dev]) continue;
+      //
+      if(   pdev_lst[dev]->dev_name[0]=='c'
+            && pdev_lst[dev]->dev_name[1]=='p'
+            && pdev_lst[dev]->dev_name[2]=='u'
+            && pdev_lst[dev]->dev_name[3]=='0') {
+
+         //load dev
+         if(pdev_lst[dev]->fdev_load)
+            if(pdev_lst[dev]->fdev_load()<0)
+               continue;
+
+         //spi interface
+         strcpy(ref,"/dev/");
+         strcat(ref,pdev_lst[dev]->dev_name);
+         _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
+         //
+         __set_cpu((fdev_map_t*)pdev_lst[dev]); 
+      }
+   }
+   
+   //
+   if((desc = _vfs_open("/dev/cpu0",O_RDWR,0))<0)
+      return;  //cpu device not available
+   //
+   __set_cpu_desc(desc);
+}
+
+/*--------------------------------------------
 | Name:        _kernel_warmup_load_mount_cpufs
 | Description:
 | Parameters:  none
@@ -563,18 +611,7 @@ void _kernel_warmup_dev(void){
               && pdev_lst[dev]->dev_name[1]=='p'
               && pdev_lst[dev]->dev_name[2]=='u'
               && pdev_lst[dev]->dev_name[3]=='0') {
-         //cpu device
-
-         //load dev
-         if(pdev_lst[dev]->fdev_load)
-            if(pdev_lst[dev]->fdev_load()<0)
-               continue;
-
-         strcpy(ref,"/dev/");
-         strcat(ref,pdev_lst[dev]->dev_name);
-
-         _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
-         __set_cpu((fdev_map_t*)pdev_lst[dev]);
+         //already mount see _kernel_warmup_cpu
 
       }else{
          //load dev
@@ -600,6 +637,44 @@ void _kernel_warmup_dev(void){
    }
 }
 
+/*--------------------------------------------
+| Name:        _kernel_warmup_tty
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void _kernel_warmup_tty(void){
+   desc_t desc_1;
+   desc_t desc_2;
+   desc_t desc_tty;
+#ifdef __KERNEL_DEV_TTY
+   if((desc_1 = _vfs_open(__KERNEL_DEV_TTY,O_RDWR,0))<0)
+      return;
+   //
+   if((desc_2 = _vfs_open("/dev/head",O_RDWR,0))<0)
+      return;
+   //
+   if(_vfs_ioctl(desc_1,I_LINK,desc_2)<0)
+      return;
+   //
+   if(_vfs_fattach(desc_1,"/dev/console")<0)
+      return;
+   //
+   _vfs_close(desc_2);
+   _vfs_close(desc_1);
+   //
+   if((desc_tty = _vfs_open("/dev/console",O_WRONLY,0))<0)
+      return;
+   //
+   __set_kernel_tty_desc(desc_tty);
+   //
+#else
+   __set_kernel_tty_desc(INVALID_DESC);
+   return;
+#endif
+}
 
 /*--------------------------------------------
 | Name:        _kernel_warmup_stream
@@ -642,21 +717,6 @@ int _kernel_warmup_object_manager(void){
    int kernel_object_no = __KERNEL_OBJECT_POOL_MAX;
 
    return kernel_object_manager_pool(kernel_object_no);
-}
-
-/*--------------------------------------------
-| Name:        _kernel_warmup_cpu
-| Description:
-| Parameters:  none
-| Return Type: none
-| Comments:
-| See:
-----------------------------------------------*/
-void _kernel_warmup_cpu(void){
-   desc_t desc;
-   if((desc = _vfs_open("/dev/cpu0",O_RDWR,0))<0)
-      return;  //cpu device not available
-   __set_cpu_desc(desc);
 }
 
 
@@ -1044,7 +1104,7 @@ void _start_kernel(char* arg){
 
    //
    __kernel_static_mode_in();
-   
+
    //init kernel system
    _pid();
    //
@@ -1077,6 +1137,8 @@ void _start_kernel(char* arg){
    //detect and create devices in /dev
    _kernel_warmup_rootfs();
    //
+   _kernel_warmup_cpu();
+   //
    _kernel_warmup_load_mount_cpufs();
    //
    _kernel_warmup_i2c();
@@ -1085,11 +1147,11 @@ void _start_kernel(char* arg){
    //
    _kernel_warmup_dev();
    //
+   _kernel_warmup_tty();
+   //
    _kernel_warmup_stream();
    //
    _kernel_warmup_object_manager();
-   //
-   _kernel_warmup_cpu();
    //
    _kernel_warmup_rtc();
    //
@@ -1104,6 +1166,8 @@ void _start_kernel(char* arg){
          uip_core_run();
       #endif
    #endif
+   //
+   kernel_printk_init();
    //
    __kernel_static_mode_out();
 }

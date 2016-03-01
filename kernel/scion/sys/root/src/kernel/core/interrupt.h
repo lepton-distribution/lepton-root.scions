@@ -122,10 +122,14 @@ typedef unsigned char kernel_intr_t;
  * \param useconds temps de la suspention en micro secondes
  * \hideinitializer
  */
-   #define __kernel_usleep(useconds){ \
-      ldiv_t lr =ldiv(useconds,1000); \
+#if (__tauon_compiler__==__compiler_iar_m16c__)
+   #define __kernel_usleep(__useconds__){ \
+      ldiv_t lr =ldiv(__useconds__,1000); \
       if(lr.quot) OS_Delay(lr.quot); \
-}
+   }
+#else
+     #define __kernel_usleep(__useconds__) OS_Delay((__useconds__)/(1000))
+#endif 
 
 /**
  * met le noyau lepton (le thread kernel (voir kernel_routine() ) en attente d'une interruption noyau

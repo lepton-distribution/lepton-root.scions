@@ -32,6 +32,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/interrupt.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/time.h"
 
 #include "kernel/fs/vfs/vfsdev.h"

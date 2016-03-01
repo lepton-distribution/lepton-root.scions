@@ -31,6 +31,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/kernel.h"
 #include "kernel/system.h"
 #include "kernel/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/ioctl_lcd.h"
 #include "kernel/ioctl_board.h"
 

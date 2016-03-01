@@ -51,6 +51,43 @@ struct stat {
    //blkcnt_t  st_blocks;     //number of blocks allocated for this object
 };
 
+
+//prevent multiple declaration
+#ifdef S_IFMT
+   #undef S_IFMT
+#endif
+#ifdef S_IFNULL
+   #undef S_IFNULL
+#endif
+#ifdef S_IFREG
+   #undef S_IFREG
+#endif
+#ifdef S_IFBLK
+   #undef S_IFBLK
+#endif
+#ifdef S_IFCHR
+   #undef S_IFCHR
+#endif
+#ifdef S_IFDIR
+   #undef S_IFDIR
+#endif
+#ifdef S_IFIFO
+   #undef S_IFIFO
+#endif
+#ifdef S_IFLNK
+   #undef S_IFLNK
+#endif
+
+//file attribute
+#define S_IFMT                  0x003F
+#define S_IFNULL                0x0000
+#define S_IFREG                 0x0001
+#define S_IFBLK                 0x0002
+#define S_IFCHR                 0x0004
+#define S_IFDIR                 0x0008
+#define S_IFIFO                 0x0010
+#define S_IFLNK                 0x0020
+
 //The following macros will test whether a file is of the specified type.
 //The value m supplied to the macros is the value of st_mode from a stat structure.
 //The macro evaluates to a non-zero value if the test is true, 0 if the test is false.

@@ -149,7 +149,6 @@ typedef struct DIR {
       #include "kernel/core/system.h"
       #include "kernel/core/signal.h"
       #include "kernel/core/wait.h"
-      #include "kernel/core/devio.h"
       #include "kernel/core/stat.h"
       #include "kernel/core/statvfs.h"
       #include "kernel/core/dirent.h"
@@ -158,6 +157,8 @@ typedef struct DIR {
 
       #include "kernel/core/select.h"
       #include "kernel/core/net/socket.h"
+
+      #include "lib/libc/unistd.h"
       #include "lib/libc/stdio/stdio.h"
       #include "lib/pthread/pthread.h"
 

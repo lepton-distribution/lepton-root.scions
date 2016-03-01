@@ -537,6 +537,11 @@ __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_count
 
 #define _SYSCALL_NET_SND         100
 
+//console device 
+extern desc_t __g_kernel_desc_tty;
+#define __set_kernel_tty_desc(__kernel_desc_tty__) __g_kernel_desc_tty = __kernel_desc_tty__
+#define __get_kernel_tty_desc() (__g_kernel_desc_tty)
+
 //cpu device
 extern fdev_map_t*   __g_kernel_cpu;
 extern desc_t __g_kernel_desc_cpu;

@@ -55,13 +55,14 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/types.h"
-#include "kernel/interrupt.h"
-#include "kernel/kernelconf.h"
-#include "kernel/kernel.h"
-#include "kernel/system.h"
-#include "kernel/fcntl.h"
-#include "kernel/cpu.h"
+#include "kernel/core/types.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/kernelconf.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/system.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
+#include "kernel/core/cpu.h"
 
 #include "termios/termios.h"
 

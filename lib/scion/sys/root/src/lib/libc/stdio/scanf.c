@@ -33,9 +33,9 @@ Includes
 #include "lib/libc/ctype/ctype.h"
 
 #include "kernel/core/types.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/errno.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 

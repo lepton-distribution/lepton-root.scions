@@ -66,13 +66,14 @@ Includes
 #include <intrinsic.h>
 
 #include "ctype/ctype.h"
-#include "kernel/types.h"
-#include "kernel/signal.h"
-#include "kernel/libstd.h"
-#include "kernel/stat.h"
-#include "kernel/time.h"
-#include "kernel/devio.h"
-#include "kernel/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/signal.h"
+#include "kernel/core/libstd.h"
+#include "kernel/core/stat.h"
+#include "kernel/core/stat.h"
+#include "kernel/core/time.h"
+#include "kernel/core/devio.h"
+#include "kernel/core/errno.h"
 
 #include "dev/arch/all/sdcard/drv_sdcard_arch.h"
 

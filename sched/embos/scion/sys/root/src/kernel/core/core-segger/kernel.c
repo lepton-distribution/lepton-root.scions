@@ -9,8 +9,11 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Chauvin-Arnoux.
-Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2013 <lepton.phlb@gmail.com>.
+All Rights Reserved.
+
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -29,7 +32,7 @@ Includes
 #include <stdlib.h>
 
 #include "kernel/core/kernelconf.h"
-
+#include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -52,6 +55,8 @@ Includes
 
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
+
+#include "kernel/core/kernel_printk.h"
 
 #if defined (__KERNEL_NET_IPSTACK)
    #if defined(USE_UIP)
@@ -109,6 +114,9 @@ _macro_stack_addr char kernel_stack[KERNEL_STACK_SIZE];
 kernel_profiler_result_t kernel_profiler_result_lst[_SYSCALL_TOTAL_NB]={0};
 io_profiler_result_t*      io_profiler_result_lst;
 #endif
+
+//console device
+desc_t __g_kernel_desc_tty;
 
 //cpu device
 fdev_map_t*   __g_kernel_cpu;
@@ -625,6 +633,44 @@ void _kernel_warmup_dev(void){
    }
 }
 
+/*--------------------------------------------
+| Name:        _kernel_warmup_tty
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void _kernel_warmup_tty(void){
+   desc_t desc_1;
+   desc_t desc_2;
+   desc_t desc_tty;
+#ifdef __KERNEL_DEV_TTY
+   if((desc_1 = _vfs_open(__KERNEL_DEV_TTY,O_RDWR,0))<0)
+      return;
+   //
+   if((desc_2 = _vfs_open("/dev/head",O_RDWR,0))<0)
+      return;
+   //
+   if(_vfs_ioctl(desc_1,I_LINK,desc_2)<0)
+      return;
+   //
+   if(_vfs_fattach(desc_1,"/dev/console")<0)
+      return;
+   //
+   _vfs_close(desc_2);
+   _vfs_close(desc_1);
+   //
+   if((desc_tty = _vfs_open("/dev/console",O_WRONLY,0))<0)
+      return;
+   //
+   __set_kernel_tty_desc(desc_tty);
+   //
+#else
+   __set_kernel_tty_desc(INVALID_DESC);
+   return;
+#endif
+}
 
 /*--------------------------------------------
 | Name:        _kernel_warmup_stream
@@ -1097,6 +1143,8 @@ void _start_kernel(char* arg){
    //
    _kernel_warmup_dev();
    //
+   _kernel_warmup_tty();
+   //
    _kernel_warmup_stream();
    //
    _kernel_warmup_object_manager();
@@ -1114,6 +1162,8 @@ void _start_kernel(char* arg){
          uip_core_run();
       #endif
    #endif
+   //
+   kernel_printk_init();
    //
    __kernel_static_mode_out();
 }

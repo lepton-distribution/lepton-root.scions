@@ -36,7 +36,7 @@ Includes
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/errno.h"
 
-#include "kernel/core/devio.h"
+#include "kernel/core/kernel_io.h"
 
 #include "kernel/fs/vfs/vfs.h"
 

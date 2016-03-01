@@ -27,8 +27,9 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include "kernel/core/types.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/kernel.h"
+#include "kernel/core/kernel_io.h"
+#include "kernel/core/fcntl.h"
 #include "kernel/core/system.h"
 #include "kernel/core/syscall.h"
 #include "kernel/core/process.h"
@@ -45,9 +46,6 @@ Includes
 Global Declaration
 =============================================*/
 
-const int16_t STDIN_FILENO  = 0;
-const int16_t STDOUT_FILENO = 1;
-const int16_t STDERR_FILENO = 2;
 
 
 /*===========================================
@@ -105,18 +103,6 @@ void sync(void){
    __mk_syscall(_SYSCALL_SYNC,sync_dt)
 }
 
-
-/*-------------------------------------------
-| Name:creat
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int creat(const char *path, mode_t mode){
-   return open(path,O_WRONLY|O_CREAT,mode);
-}
 /*-------------------------------------------
 | Name:open
 | Description:
@@ -164,6 +150,18 @@ int open(const char *path, int oflag, mode_t mode){
 }
 
 /*-------------------------------------------
+| Name:creat
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int creat(const char *path, mode_t mode){
+   return open(path,O_WRONLY|O_CREAT,mode);
+}
+
+/*-------------------------------------------
 | Name:close
 | Description:
 | Parameters:
@@ -191,257 +189,6 @@ int close(int fildes){
    __mk_syscall(_SYSCALL_CLOSE,close_dt)
 
    return close_dt.ret;
-}
-
-/*-------------------------------------------
-| Name:read
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-#if defined(__GNUC__)
-ssize_t __attribute__ ((visibility("hidden")))
-read(int fildes, void *buf, size_t nbyte){
-#else
-ssize_t read(int fildes, void *buf, size_t nbyte){
-#endif
-   pid_t pid;
-   kernel_pthread_t* pthread_ptr;
-   desc_t desc;
-
-   if(fildes<0)
-      return -1;
-
-   if(nbyte<=0)
-      return -1;
-
-   if(!(pthread_ptr = kernel_pthread_self()))
-      return -1;
-
-   if((pid= pthread_ptr->pid)<1)
-      return -1;
-
-   desc = process_lst[pid]->desc_tbl[fildes];
-
-   if(desc<0)
-      return -1;
-
-   if(!(ofile_lst[desc].oflag&O_RDONLY))
-      return -1;
-
-   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR)) {
-      read_t read_dt;
-      read_dt.fildes= fildes;
-      read_dt.buf    = buf;
-      read_dt.nbyte  = nbyte;
-      __mk_syscall(_SYSCALL_READ,read_dt);
-      return read_dt.nbyte;
-   }
-
-   //is not implemented for this device dev?
-   if(!ofile_lst[desc].pfsop->fdev.fdev_read)
-      return -1;
-
-   //
-   __lock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-   //check thread owner
-   __atomic_in();
-   {
-      desc_t _desc=ofile_lst[desc].desc;
-      //
-      if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr) {
-         do {
-            //check
-            if(ofile_lst[_desc].used<=0) {
-               __atomic_out();
-               __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-               return -1; //error, stream not coherent :(
-            }
-            //
-            //begin of section: protection from io interrupt
-            __disable_interrupt_section_in();
-            //
-            ofile_lst[_desc].owner_pthread_ptr_read=pthread_ptr;
-            ofile_lst[_desc].owner_pid=pid;
-            //end of section: protection from io interrupt
-            __disable_interrupt_section_out();
-            //
-            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         } while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
-      }
-   }
-   __atomic_out();
-
-   //
-   if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
-      while(ofile_lst[desc].pfsop->fdev.fdev_isset_read
-            && ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
-         __wait_io_int(pthread_ptr); //wait incomming data
-      }
-      nbyte=ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      return nbyte;
-   }else if((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
-      //profiler
-      __io_profiler_start(desc);
-      nbyte=ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      return nbyte;
-   }else if(ofile_lst[desc].attr&S_IFBLK) {
-      //no specific action.
-      //profiler
-      __io_profiler_start(desc);
-      nbyte =  ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      return nbyte;
-   }
-   __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-   return -1;
-}
-
-/*-------------------------------------------
-| Name:write
-| Description:
-| Parameters:
-| Return Type:
-| Comments:
-| See:
----------------------------------------------*/
-int dev_ioflag;
-#if defined(__GNUC__)
-ssize_t __attribute__ ((visibility("hidden")))
-write(int fildes, const void *buf, size_t nbyte){
-#else
-ssize_t write(int fildes, const void *buf, size_t nbyte){
-#endif
-   pid_t pid;
-   kernel_pthread_t* pthread_ptr;
-   desc_t desc;
-
-   if(fildes<0)
-      return -1;
-
-   if(nbyte<=0)
-      return -1;
-
-   if(!(pthread_ptr = kernel_pthread_self()))
-      return -1;
-
-   if((pid= pthread_ptr->pid)<1)
-      return -1;
-
-   desc = process_lst[pid]->desc_tbl[fildes];
-
-   if(desc<0)
-      return -1;
-
-   if(!(ofile_lst[desc].oflag&O_WRONLY))
-      return -1;
-
-   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR)) {
-      write_t write_dt;
-      write_dt.fildes = fildes;
-      write_dt.buf    = (void*)buf;
-      write_dt.nbyte  = nbyte;
-      __mk_syscall(_SYSCALL_WRITE,write_dt);
-      return write_dt.nbyte;
-   }
-
-   //is not implemented for this device dev?
-   if(!ofile_lst[desc].pfsop->fdev.fdev_write)
-      return -1;
-
-   //
-   __lock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
-   //check thread owner
-   __atomic_in();
-   {
-      desc_t _desc=ofile_lst[desc].desc;
-      //
-      if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr) {
-         do {
-            //check
-            if(ofile_lst[_desc].used<=0) {
-               __atomic_out();
-               __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
-               return -1; //error, stream not coherent :(
-            }
-            //
-            //begin of section: protection from io interrupt
-            __disable_interrupt_section_in();
-            //
-            ofile_lst[_desc].owner_pthread_ptr_write=pthread_ptr;
-            ofile_lst[_desc].owner_pid=pid;
-            //end of section: protection from io interrupt
-            __disable_interrupt_section_out();
-            //
-            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         } while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
-      }
-   }
-   __atomic_out();
-   //
-   if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
-      //profiler
-      __io_profiler_start(desc);
-      //
-      dev_ioflag=1;
-      if((nbyte = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte))<0) {
-         //profiler
-         __io_profiler_stop(desc);
-         __io_profiler_add_result(desc,O_WRONLY,0,0);
-         //
-         __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
-         return -1;
-      }
-      do {
-        dev_ioflag=2;
-         __wait_io_int(pthread_ptr); //wait all data are transmitted
-         dev_ioflag=3;
-      } while(ofile_lst[desc].pfsop->fdev.fdev_isset_write
-              && ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc));
-      //profiler
-      dev_ioflag=4;
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      //printf("__wait_io_int ok\n");
-   }else if((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
-      //profiler
-      __io_profiler_start(desc);
-      //
-      nbyte = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
-   }else if(ofile_lst[desc].attr&S_IFBLK) {
-      //no specific action.
-      //profiler
-      __io_profiler_start(desc);
-      //
-      nbyte =  ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
-   }
-   //
-   __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
-   //
-   return nbyte;
 }
 
 /*-------------------------------------------
@@ -653,7 +400,112 @@ int fdetach(const char *path){
    return fdetach_dt.ret;
 }
 
+/*-------------------------------------------
+| Name:read
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+#if defined(__GNUC__)
+ssize_t __attribute__ ((visibility("hidden")))
+read(int fildes, void *buf, size_t nbyte){
+#else
+ssize_t read(int fildes, void *buf, size_t nbyte){
+#endif
+   pid_t pid;
+   kernel_pthread_t* pthread_ptr;
+   desc_t desc;
+
+   if(fildes<0)
+      return -1;
+
+   if(nbyte<=0)
+      return -1;
+
+   if(!(pthread_ptr = kernel_pthread_self()))
+      return -1;
+
+   if((pid= pthread_ptr->pid)<1)
+      return -1;
+
+   desc = process_lst[pid]->desc_tbl[fildes];
+
+   if(desc<0)
+      return -1;
+
+   if(!(ofile_lst[desc].oflag&O_RDONLY))
+      return -1;
+
+   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR)) {
+      read_t read_dt;
+      read_dt.fildes= fildes;
+      read_dt.buf    = buf;
+      read_dt.nbyte  = nbyte;
+      __mk_syscall(_SYSCALL_READ,read_dt);
+      return read_dt.nbyte;
+   }
+   
+   //direct access to device driver
+   return kernel_io_read(desc,buf,nbyte);
+}
+
+/*-------------------------------------------
+| Name:write
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_ioflag;
+#if defined(__GNUC__)
+ssize_t __attribute__ ((visibility("hidden")))
+write(int fildes, const void *buf, size_t nbyte){
+#else
+ssize_t write(int fildes, const void *buf, size_t nbyte){
+#endif
+   pid_t pid;
+   kernel_pthread_t* pthread_ptr;
+   desc_t desc;
+
+   if(fildes<0)
+      return -1;
+
+   if(nbyte<=0)
+      return -1;
+
+   if(!(pthread_ptr = kernel_pthread_self()))
+      return -1;
+
+   if((pid= pthread_ptr->pid)<1)
+      return -1;
+
+   desc = process_lst[pid]->desc_tbl[fildes];
+
+   if(desc<0)
+      return -1;
+
+   if(!(ofile_lst[desc].oflag&O_WRONLY))
+      return -1;
+
+   if(ofile_lst[desc].attr&(S_IFREG|S_IFDIR)) {
+      write_t write_dt;
+      write_dt.fildes = fildes;
+      write_dt.buf    = (void*)buf;
+      write_dt.nbyte  = nbyte;
+      __mk_syscall(_SYSCALL_WRITE,write_dt);
+      return write_dt.nbyte;
+   }
+
+  //direct access to device driver
+   return kernel_io_write(desc,buf,nbyte);
+}
+
+
+
 
 /*===========================================
-End of Sourceio.c
+End of Source io.c
 =============================================*/

@@ -205,13 +205,13 @@ char_type magic_header[] = "\037\235";  /* 1F 9D */
 #include "kernel/core/libstd.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/statvfs.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/time.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/signal.h"
 
 
 //
+#include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 
 

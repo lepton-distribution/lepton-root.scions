@@ -41,7 +41,7 @@ Implementation
 /*===========================================
 End of Source tcgetattr.c
 =============================================*/
-#include "kernel/core/devio.h"
+#include "lib/libc/unistd.h"
 #include "lib/libc/termios/termios.h"
 
 int tcgetattr(int fd, struct termios *termios_p)

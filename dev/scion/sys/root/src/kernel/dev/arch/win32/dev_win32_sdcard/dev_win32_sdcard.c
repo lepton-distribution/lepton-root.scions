@@ -37,6 +37,8 @@ Includes
 
 //lepton include
 #include "kernel/core/system.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/ioctl_hd.h"
 #include "kernel/fs/vfs/vfsdev.h"
 #include "kernel/fs/vfs/vfstypes.h"

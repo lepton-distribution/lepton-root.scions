@@ -26,7 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/core//devio.h"
+#include "lib/libc/unistd.h"
 
 /*===========================================
 Global Declaration

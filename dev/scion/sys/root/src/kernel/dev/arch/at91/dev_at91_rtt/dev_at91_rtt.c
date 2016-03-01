@@ -38,7 +38,7 @@ either the MPL or the [eCos GPL] License."
 #include "lib/libc/ctype/ctype.h"
 #include "kernel/core/types.h"
 #include "kernel/core/time.h"
-#include "kernel/core/devio.h"
+#include "kernel/core/kernel_io.h"
 #include "kernel/core/errno.h"
 
 #include "dev_at91_rtt.h"

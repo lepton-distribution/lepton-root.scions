@@ -51,7 +51,6 @@ typedef struct utsname {
 
 
 int     _unistd_uname(struct utsname *);
-#define uname(__utsname__)_unistd_uname(__utsname__)
 
 
 #endif

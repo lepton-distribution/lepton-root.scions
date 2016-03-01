@@ -9,8 +9,11 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Chauvin-Arnoux.
-Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
+All Rights Reserved.
+
+Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -27,7 +30,7 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
-
+#include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/kernel_pthread.h"
@@ -38,6 +41,7 @@ Includes
 #include "kernel/core/systime.h"
 #include "kernel/core/time.h"
 #include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/flock.h"
 #include "kernel/core/bin.h"
 #include "kernel/core/env.h"
@@ -1576,7 +1580,7 @@ int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
       pthread_ptr->sig_mask.std|= (1 << (sig-1));
    }else if(sig>=SIGRTMIN && sig<SIGRTMAX) {
       //realtime signal
-
+   #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //sig ignore?
       if((unsigned long)(pthread_ptr->sigaction_lst[sig].sa_handler)==SIG_IGN)
          return 0;
@@ -1604,12 +1608,12 @@ int _sys_kill(kernel_pthread_t* pthread_ptr,int sig,int atomic){
       }
 
       //BEGIN OF ATOMIC SECTION
-#ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
+      #ifdef KERNEL_PROCESS_VFORK_CLRSET_IRQ
       if(atomic) {
          __clr_irq();
       }
-#endif
-
+      #endif
+   #endif //__KERNEL_POSIX_REALTIME_SIGNALS
    }else{
       return -1;
    }

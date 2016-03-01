@@ -25,8 +25,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Compiler Directive
 =============================================*/
-#ifndef _DEVIO_H
-#define _DEVIO_H
+#ifndef __KERNEL_IO_H__
+#define __KERNEL_IO_H__
 
 
 /*===========================================
@@ -40,38 +40,8 @@ Includes
 Declaration
 =============================================*/
 
-extern const int16_t STDIN_FILENO;
-extern const int16_t STDOUT_FILENO;
-extern const int16_t STDERR_FILENO;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-int   mount(int fstype,const char* dev_path, const char* mount_path);
-int   umount(const char* mount_path);
-void  sync(void);
-int   creat(const char *path,mode_t mode);
-int   open(const char *path, int oflag,mode_t mode);
-int   close(int fildes);
-int   remove(const char *path);
-int   rename(const char *old_name, const char *new_name);
-
-
-off_t    lseek(int fildes, off_t offset, int whence);
-ssize_t  read(int fildes, void *buf, size_t nbyte);
-ssize_t  write(int fildes, const void *buf, size_t nbyte);
-
-
-int ioctl(int fildes, int request, ... );
-
-#ifdef __cplusplus
-}
-#endif
-
-//posix compatiblity: symbolic link not yet supported on lepton.
-//in future development syscall unlink must be implemented.
-#define unlink(__path__) remove(__path__)
-
+extern ssize_t kernel_io_read(desc_t desc, void *buf, size_t nbyte);
+extern ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte);
 
 #endif
 

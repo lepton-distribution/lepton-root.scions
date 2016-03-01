@@ -32,13 +32,13 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
-
+#include "kernel/core/stat.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
 #include "lib/libc/ctype/ctype.h"
 #include "kernel/core/types.h"
 #include "kernel/core/time.h"
-#include "kernel/core/devio.h"
+#include "kernel/core/kernel_io.h"
 #include "kernel/core/errno.h"
 
 #include "kernel/dev/arch/at91/dev_at91_rtt/dev_at91_rtt.h"

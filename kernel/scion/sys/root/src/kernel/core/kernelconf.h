@@ -282,6 +282,7 @@ Declaration
    #define __KERNEL_SRAM_LOCATION
 #endif
 
+        
 //features profile
 #define __tauon_kernel_profile_minimal__         0x0001
 #define __tauon_kernel_profile_classic__         0x0002
@@ -304,7 +305,9 @@ Declaration
 
 #if (__tauon_kernel_profile__==__tauon_kernel_profile_full__)
    //
-   #define __KERNEL_OBJECT_POOL_MAX 10
+   #ifndef __KERNEL_OBJECT_POOL_MAX
+      #define __KERNEL_OBJECT_POOL_MAX 10
+   #endif
 
    #ifndef __KERNEL_MAX_PIPE
       #define __KERNEL_MAX_PIPE 10
@@ -319,7 +322,10 @@ Declaration
    #define __KERNEL_UFS_BLOCK_SIZE_MAX 256
 
 #elif (__tauon_kernel_profile__==__tauon_kernel_profile_classic__)
-   #define __KERNEL_OBJECT_POOL_MAX 10
+   
+   #ifndef __KERNEL_OBJECT_POOL_MAX
+      #define __KERNEL_OBJECT_POOL_MAX 10
+   #endif
 
    #ifndef __KERNEL_MAX_PIPE
       #define __KERNEL_MAX_PIPE 10
@@ -363,6 +369,20 @@ Declaration
    #endif
 #endif
 
+//printk
+#ifdef __KERNEL_PRINTK
+   #ifndef __KERNEL_PRINTK_BUFFER
+      #define __KERNEL_PRINTK_BUFFER  (128)
+   #endif
+#endif
+        
+#ifdef __KERNEL_TRACE_PRINTK
+   #ifndef __KERNEL_TRACE_PRINTK_BUFFER
+      #define __KERNEL_TRACE_PRINTK_BUFFER  (128)
+   #endif
+#endif
+        
+        
 //for 20KB RAM default setting
 //distrib: must be set
 #ifndef __KERNEL_CPU_FREQ

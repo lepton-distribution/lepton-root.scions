@@ -46,6 +46,7 @@ int      _vfs_mount(fstype_t fstype,const char* dev_path,const char* mount_path)
 int      _vfs_umount(const char* mount_path);
 int      _vfs_sync(void);
 int      _vfs_mknod(const char *path, mode_t mode, dev_t dev);
+int      _vfs_mkfifo(const char *path);
 int      _vfs_fattach(desc_t desc, const char* path);
 int      _vfs_fdetach(const char* path);
 int      _vfs_mkdir(const char* ref,mode_t mode);

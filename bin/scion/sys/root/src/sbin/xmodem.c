@@ -68,14 +68,14 @@ Includes
    #include <string.h>
 
    #include "kernel/core/errno.h"
+   #include "kernel/core/system.h"
    #include "kernel/core/libstd.h"
-   #include "kernel/core/devio.h"
-
-   #include "lib/libc/termios/termios.h"
-
    #include "kernel/core/stat.h"
    #include "kernel/core/statvfs.h"
+   #include "kernel/core/fcntl.h"
 
+   #include "lib/libc/unistd.h"
+   #include "lib/libc/termios/termios.h"
    #include "lib/libc/stdio/stdio.h"
 #endif
 

@@ -39,7 +39,8 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/core/stat.h"
-#include "kernel/core/devio.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/kernel_io.h"
 
 
 

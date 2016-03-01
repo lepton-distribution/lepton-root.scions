@@ -30,7 +30,7 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
-
+#include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/kernel_pthread.h"
@@ -41,6 +41,7 @@ Includes
 #include "kernel/core/systime.h"
 #include "kernel/core/time.h"
 #include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/flock.h"
 #include "kernel/core/bin.h"
 #include "kernel/core/env.h"

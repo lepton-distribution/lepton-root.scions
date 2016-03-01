@@ -35,7 +35,6 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/fcntl.h"
 #include "kernel/core/ioctl.h"
 #include "kernel/core/stat.h"
-#include "kernel/core/devio.h"
 #include "kernel/core/stropts.h"
 #include "kernel/core/timer.h"
 
@@ -44,6 +43,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/fs/vfs/vfs.h"
 
+#include "lib/libc/unistd.h"
 #include "lib/librt/mqueue.h"
 
 

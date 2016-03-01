@@ -12,7 +12,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -26,11 +26,6 @@
         <option>
           <name>ListPath</name>
           <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>38</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -59,11 +54,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -87,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.30.1.7765</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -136,13 +126,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>38</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>38</state>
         </option>
         <option>
@@ -156,6 +141,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>38</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -599,7 +612,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -626,6 +639,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -968,7 +982,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -982,11 +996,6 @@
         <option>
           <name>ListPath</name>
           <state>C:\tauon\building\output\$PROJ_FNAME$\$CONFIG_NAME$\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>39</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1015,11 +1024,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -1043,7 +1047,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.30.1.7765</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1092,13 +1096,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>39</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>39</state>
         </option>
         <option>
@@ -1112,6 +1111,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>39</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>39</state>
         </option>
       </data>
     </settings>
@@ -1558,7 +1585,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -1585,6 +1612,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -1927,7 +1955,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -1941,11 +1969,6 @@
         <option>
           <name>ListPath</name>
           <state>tauon-kernel-arm926ejs-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>12</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1974,11 +1997,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -2002,7 +2020,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -2014,7 +2032,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -2051,13 +2069,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>12</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>12</state>
         </option>
         <option>
@@ -2071,6 +2084,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>12</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>12</state>
         </option>
       </data>
     </settings>
@@ -2516,7 +2557,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -2543,6 +2584,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -2885,7 +2927,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -2899,11 +2941,6 @@
         <option>
           <name>ListPath</name>
           <state>tauon-kernel-cortex-m3-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>38</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -2932,11 +2969,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -2960,7 +2992,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>6.21.1.52845</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -2972,7 +3004,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -3009,13 +3041,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>38</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>38</state>
         </option>
         <option>
@@ -3029,6 +3056,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>38</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -3475,7 +3530,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -3502,6 +3557,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -3844,7 +3900,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -3858,11 +3914,6 @@
         <option>
           <name>ListPath</name>
           <state>tauon-kernel-cortex-m4f-freertos-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>40</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -3891,11 +3942,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>5</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -3919,7 +3965,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -3968,13 +4014,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>40</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>40</state>
         </option>
         <option>
@@ -3988,6 +4029,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>39</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>4</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>1</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>39</state>
         </option>
       </data>
     </settings>
@@ -4435,7 +4504,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -4462,6 +4531,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -4804,7 +4874,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -4818,11 +4888,6 @@
         <option>
           <name>ListPath</name>
           <state>tauon-kernel-arm926ejs-freertos-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>12</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -4851,11 +4916,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -4879,7 +4939,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -4891,7 +4951,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxDxx	TexasInstruments LM3SxDxx</state>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -4928,13 +4988,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>12</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>12</state>
         </option>
         <option>
@@ -4948,6 +5003,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>12</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>12</state>
         </option>
       </data>
     </settings>
@@ -5395,7 +5478,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -5422,6 +5505,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -5764,7 +5848,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -5778,11 +5862,6 @@
         <option>
           <name>ListPath</name>
           <state>tauon-kernel-cortex-m0+-freertos-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>35</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -5811,11 +5890,6 @@
           <state>1</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>0</state>
         </option>
@@ -5839,7 +5913,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.40.3.8937</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -5888,13 +5962,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>35</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>22</version>
           <state>35</state>
         </option>
         <option>
@@ -5908,6 +5977,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>22</version>
+          <state>35</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9D96	TexasInstruments LM3S9D96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>22</version>
+          <state>35</state>
         </option>
       </data>
     </settings>
@@ -6349,7 +6446,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -6376,6 +6473,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -7902,12 +8000,6 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\devconf.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\devio.c</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\devio.h</name>
-      </file>
-      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\dirent.c</name>
       </file>
       <file>
@@ -7974,7 +8066,551 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_io.c</name>
+        <configuration>
+          <name>lib-debug</name>
+          <settings>
+            <name>ICCARM</name>
+            <data>
+              <version>31</version>
+              <wantNonLocal>0</wantNonLocal>
+              <debug>1</debug>
+              <option>
+                <name>CCOptimizationNoSizeConstraints</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDefines</name>
+                <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
+                <state>OS_LIBMODE_SP</state>
+                <state>NDEBUG</state>
+              </option>
+              <option>
+                <name>CCPreprocFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPreprocComments</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPreprocLine</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCMnemonics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCMessages</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListAssFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListAssSource</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCEnableRemarks</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDiagSuppress</name>
+                <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
+              </option>
+              <option>
+                <name>CCDiagRemark</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCDiagWarning</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCDiagError</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCObjPrefix</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCAllowList</name>
+                <version>1</version>
+                <state>11111110</state>
+              </option>
+              <option>
+                <name>CCDebugInfo</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IEndianMode</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IProcessor</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IExtraOptionsCheck</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IExtraOptions</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCLangConformance</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCSignedPlainChar</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCRequirePrototypes</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCMultibyteSupport</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDiagWarnAreErr</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCCompilerRuntimeInfo</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IFpuProcessor</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>OutputFile</name>
+                <state>$FILE_BNAME$.o</state>
+              </option>
+              <option>
+                <name>CCLibConfigHeader</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>PreInclude</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CompilerMisraOverride</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCIncludePath2</name>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/generic</state>
+                <state>c:/tauon/sys/root/src</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
+                <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
+                <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
+                <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+              </option>
+              <option>
+                <name>CCStdIncCheck</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCCodeSection</name>
+                <state>.text</state>
+              </option>
+              <option>
+                <name>IInterwork2</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IProcessorMode2</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCOptLevel</name>
+                <state>3</state>
+              </option>
+              <option>
+                <name>CCOptStrategy</name>
+                <version>0</version>
+                <state>2</state>
+              </option>
+              <option>
+                <name>CCOptLevelSlave</name>
+                <state>3</state>
+              </option>
+              <option>
+                <name>CompilerMisraRules98</name>
+                <version>0</version>
+                <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+              </option>
+              <option>
+                <name>CompilerMisraRules04</name>
+                <version>0</version>
+                <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+              </option>
+              <option>
+                <name>CCPosIndRopi</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPosIndRwpi</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPosIndNoDynInit</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccLang</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCDialect</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccAllowVLA</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCppDialect</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccExceptions</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccRTTI</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccStaticDestr</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccCppInlineSemantics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCmsis</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccFloatSemantics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCNoLiteralPool</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCOptStrategySlave</name>
+                <version>0</version>
+                <state>2</state>
+              </option>
+            </data>
+          </settings>
+        </configuration>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_io.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_printk.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_printk.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_pthread.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_ring_buffer.c</name>
+        <configuration>
+          <name>lib-debug</name>
+          <settings>
+            <name>ICCARM</name>
+            <data>
+              <version>31</version>
+              <wantNonLocal>0</wantNonLocal>
+              <debug>1</debug>
+              <option>
+                <name>CCOptimizationNoSizeConstraints</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDefines</name>
+                <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
+                <state>OS_LIBMODE_SP</state>
+                <state>NDEBUG</state>
+              </option>
+              <option>
+                <name>CCPreprocFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPreprocComments</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPreprocLine</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCMnemonics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListCMessages</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListAssFile</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCListAssSource</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCEnableRemarks</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDiagSuppress</name>
+                <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
+              </option>
+              <option>
+                <name>CCDiagRemark</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCDiagWarning</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCDiagError</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCObjPrefix</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCAllowList</name>
+                <version>1</version>
+                <state>11111110</state>
+              </option>
+              <option>
+                <name>CCDebugInfo</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IEndianMode</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IProcessor</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IExtraOptionsCheck</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IExtraOptions</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CCLangConformance</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCSignedPlainChar</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCRequirePrototypes</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCMultibyteSupport</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCDiagWarnAreErr</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCCompilerRuntimeInfo</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IFpuProcessor</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>OutputFile</name>
+                <state>$FILE_BNAME$.o</state>
+              </option>
+              <option>
+                <name>CCLibConfigHeader</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>PreInclude</name>
+                <state></state>
+              </option>
+              <option>
+                <name>CompilerMisraOverride</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCIncludePath2</name>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
+                <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/generic</state>
+                <state>c:/tauon/sys/root/src</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
+                <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
+                <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
+                <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
+                <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+              </option>
+              <option>
+                <name>CCStdIncCheck</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCCodeSection</name>
+                <state>.text</state>
+              </option>
+              <option>
+                <name>IInterwork2</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IProcessorMode2</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>CCOptLevel</name>
+                <state>3</state>
+              </option>
+              <option>
+                <name>CCOptStrategy</name>
+                <version>0</version>
+                <state>2</state>
+              </option>
+              <option>
+                <name>CCOptLevelSlave</name>
+                <state>3</state>
+              </option>
+              <option>
+                <name>CompilerMisraRules98</name>
+                <version>0</version>
+                <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+              </option>
+              <option>
+                <name>CompilerMisraRules04</name>
+                <version>0</version>
+                <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+              </option>
+              <option>
+                <name>CCPosIndRopi</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPosIndRwpi</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCPosIndNoDynInit</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccLang</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCDialect</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccAllowVLA</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCppDialect</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccExceptions</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccRTTI</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccStaticDestr</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccCppInlineSemantics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>IccCmsis</name>
+                <state>1</state>
+              </option>
+              <option>
+                <name>IccFloatSemantics</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCNoLiteralPool</name>
+                <state>0</state>
+              </option>
+              <option>
+                <name>CCOptStrategySlave</name>
+                <version>0</version>
+                <state>2</state>
+              </option>
+            </data>
+          </settings>
+        </configuration>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_ring_buffer.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_sem.h</name>
@@ -7987,6 +8623,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\libstd.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\limits.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\malloc.c</name>
@@ -10680,18 +11319,6 @@
       </group>
       <group>
         <name>stdio</name>
-        <group>
-          <name>unistd</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\unistd.c</name>
-          </file>
-        </group>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\stdio\printf.c</name>
         </file>
@@ -10729,6 +11356,284 @@
           <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\termios\termios.h</name>
         </file>
       </group>
+      <group>
+        <name>unistd</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\getopt.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\io.c</name>
+          <configuration>
+            <name>lib-debug</name>
+            <settings>
+              <name>ICCARM</name>
+              <data>
+                <version>31</version>
+                <wantNonLocal>0</wantNonLocal>
+                <debug>1</debug>
+                <option>
+                  <name>CCOptimizationNoSizeConstraints</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCDefines</name>
+                  <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
+                  <state>OS_LIBMODE_SP</state>
+                  <state>NDEBUG</state>
+                </option>
+                <option>
+                  <name>CCPreprocFile</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCPreprocComments</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCPreprocLine</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCListCFile</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCListCMnemonics</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCListCMessages</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCListAssFile</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCListAssSource</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCEnableRemarks</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCDiagSuppress</name>
+                  <state>pe001,pa050,pe375,pe231,pe177,pe550,pe167</state>
+                </option>
+                <option>
+                  <name>CCDiagRemark</name>
+                  <state></state>
+                </option>
+                <option>
+                  <name>CCDiagWarning</name>
+                  <state></state>
+                </option>
+                <option>
+                  <name>CCDiagError</name>
+                  <state></state>
+                </option>
+                <option>
+                  <name>CCObjPrefix</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>CCAllowList</name>
+                  <version>1</version>
+                  <state>11111110</state>
+                </option>
+                <option>
+                  <name>CCDebugInfo</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IEndianMode</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IProcessor</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IExtraOptionsCheck</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IExtraOptions</name>
+                  <state></state>
+                </option>
+                <option>
+                  <name>CCLangConformance</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCSignedPlainChar</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>CCRequirePrototypes</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCMultibyteSupport</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCDiagWarnAreErr</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCCompilerRuntimeInfo</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IFpuProcessor</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>OutputFile</name>
+                  <state>$FILE_BNAME$.o</state>
+                </option>
+                <option>
+                  <name>CCLibConfigHeader</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>PreInclude</name>
+                  <state></state>
+                </option>
+                <option>
+                  <name>CompilerMisraOverride</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCIncludePath2</name>
+                  <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM4_386/inc</state>
+                  <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSCXM3_382/inc</state>
+                  <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360</state>
+                  <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/cpu</state>
+                  <state>c:/tauon/sys/root/src/kernel/core/ucore/embOSARM7_360/src/generic</state>
+                  <state>c:/tauon/sys/root/src</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
+                  <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
+                  <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
+                  <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+                </option>
+                <option>
+                  <name>CCStdIncCheck</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCCodeSection</name>
+                  <state>.text</state>
+                </option>
+                <option>
+                  <name>IInterwork2</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IProcessorMode2</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>CCOptLevel</name>
+                  <state>3</state>
+                </option>
+                <option>
+                  <name>CCOptStrategy</name>
+                  <version>0</version>
+                  <state>2</state>
+                </option>
+                <option>
+                  <name>CCOptLevelSlave</name>
+                  <state>3</state>
+                </option>
+                <option>
+                  <name>CompilerMisraRules98</name>
+                  <version>0</version>
+                  <state>1000111110110101101110011100111111101110011011000101110111101101100111111111111100110011111001110111001111111111111111111111111</state>
+                </option>
+                <option>
+                  <name>CompilerMisraRules04</name>
+                  <version>0</version>
+                  <state>111101110010111111111000110111111111111111111111111110010111101111010101111111111111111111111111101111111011111001111011111011111111111111111</state>
+                </option>
+                <option>
+                  <name>CCPosIndRopi</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCPosIndRwpi</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCPosIndNoDynInit</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IccLang</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IccCDialect</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccAllowVLA</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IccCppDialect</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccExceptions</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccRTTI</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccStaticDestr</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccCppInlineSemantics</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>IccCmsis</name>
+                  <state>1</state>
+                </option>
+                <option>
+                  <name>IccFloatSemantics</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCNoLiteralPool</name>
+                  <state>0</state>
+                </option>
+                <option>
+                  <name>CCOptStrategySlave</name>
+                  <version>0</version>
+                  <state>2</state>
+                </option>
+              </data>
+            </settings>
+          </configuration>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd\unistd.c</name>
+        </file>
+      </group>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\libc.c</name>
       </file>
@@ -10737,6 +11642,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\stdint.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\unistd.h</name>
       </file>
     </group>
     <group>

@@ -57,76 +57,12 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-//prevent multiple declaration (to do:will be moved in stat.h)
-#ifdef S_IFMT
-   #undef S_IFMT
-#endif
-#ifdef S_IFNULL
-   #undef S_IFNULL
-#endif
-#ifdef S_IFREG
-   #undef S_IFREG
-#endif
-#ifdef S_IFBLK
-   #undef S_IFBLK
-#endif
-#ifdef S_IFCHR
-   #undef S_IFCHR
-#endif
-#ifdef S_IFDIR
-   #undef S_IFDIR
-#endif
-#ifdef S_IFIFO
-   #undef S_IFIFO
-#endif
-#ifdef S_IFLNK
-   #undef S_IFLNK
-#endif
-
-//file attribute
-#define S_IFMT                  0x003F
-#define S_IFNULL                0x0000
-#define S_IFREG                 0x0001
-#define S_IFBLK                 0x0002
-#define S_IFCHR                 0x0004
-#define S_IFDIR                 0x0008
-#define S_IFIFO                 0x0010
-#define S_IFLNK                 0x0020
-
-//prevent multiple declaration
-#ifdef O_RDONLY
-   #undef O_RDONLY
-#endif
-#ifdef O_WRONLY
-   #undef O_WRONLY
-#endif
-#ifdef O_RDWR
-   #undef O_RDWR
-#endif
-#ifdef O_CREAT
-   #undef O_CREAT
-#endif
-#ifdef O_APPEND
-   #undef O_APPEND
-#endif
-#ifdef O_SYNC
-   #undef O_SYNC
-#endif
-#ifdef O_NONBLOCK
-   #undef O_NONBLOCK
-#endif
 
 //
-#define PATH_MAX     64
+extern const int STDIN_FILENO;
+extern const int STDOUT_FILENO;
+extern const int STDERR_FILENO;
 
-//file open flag
-#define O_RDONLY     0x0001
-#define O_WRONLY     0x0002
-#define O_RDWR       0x0003 //O_RDONLY|O_WRONLY
-#define O_CREAT      0x0004
-#define O_APPEND     0x0008
-#define O_SYNC       0x0010
-#define O_NONBLOCK   0x0020
 
 //see fcntl.h FD_CLOEXEC 0x8000
 
