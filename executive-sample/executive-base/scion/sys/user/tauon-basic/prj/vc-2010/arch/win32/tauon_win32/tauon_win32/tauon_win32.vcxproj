@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -21,12 +21,14 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>false</WholeProgramOptimization>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -85,9 +87,6 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoosed.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\telnetd.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\tst\tsteth.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
@@ -101,7 +100,6 @@
     <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\kernel_mkconf.h" />
   </ItemGroup>

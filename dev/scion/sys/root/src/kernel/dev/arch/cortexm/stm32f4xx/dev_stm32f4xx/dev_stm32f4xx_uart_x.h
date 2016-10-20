@@ -50,6 +50,8 @@ typedef struct board_stm32f4xx_uart_info_st {
    //
    _Uart_Ctrl uart_ctrl;
    _Uart_Descriptor uart_descriptor;
+   //
+   unsigned long baudrate;
    
    //
    kernel_pthread_mutex_t mutex;

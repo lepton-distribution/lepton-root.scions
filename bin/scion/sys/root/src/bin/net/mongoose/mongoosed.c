@@ -47,7 +47,8 @@
 
    #include <stdlib.h>
    #include <string.h>
-   #include "lib/libc/ctype/ctype.h"
+   
+   #include "kernel/core/kal.h"
    #include "kernel/core/system.h"
    #include "kernel/core/signal.h"
    #include "kernel/core/wait.h"
@@ -58,14 +59,16 @@
    #include "kernel/core/time.h"
    #include "kernel/core/fcntl.h"
 
+   #include "kernel/core/libstd.h"
    #include "kernel/core/select.h"
    #include "kernel/core/net/socket.h"
 
    #include "lib/libc/unistd.h"
    #include "lib/libc/stdio/stdio.h"
    #include "lib/pthread/pthread.h"
+   #include "lib/libc/ctype/ctype.h"
 
-   #include "kernel/core/libstd.h"
+   
 
    #undef _WIN32
 

@@ -27,7 +27,10 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include "kernel/core/errno.h"
-#include "kernel/core/syscall.h"
+#include "kernel/core/kernel_pthread.h"
+#include "kernel/core/kernel_pthread_mutex.h"
+
+#include "kernel/core/process.h"
 #include "kernel/core/timer.h"
 #include "kernel/core/kernel_timer.h"
 

@@ -56,7 +56,7 @@ OS_TASK* OS_GetpCurrentTask (void){
       if(osTaskList[i]){
          if(osTaskList[i]->Id!=GetCurrentThreadId())
             continue;
-         return &osTaskList[i];
+         return osTaskList[i];
       }
    }
    //
@@ -107,10 +107,13 @@ void OS_CreateTask(
         ){
    
    int i=0;
+   HANDLE hThread;
 
    pt->hEvent=CreateEvent(NULL,FALSE,FALSE,NULL);
 
-   pt->hTask = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)pRoutine, NULL, CREATE_SUSPENDED, &pt->Id ); 
+   hThread  = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)pRoutine, NULL, CREATE_SUSPENDED, &pt->Id );
+   
+   pt->hTask = hThread;
 
    pt->Name=strdup(pName);
    pt->Priority=Priority;

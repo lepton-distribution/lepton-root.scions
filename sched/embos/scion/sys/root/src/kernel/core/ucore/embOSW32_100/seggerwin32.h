@@ -122,7 +122,7 @@ Declaration
 
 //typedef void (voidRoutine)(void);
 
-#define OS_CPU "WIN32/MS VC++ 6.0"
+#define OS_CPU "WIN32/MS VC++ 2015"
 #define OS_CPU_VERSION 306
 
 HANDLE hSeggerProcess;
@@ -134,61 +134,35 @@ extern  volatile OS_I32 OS_Time;
 #define OS_EI()
 
 //TASK
-
+#pragma pack(push, 8)
 typedef struct {
-
-   HANDLE hTask;
    DWORD  Id; //Preserved compatiblity with Segger 
-
-   HANDLE hSemTask;
-
+   //
    const char*  Name;
    uchar Priority;
-
+   //
    void* pStack;
    uint StackSize;
    uint TimeSlice;
-
-   HANDLE hEvent;
+   
+   //win32 structure
+   HANDLE   hTask;
+   CONTEXT  context;
+   CONTEXT  bckup_context;
+   HANDLE   hSemTask;
+   HANDLE   hCurrentWaitObject;
+   HANDLE   hEvent;
+  
+   //
+   char*   bckup_stack;
    U8  Events;
 
-   CONTEXT context;
-
-   CONTEXT bckup_context;
-   char*   bckup_stack;
-   
    //specific for win32 task management
    int index;
    int regionCount;
 
-   HANDLE hCurrentWaitObject;
-
-
 }OS_TASK;
-
-
-typedef struct {
-
-   HANDLE hTask;
-   DWORD  Id; //Preserved compatiblity with Segger 
-
-   HANDLE hSemTask;
-
-   char*  pName;
-   uchar Priority;
-
-   void* pStack;
-   uint StackSize;
-   uint TimeSlice;
-
-   HANDLE hEvent;
-   U8  Events;
-  
-   
-   //specific for win32 task management
-   int index;
-
-}OS_TASK2;
+#pragma pack (pop)
 
 
 extern volatile BOOLEAN seggerStarted;

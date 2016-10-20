@@ -27,21 +27,15 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 
-//specific win32 include
-#include <io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-
-//lepton include
 #include "kernel/core/ioctl_hd.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 #include "kernel/fs/vfs/vfsdev.h"
 #include "kernel/fs/vfs/vfstypes.h"
+
+#include "kernel/dev/arch/win32/dev_win32_fileflash/dev_win32_fileflash.h"
+#include "kernel/dev/arch/win32/dev_win32_fileflash/fileflash_win32_isolation.h"
 
 /*===========================================
 Global Declaration
@@ -73,18 +67,6 @@ dev_map_t dev_win32_fileflash_map={
 };
 
 
-//
-#define DFLT_FILEFLASH_MEMORYSIZE 128*1024 /*2048*1024*/ //32*1024 //(32KB)
-static char* pmemory=(char*)0;
-static long memory_size = DFLT_FILEFLASH_MEMORYSIZE;
-static int fh=-1;
-
-static const char memory[DFLT_FILEFLASH_MEMORYSIZE]={0};
-static int instance_counter=0;
-
-static int current_memory_size=0;
-
-
 
 /*===========================================
 Implementation
@@ -98,7 +80,7 @@ Implementation
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_load(void){
+int dev_win32_fileflash_load(void) {
    return 0;
 }
 
@@ -110,41 +92,16 @@ int dev_win32_fileflash_load(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_open(desc_t desc, int o_flag){
-
-   if(fh==-1) {
-
-      if( (fh = _open( ".\\fsflash.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
-         DWORD dwError=GetLastError();
-
-         if(dwError!=ERROR_FILE_EXISTS)
-            return -1;
-
-         if( (fh = _open( ".\\fsflash.o",_O_RDWR |_O_BINARY,_S_IREAD|_S_IWRITE )) == -1 )
-            return -1;
-
-      }else{
-         int w=0;
-
-         close(fh);
-         if( (fh = _open( ".\\fsflash.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
-            return -1;
-      }
-
-      current_memory_size=_lseek(fh,0,SEEK_END);
-      printf( "fsflash physical size %u bytes ok.\n", current_memory_size );
-
-      _lseek(fh,0,SEEK_SET );
-   }
-
+int dev_win32_fileflash_open(desc_t desc, int o_flag) {
    //
-   if(o_flag & O_RDONLY) {
+   if (fileflash_win32_isolation_open(DFLT_FLILEFLASH_FILE_PATH) < 0)
+      return -1;
+   //
+   if (o_flag & O_RDONLY) {
    }
 
-   if(o_flag & O_WRONLY) {
+   if (o_flag & O_WRONLY) {
    }
-
-   instance_counter++;
 
    return 0;
 }
@@ -157,20 +114,8 @@ int dev_win32_fileflash_open(desc_t desc, int o_flag){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_close(desc_t desc){
-
-   if(fh==-1)
-      return -1;
-
-   instance_counter--;
-
-   if(instance_counter<0) {
-      instance_counter=0;
-      _close(fh);
-      fh = -1;
-   }
-
-   return 0;
+int dev_win32_fileflash_close(desc_t desc) {
+   return fileflash_win32_isolation_close();
 }
 
 /*-------------------------------------------
@@ -181,7 +126,7 @@ int dev_win32_fileflash_close(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_isset_read(desc_t desc){
+int dev_win32_fileflash_isset_read(desc_t desc) {
    return -1;
 }
 
@@ -193,7 +138,7 @@ int dev_win32_fileflash_isset_read(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_isset_write(desc_t desc){
+int dev_win32_fileflash_isset_write(desc_t desc) {
    return -1;
 }
 /*-------------------------------------------
@@ -204,16 +149,8 @@ int dev_win32_fileflash_isset_write(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_read(desc_t desc, char* buf,int size){
-   int r;
-   if(ofile_lst[desc].offset>=memory_size)
-      return -1;
-   _lseek( fh, ofile_lst[desc].offset, SEEK_SET);
-   r= _read( fh,buf,size);
-   ofile_lst[desc].offset = _lseek( fh, 0, SEEK_CUR);
-   //to remove : test
-   //printf("<- read offset=%d\n",ofile_lst[desc].offset);
-   return r;
+int dev_win32_fileflash_read(desc_t desc, char* buf, int size) {
+   return fileflash_win32_isolation_read(&ofile_lst[desc].offset, buf, size);
 }
 
 /*-------------------------------------------
@@ -224,17 +161,8 @@ int dev_win32_fileflash_read(desc_t desc, char* buf,int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_write(desc_t desc, const char* buf,int size){
-   int w;
-   if(ofile_lst[desc].offset>=memory_size)
-      return -1;
-   _lseek( fh, ofile_lst[desc].offset, SEEK_SET);
-   w = _write( fh,buf,size);
-   //_commit(fh);
-   ofile_lst[desc].offset = _lseek( fh, 0, SEEK_CUR);
-   //to remove : test
-   //printf("-> write offset=%d\n",ofile_lst[desc].offset);
-   return w;
+int dev_win32_fileflash_write(desc_t desc, const char* buf, int size) {
+   return fileflash_win32_isolation_write(&ofile_lst[desc].offset, buf, size);
 }
 
 /*-------------------------------------------
@@ -245,11 +173,25 @@ int dev_win32_fileflash_write(desc_t desc, const char* buf,int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_seek(desc_t desc,int offset,int origin){
-   if(ofile_lst[desc].offset>=memory_size)
-      return -1;
-   ofile_lst[desc].offset = _lseek( fh, offset, origin);
+int dev_win32_fileflash_seek(desc_t desc, int offset, int origin) {
+   unsigned long dev_current_addr = (unsigned long)ofile_lst[desc].offset;
 
+   switch (origin) {
+   case SEEK_SET:
+      dev_current_addr = (unsigned long)(offset);
+      break;
+
+   case SEEK_CUR:
+      dev_current_addr += (unsigned long)(offset);
+      break;
+
+   case SEEK_END:
+      dev_current_addr = (unsigned long)fileflash_win32_isolation_getsize();
+      break;
+   }
+   //
+   ofile_lst[desc].offset = dev_current_addr;
+   //
    return ofile_lst[desc].offset;
 }
 
@@ -261,63 +203,44 @@ int dev_win32_fileflash_seek(desc_t desc,int offset,int origin){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_ioctl(desc_t desc,int request,va_list ap){
-   switch(request) {
-
-   case HDGETSZ: {
-      long* hdsz_p= va_arg( ap, long*);
-      if(!hdsz_p)
-         return -1;
-
-      *hdsz_p = memory_size;
-   }
-   break;
-
-   case HDSETSZ: {
-      int w=0;
-      long hdsz= va_arg( ap, long);
-      if(!hdsz)
-         return -1;
+int dev_win32_fileflash_ioctl(desc_t desc, int request, va_list ap) {
+   switch (request) {
       //
-      memory_size = hdsz;
-      //
-      if(memory_size<current_memory_size) {
-         //file must be truncate
-         printf( "fsflash must be truncate...");
-         close(fh);
-         if( (fh = _open( ".\\fsflash.o",_O_RDWR|_O_TRUNC|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ) {
-            printf( "error!\n");
+      case HDGETSZ: {
+         long* hdsz_p = va_arg(ap, long*);
+         if (!hdsz_p)
             return -1;
-         }
-         printf( "ok");
+         //
+         *hdsz_p = fileflash_win32_isolation_getsize();
       }
+      break;
+
       //
-      _lseek(fh,0,SEEK_SET );
+      case HDSETSZ: {
+         long hdsz = va_arg(ap, long);
+         //
+         if (!hdsz)
+            return -1;
+         //
+         fileflash_win32_isolation_setsize(hdsz);
+         //
+      }
+      break;
+
       //
-      if(pmemory)
-         free(pmemory);
-      pmemory = malloc(memory_size);
-      memset(pmemory,0,memory_size);
+      case HDCLRDSK: {
+         fileflash_win32_isolation_erase();
+      }
+      break;
       //
-      if(( w = _write(fh,pmemory,memory_size)) == -1 )
-         printf( "fsflash creation failed" );
-      else
-         printf( "fsflash creation size %u bytes ok.\n", w );
-      //
-      current_memory_size=_lseek(fh,0,SEEK_END);
-      printf( "fsflash physical size %u bytes ok.\n", current_memory_size );
-      //
-      _lseek(fh,0,SEEK_SET );
-   }
-   break;
-   //
-   default:
-      return -1;
+      default:
+         return -1;
 
    }
 
    return 0;
 }
+
 /*===========================================
 End of Sourcedrv_fileflash.c
 =============================================*/

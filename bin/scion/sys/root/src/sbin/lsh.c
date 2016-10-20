@@ -27,10 +27,12 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+
 #include <stdlib.h>
-#include <string.h>
+
 #include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
+#include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/signal.h"
@@ -42,6 +44,9 @@ Includes
 
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
+#include "lib/libc/string/string.h"
+
+
 
 //for cygwin unix test
 /*

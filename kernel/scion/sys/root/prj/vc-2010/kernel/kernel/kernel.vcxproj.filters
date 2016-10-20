@@ -148,9 +148,6 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\cpu.c">
       <Filter>kernel\core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\devio.c">
-      <Filter>kernel\core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\dirent.c">
       <Filter>kernel\core</Filter>
     </ClCompile>
@@ -212,6 +209,12 @@
       <Filter>kernel\core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\wait.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_io.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_printk.c">
       <Filter>kernel\core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -295,9 +298,6 @@
       <Filter>kernel\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\devconf.h">
-      <Filter>kernel\core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\devio.h">
       <Filter>kernel\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\dirent.h">
@@ -460,6 +460,12 @@
       <Filter>kernel\core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\ioctl_spi.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_io.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_printk.h">
       <Filter>kernel\core</Filter>
     </ClInclude>
   </ItemGroup>

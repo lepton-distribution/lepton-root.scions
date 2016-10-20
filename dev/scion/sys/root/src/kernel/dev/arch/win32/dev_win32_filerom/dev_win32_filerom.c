@@ -26,27 +26,21 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-//specific win32 include
-#include <io.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 
-//lepton include
+#include "kernel/core/ioctl_hd.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 #include "kernel/fs/vfs/vfsdev.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
-
+#include "kernel/dev/arch/win32/dev_win32_filerom/dev_win32_filerom.h"
+#include "kernel/dev/arch/win32/dev_win32_filerom/filerom_win32_isolation.h"
 
 /*===========================================
 Global Declaration
 =============================================*/
-const char dev_win32_filerom_name[]="hdb\0";
+const char dev_win32_filerom_name[]="hdc\0";
 
 int dev_win32_filerom_load(void);
 int dev_win32_filerom_open(desc_t desc, int o_flag);
@@ -56,6 +50,7 @@ int dev_win32_filerom_isset_write(desc_t desc);
 int dev_win32_filerom_read(desc_t desc, char* buf,int size);
 int dev_win32_filerom_write(desc_t desc, const char* buf,int size);
 int dev_win32_filerom_seek(desc_t desc,int offset,int origin);
+int dev_win32_filerom_ioctl(desc_t desc,int request,va_list ap);
 
 dev_map_t dev_win32_filerom_map={
    dev_win32_filerom_name,
@@ -68,17 +63,9 @@ dev_map_t dev_win32_filerom_map={
    dev_win32_filerom_read,
    dev_win32_filerom_write,
    dev_win32_filerom_seek,
-   __fdev_not_implemented //ioctl
+   dev_win32_filerom_ioctl //ioctl
 };
 
-
-//
-#define FILEROM_MEMORYSIZE 32*1024 //11*1024 //14Ko//(32KB)
-static char memory[FILEROM_MEMORYSIZE]={0};
-
-static int fh=-1;
-
-static int instance_counter=0;
 
 
 /*===========================================
@@ -93,7 +80,7 @@ Implementation
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_load(void){
+int dev_win32_filerom_load(void) {
    return 0;
 }
 
@@ -105,47 +92,16 @@ int dev_win32_filerom_load(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_open(desc_t desc, int o_flag){
-
-
-   if(fh==-1) {
-
-      if( (fh = _open( ".\\fsrom.o",_O_RDWR|_O_CREAT|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 ){
-         DWORD dwError=GetLastError();
-
-         if(dwError!=ERROR_FILE_EXISTS)
-            return -1;
-
-         if( (fh = _open( ".\\fsrom.o",_O_RDWR |_O_BINARY,_S_IREAD|_S_IWRITE )) == -1 )
-            return -1;
-
-         _lseek( fh, 0, SEEK_SET );
-
-      }else{
-         int w=0;
-
-         close(fh);
-         if( (fh = _open( ".\\fsrom.o",_O_RDWR|_O_TRUNC|_O_EXCL|_O_BINARY,_S_IREAD|_S_IWRITE)) == -1 )
-            return -1;
-
-
-         if(( w = _write(fh,memory,sizeof( memory ))) == -1 )
-            printf( "fsrom creation failed" );
-         else
-            printf( "fsrom creation size %u bytes ok.\n", w );
-
-         _lseek(fh,0,SEEK_SET );
-      }
-   }
-
+int dev_win32_filerom_open(desc_t desc, int o_flag) {
    //
-   if(o_flag & O_RDONLY) {
+   if (filerom_win32_isolation_open(DFLT_FLILEROM_FILE_PATH) < 0)
+      return -1;
+   //
+   if (o_flag & O_RDONLY) {
    }
 
-   if(o_flag & O_WRONLY) {
+   if (o_flag & O_WRONLY) {
    }
-
-   instance_counter++;
 
    return 0;
 }
@@ -158,20 +114,8 @@ int dev_win32_filerom_open(desc_t desc, int o_flag){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_close(desc_t desc){
-
-   if(fh==-1)
-      return -1;
-
-   instance_counter--;
-
-   if(instance_counter<0) {
-      instance_counter=0;
-      _close(fh);
-      fh = -1;
-   }
-
-   return 0;
+int dev_win32_filerom_close(desc_t desc) {
+   return filerom_win32_isolation_close();
 }
 
 /*-------------------------------------------
@@ -182,7 +126,7 @@ int dev_win32_filerom_close(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_isset_read(desc_t desc){
+int dev_win32_filerom_isset_read(desc_t desc) {
    return -1;
 }
 
@@ -194,10 +138,9 @@ int dev_win32_filerom_isset_read(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_isset_write(desc_t desc){
+int dev_win32_filerom_isset_write(desc_t desc) {
    return -1;
 }
-
 /*-------------------------------------------
 | Name:dev_win32_filerom_read
 | Description:
@@ -206,16 +149,8 @@ int dev_win32_filerom_isset_write(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_read(desc_t desc, char* buf,int size){
-   int r;
-   if(ofile_lst[desc].offset>=FILEROM_MEMORYSIZE)
-      return -1;
-   _lseek( fh, ofile_lst[desc].offset, SEEK_SET);
-   r= _read( fh,buf,size);
-   ofile_lst[desc].offset = _lseek( fh, 0, SEEK_CUR);
-   //to remove : test
-   //printf("<- read offset=%d\n",ofile_lst[desc].offset);
-   return r;
+int dev_win32_filerom_read(desc_t desc, char* buf, int size) {
+   return filerom_win32_isolation_read(&ofile_lst[desc].offset, buf, size);
 }
 
 /*-------------------------------------------
@@ -226,17 +161,8 @@ int dev_win32_filerom_read(desc_t desc, char* buf,int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_write(desc_t desc, const char* buf,int size){
-   int w;
-   if(ofile_lst[desc].offset>=FILEROM_MEMORYSIZE)
-      return -1;
-   _lseek( fh, ofile_lst[desc].offset, SEEK_SET);
-   w = _write( fh,buf,size);
-   //_commit(fh);
-   ofile_lst[desc].offset = _lseek( fh, 0, SEEK_CUR);
-   //to remove : test
-   //printf("-> write offset=%d\n",ofile_lst[desc].offset);
-   return w;
+int dev_win32_filerom_write(desc_t desc, const char* buf, int size) {
+   return filerom_win32_isolation_write(&ofile_lst[desc].offset, buf, size);
 }
 
 /*-------------------------------------------
@@ -247,14 +173,73 @@ int dev_win32_filerom_write(desc_t desc, const char* buf,int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_filerom_seek(desc_t desc,int offset,int origin){
-   if(ofile_lst[desc].offset>=FILEROM_MEMORYSIZE)
-      return -1;
-   ofile_lst[desc].offset = _lseek( fh, offset, origin);
+int dev_win32_filerom_seek(desc_t desc, int offset, int origin) {
+   unsigned long dev_current_addr = (unsigned long)ofile_lst[desc].offset;
 
+   switch (origin) {
+   case SEEK_SET:
+      dev_current_addr = (unsigned long)(offset);
+      break;
+
+   case SEEK_CUR:
+      dev_current_addr += (unsigned long)(offset);
+      break;
+
+   case SEEK_END:
+      dev_current_addr = (unsigned long)filerom_win32_isolation_getsize();
+      break;
+   }
+   //
+   ofile_lst[desc].offset = dev_current_addr;
+   //
    return ofile_lst[desc].offset;
 }
 
+/*-------------------------------------------
+| Name:dev_win32_filerom_ioctl
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int dev_win32_filerom_ioctl(desc_t desc, int request, va_list ap) {
+   switch (request) {
+      //
+   case HDGETSZ: {
+      long* hdsz_p = va_arg(ap, long*);
+      if (!hdsz_p)
+         return -1;
+      //
+      *hdsz_p = filerom_win32_isolation_getsize();
+   }
+                 break;
+
+                 //
+   case HDSETSZ: {
+      long hdsz = va_arg(ap, long);
+      //
+      if (!hdsz)
+         return -1;
+      //
+      filerom_win32_isolation_setsize(hdsz);
+      //
+   }
+                 break;
+
+                 //
+   case HDCLRDSK: {
+      filerom_win32_isolation_erase();
+   }
+                  break;
+                  //
+   default:
+      return -1;
+
+   }
+
+   return 0;
+}
 
 /*===========================================
 End of Sourcedrv_filerom.c

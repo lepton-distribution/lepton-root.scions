@@ -28,7 +28,7 @@ Revision History:
 extern "C" {
 #endif
 
-#include <ctype.h>  
+//#include <ctype.h>  
 #define ANYSIZE_ARRAY 1       
 
 //
@@ -12691,7 +12691,8 @@ typedef struct IMAGE_COR20_HEADER
 #include <string.h>
 #endif /* _INC_STRING */
 #else
-#include <string.h>
+//lepton patch: remove string.h (avoid collision with <errno.h>")
+//#include <string.h>
 #endif // _MAC
 
 

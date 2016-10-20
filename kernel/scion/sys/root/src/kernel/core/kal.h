@@ -669,6 +669,7 @@ enum enum_synth_regs {
    #pragma pack(push, 8)
    //#include "kernel/core/windows.h"
    #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
+   //#include <windows.h>
    #include <malloc.h>
 
    #ifdef __KERNEL_UCORE_EMBOS
@@ -726,7 +727,7 @@ typedef CONTEXT context_t;
    #define _macro_stack_addr OS_STACKPTR
 
 
-   #define PTHREAD_CONTEXT_DUMP CONTEXT_FULL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT|CONTEXT_EXTENDED_REGISTERS
+   #define PTHREAD_CONTEXT_DUMP CONTEXT_FULL|CONTEXT_CONTROL|CONTEXT_DEBUG_REGISTERS|CONTEXT_FLOATING_POINT|CONTEXT_EXTENDED_REGISTERS
 
 /**
 * permet de sauvegarder le contexte de dpart du thread __pthread_ptr dans context.

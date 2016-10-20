@@ -26,14 +26,15 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-#include <stdlib.h>
+
 #include "kernel/core/errno.h"
-#include "lib/libc/unistd/getopt.h"
 #include "kernel/core/libstd.h"
 #include "kernel/core/sys/utsname.h"
 
 #include "lib/libc/unistd.h"
+#include "lib/libc/unistd/getopt.h"
 #include "lib/libc/stdio/stdio.h"
+
 
 /*============================================
 | Global Declaration

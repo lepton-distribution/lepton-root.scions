@@ -65,9 +65,9 @@ Includes
    #include <stdio.h>
 #else
    #include <stdlib.h>
-   #include <string.h>
 
    #include "kernel/core/errno.h"
+   #include "kernel/core/kal.h"
    #include "kernel/core/system.h"
    #include "kernel/core/libstd.h"
    #include "kernel/core/stat.h"

@@ -54,10 +54,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include <stdlib.h>
-#include <string.h>
-
 #include "kernel/core/errno.h"
+#include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/systime.h"

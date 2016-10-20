@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,12 +20,14 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -52,6 +54,7 @@
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>
+      <EnableEnhancedInstructionSet>NoExtensions</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +107,6 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\signal.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\syscall.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\cpu.c" />
-    <ClCompile Include="..\..\..\..\src\kernel\core\devio.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\dirent.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\env.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\fcntl.c" />
@@ -113,6 +115,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\kal.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_io.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_printk.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\lib.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\malloc.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net.c">
@@ -161,7 +165,6 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\core_rttimer.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\cpu.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\devconf.h" />
-    <ClInclude Include="..\..\..\..\src\kernel\core\devio.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\dirent.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\env.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\errno.h" />
@@ -189,7 +192,9 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\kernelconf.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_clock.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_elfloader.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_io.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_object.h" />
+    <ClInclude Include="..\..\..\..\src\kernel\core\kernel_printk.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_pthread_mutex.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_sem.h" />

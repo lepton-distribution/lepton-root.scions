@@ -9,9 +9,8 @@
 /*============================================
 | Includes
 ==============================================*/
-#include "kernel/core/types.h"
-#include "kernel/core/kernelconf.h"
-
+#include "kernel/core/kal.h"
+#include "kernel/core/system.h"
 /*============================================
 | Declaration
 ==============================================*/

@@ -38,10 +38,12 @@ Includes
 #include <stdarg.h>
 
 #include "kernel/core/types.h"
-#include "kernel/core/interrupt.h"
-#include "kernel/core/syscall.h"
+#include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/kernel_io.h"
+#include "kernel/core/interrupt.h"
+#include "kernel/core/syscall.h"
+
 #include "kernel/core/process.h"
 #include "kernel/core/pipe.h"
 #include "kernel/fs/vfs/vfs.h"
@@ -61,14 +63,14 @@ Global Declaration
 
 static char *lower_digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char *upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-static size_t strnlen(const char *s, size_t count);
+static size_t ee_strnlen(const char *s, size_t count);
 
 desc_t printk_trace_desc_w = INVALID_DESC;
 
 /*===========================================
 Implementation
 =============================================*/
-static size_t strnlen(const char *s, size_t count)
+static size_t ee_strnlen(const char *s, size_t count)
 {
   const char *sc;
   for (sc = s; *sc != '\0' && count--; ++sc);
@@ -522,7 +524,7 @@ repeat:
       case 's':
         s = va_arg(args, char *);
         if (!s) s = "<NULL>";
-        len = strnlen(s, precision);
+        len = ee_strnlen(s, precision);
         if (!(flags & LEFT)) while (len < field_width--) *str++ = ' ';
         for (i = 0; i < len; ++i) *str++ = *s++;
         while (len < field_width--) *str++ = ' ';
@@ -681,6 +683,8 @@ int kernel_printk(const char *fmt, ...){
   }
   //
   return n;
+#else
+   return - 1;
 #endif
 }
 
@@ -719,5 +723,7 @@ int kernel_trace_printk(const char *fmt, ...){
   }
   //
   return n;
+#else
+   return -1;
 #endif
 }

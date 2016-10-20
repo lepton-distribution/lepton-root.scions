@@ -33,9 +33,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-
 #include "kernel/core/kal.h"
-//#include "kernel/core/kernel_pthread.h"
 
 #ifdef __KERNEL_UCORE_ECOS
    #include <cyg/kernel/kapi.h>

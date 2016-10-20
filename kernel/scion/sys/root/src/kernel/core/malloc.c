@@ -58,8 +58,10 @@ void* _sys_malloc(size_t size){
    void* p;
 
 #if !defined(__GNUC__)
-   __atomic_in();
-   __disable_interrupt_section_in();
+   if (!__kernel_is_in_static_mode()) {
+      __atomic_in();
+      __disable_interrupt_section_in();
+   }
 #endif
 
 #if defined(__KERNEL_UCORE_FREERTOS)
@@ -71,8 +73,10 @@ void* _sys_malloc(size_t size){
       p=(void*)0;
 
 #if !defined(__GNUC__)
-   __disable_interrupt_section_out();
-   __atomic_out();
+   if (!__kernel_is_in_static_mode()) {
+      __disable_interrupt_section_out();
+      __atomic_out();
+   }
 #endif
    return p;
 }
@@ -89,8 +93,10 @@ void *_sys_calloc(size_t nelem, size_t elsize){
    void* p;
 
 #if !defined(__GNUC__)
-   __atomic_in();
-   __disable_interrupt_section_in();
+   if (!__kernel_is_in_static_mode()) {
+      __atomic_in();
+      __disable_interrupt_section_in();
+   }
 #endif
 
 #if defined(__KERNEL_UCORE_FREERTOS)
@@ -103,8 +109,10 @@ void *_sys_calloc(size_t nelem, size_t elsize){
       p=(void*)0;
 
 #if !defined(__GNUC__)
-   __disable_interrupt_section_out();
-   __atomic_out();
+   if (!__kernel_is_in_static_mode()) {
+      __disable_interrupt_section_out();
+      __atomic_out();
+   }
 #endif
 
    return p;
@@ -121,8 +129,10 @@ void *_sys_calloc(size_t nelem, size_t elsize){
 void *_sys_realloc(void *p, size_t size){
 
 #if !defined(__GNUC__)
-   __atomic_in();
-   __disable_interrupt_section_in();
+   if (!__kernel_is_in_static_mode()) {
+      __atomic_in();
+      __disable_interrupt_section_in();
+   }
 #endif
 
 #if defined(__KERNEL_UCORE_FREERTOS)
@@ -134,8 +144,10 @@ void *_sys_realloc(void *p, size_t size){
       p=(void*)0;
 
 #if !defined(__GNUC__)
-   __disable_interrupt_section_out();
-   __atomic_out();
+   if (!__kernel_is_in_static_mode()) {
+      __disable_interrupt_section_out();
+      __atomic_out();
+   }
 #endif
 
    return p;
@@ -152,8 +164,10 @@ void *_sys_realloc(void *p, size_t size){
 void _sys_free (void* p){
 
 #if !defined(__GNUC__)
-   __atomic_in();
-   __disable_interrupt_section_in();
+   if (!__kernel_is_in_static_mode()) {
+      __atomic_in();
+      __disable_interrupt_section_in();
+   }
 #endif
 
 #if defined(__KERNEL_UCORE_FREERTOS)
@@ -163,8 +177,10 @@ void _sys_free (void* p){
 #endif
 
 #if !defined(__GNUC__)
-   __disable_interrupt_section_out();
-   __atomic_out();
+   if (!__kernel_is_in_static_mode()) {
+      __disable_interrupt_section_out();
+      __atomic_out();
+   }
 #endif
 }
 

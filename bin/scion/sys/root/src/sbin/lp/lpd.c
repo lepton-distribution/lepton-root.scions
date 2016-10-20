@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include "kernel/core/kal.h"
+#include "kernel/core/limits.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/libstd.h"
 #include "kernel/core/stat.h"

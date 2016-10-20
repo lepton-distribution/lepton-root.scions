@@ -39,77 +39,77 @@ Implementation
 
 #ifndef __KERNEL_UCORE_ECOS
 
-int __l_isdigit ( int ch ) {
+int __lepton_libc_isdigit ( int ch ) {
    return (unsigned int)(ch - '0') < 10u;
 }
 
 //
-int __l_isalnum ( int ch ) {
+int __lepton_libc_isalnum ( int ch ) {
    return (unsigned int)((ch | 0x20) - 'a') < 26u  ||
           (unsigned int)( ch         - '0') < 10u;
 }
 
 //
-int __l_isalpha ( int ch ) {
+int __lepton_libc_isalpha ( int ch ) {
    return (unsigned int)((ch | 0x20) - 'a') < 26u;
 }
 
 //
-int __l_isblank ( int ch ) {
+int __lepton_libc_isblank ( int ch ) {
    return ch == ' '  ||  ch == '\t';
 }
 
 //
-int __l_iscntrl ( int ch ) {
+int __lepton_libc_iscntrl ( int ch ) {
    return (unsigned int)ch < 32u  ||  ch == 127;
 }
 
 //
-int __l_isgraph ( int ch ) {
+int __lepton_libc_isgraph ( int ch ) {
    return (unsigned int)(ch - '!') < 127u - '!';
 }
 
 //
-int __l_islower ( int ch ) {
+int __lepton_libc_islower ( int ch ) {
    return (unsigned int) (ch - 'a') < 26u;
 }
 
 //
-int __l_isprint ( int ch ) {
+int __lepton_libc_isprint ( int ch ) {
    return (unsigned int)(ch - ' ') < 127u - ' ';
 }
 
 //
-int __l_isspace ( int ch ) {
+int __lepton_libc_isspace ( int ch ) {
    return (unsigned int)(ch - 9) < 5u  ||  ch == ' ';
 }
 
 //
-int __l_ispunct ( int ch ) {
-   return __l_isprint (ch)  &&  !__l_isalnum (ch)  &&  !__l_isspace (ch);
+int __lepton_libc_ispunct ( int ch ) {
+   return __lepton_libc_isprint (ch)  &&  !__lepton_libc_isalnum (ch)  &&  !__lepton_libc_isspace (ch);
 }
 
 
 //
-int __l_isupper ( int ch ) {
+int __lepton_libc_isupper ( int ch ) {
    return (unsigned int)(ch - 'A') < 26u;
 }
 
 //
-int __l_isxdigit ( int ch ) {
+int __lepton_libc_isxdigit ( int ch ) {
    return (unsigned int)( ch         - '0') < 10u  ||
           (unsigned int)((ch | 0x20) - 'a') <  6u;
 }
 
 //
-int __l_tolower (int ch) {
+int __lepton_libc_tolower (int ch) {
    if ( (unsigned int)(ch - 'A') < 26u )
       ch += 'a' - 'A';
    return ch;
 }
 
 //
-int __l_toupper (int ch) {
+int __lepton_libc_toupper (int ch) {
    if ( (unsigned int)(ch - 'a') < 26u )
       ch += 'A' - 'a';
    return ch;
@@ -117,7 +117,7 @@ int __l_toupper (int ch) {
 #endif
 
 //
-int __l_isascii ( int ch ) {
+int __lepton_libc_isascii ( int ch ) {
    return (unsigned int)ch < 128u;
 }
 

@@ -22,14 +22,16 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
+//
 /*============================================
 | Includes
 ==============================================*/
 #include "kernel/core/errno.h"
-#include "kernel/core/interrupt.h"
-#include "kernel/core/syscall.h"
+#include "kernel/core/kal.h"
+#include "kernel/core/kernel.h"
 #include "kernel/core/kernel_pthread.h"
+#include "kernel/core/kernel_pthread_mutex.h"
+
 
 /*============================================
 | Global Declaration

@@ -49,7 +49,7 @@ typedef wchar_t wctype_t;
 #endif  /* ndef _MAC */
 //WIN32
 //#include "ctype/ctype.h"
-#include  <ctype.h>
+//#include  <ctype.h>
 //endof lepton patch
 
 #define ANYSIZE_ARRAY 1
@@ -6533,7 +6533,8 @@ typedef enum IMPORT_OBJECT_NAME_TYPE
       #include <string.h>
    #endif /* _INC_STRING */
 #else
-   #include <string.h>
+   //lepton patch: remove string.h (avoid collision with <errno.h>")
+   //#include <string.h>
 #endif // _MAC
 
 #define HEAP_NO_SERIALIZE               0x00000001

@@ -27,11 +27,16 @@ either the MPL or the [eCos GPL] License."
  * Modified once again for uClibc by Erik Andersen 8/7/02
  */
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdarg.h>
+#include <ctype.h>
+
+#include "lib/libc/ctype/ctype.h"
 #include "lib/libc/unistd/getopt.h"
 #include "lib/libc/stdio/stdio.h"
 
-#include <string.h>
-#include <stdlib.h>
+
 
 //#include <libintl.h>
 

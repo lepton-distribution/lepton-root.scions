@@ -90,15 +90,6 @@
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c">
       <Filter>root\bin</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\telnetd.c">
-      <Filter>root\bin\net</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoosed.c">
-      <Filter>root\bin\net\mongoose</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.c">
-      <Filter>root\bin\net\mongoose</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\kernel_mkconf.h">
@@ -106,9 +97,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.h">
       <Filter>root\kernel\core\arch\win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\..\root\src\bin\net\mongoose\mongoose.h">
-      <Filter>root\bin\net\mongoose</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

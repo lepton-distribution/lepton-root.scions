@@ -38,13 +38,14 @@ either the MPL or the [eCos GPL] License."
 #include <unistd.h>
 */
 
+
 #include <stdlib.h>
 
 #include "kernel/core/errno.h"
-#include "lib/libc/unistd/getopt.h"
 #include "kernel/core/libstd.h"
 #include "kernel/core/sys/utsname.h"
 
+#include "lib/libc/unistd/getopt.h"
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 

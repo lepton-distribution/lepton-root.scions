@@ -33,8 +33,6 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -45,7 +43,7 @@ Includes
 #include "kernel/fs/vfs/vfsdev.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
-#include <time.h>
+#include "kernel/dev/arch/win32/dev_win32_rtc/rtc_win32_isolation.h"
 
 /*===========================================
 Global Declaration
@@ -179,46 +177,43 @@ int dev_win32_rtc_isset_write(desc_t desc){
 | See:
 ---------------------------------------------*/
 int dev_win32_rtc_read(desc_t desc, char* buf,int size){
-   struct tm *newtime;
-   long ltime;
+   struct tm_win32_isolation newtime;
    int cb;
-
-   time( &ltime );
-   /* Obtain coordinated universal time: */
-   newtime = gmtime( &ltime );
-
+   //
+   rtc_win32_isolation_get_gmtime(&newtime);
+   //
    for( cb=0; cb<size; cb++) {
 
       //
       switch (ofile_lst[desc].offset) {
       //sec
       case 0:
-         buf[cb]=(char)newtime->tm_sec;
+         buf[cb]=(char)newtime.tm_sec;
          break;
 
       //min
       case 1:
-         buf[cb]=(char)newtime->tm_min;
+         buf[cb]=(char)newtime.tm_min;
          break;
 
       //hour
       case 2:
-         buf[cb]=(char)newtime->tm_hour;
+         buf[cb]=(char)newtime.tm_hour;
          break;
 
       //day
       case 3:
-         buf[cb]=(char)newtime->tm_mday;
+         buf[cb]=(char)newtime.tm_mday;
          break;
 
       //month
       case 4:
-         buf[cb]=(char)newtime->tm_mon;
+         buf[cb]=(char)newtime.tm_mon;
          break;
 
       //year
       case 5:
-         buf[cb]=(char)newtime->tm_year;
+         buf[cb]=(char)newtime.tm_year;
          break;
 
       default:

@@ -35,6 +35,7 @@
 ==============================================*/
 #include <string.h>
 #include <ctype.h>
+#include "lib/libc/ctype/ctype.h"
 
 /*============================================
 | Global Declaration

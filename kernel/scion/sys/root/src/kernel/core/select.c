@@ -27,10 +27,10 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
-#include <string.h>
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
+#include "kernel/core/kal.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/syscall.h"
 #include "kernel/core/kernel.h"

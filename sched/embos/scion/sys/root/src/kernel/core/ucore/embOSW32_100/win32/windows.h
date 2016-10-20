@@ -155,7 +155,8 @@ Abstract:
 #endif /* RC_INVOKED */
 
 //lepton patch
-#include "windef.h"
+//#include "windef.h"
+#include <windef.h>
 //end of lepton patch
 #include <winbase.h>
 #include <wingdi.h>

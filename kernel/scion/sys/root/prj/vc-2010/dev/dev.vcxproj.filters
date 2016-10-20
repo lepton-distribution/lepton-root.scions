@@ -165,6 +165,33 @@
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\win32_core_pkt.h">
       <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\dev_win32_sdcard.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_fileflash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_fileflash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_filerom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_filerom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_flash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\dev_win32_flash.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_flash</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_rtc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\src\kernel\dev\dev_cpufs\dev_cpufs.c">
@@ -287,9 +314,24 @@
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_eth\dev_win32_eth.c">
       <Filter>kernel\dev\arch\win32\dev_win32_eth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_fileflash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_filerom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_flash</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_rtc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_3_1\WpdPack\Lib\Packet.lib" />
-    <Library Include="..\..\..\..\..\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
+    <Library Include="..\..\..\..\..\..\..\tools\scion\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
   </ItemGroup>
 </Project>

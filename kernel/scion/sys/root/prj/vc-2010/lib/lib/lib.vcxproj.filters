@@ -149,5 +149,8 @@
     <ClCompile Include="..\..\..\..\src\lib\pthread\pthread_cond.c">
       <Filter>pthread</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\unistd\io.c">
+      <Filter>libc\unistd</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

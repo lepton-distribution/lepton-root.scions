@@ -32,10 +32,7 @@ Includes
         Adapted to POSIX 1003.2 by Philip Homburg.
 */
 
-#include <string.h>
 #include <stdlib.h>
-
-#include "lib/libc/ctype/ctype.h"
 
 #include "kernel/core/errno.h"
 #include "kernel/core/libstd.h"
@@ -44,7 +41,7 @@ Includes
 #include "lib/libc/unistd.h"
 #include "lib/libc/termios/termios.h"
 #include "lib/libc/stdio/stdio.h"
-
+#include "lib/libc/ctype/ctype.h"
 
 /*===========================================
 Global Declaration

@@ -46,102 +46,102 @@ Declaration
    #endif 
    #define toascii(c) ((c) & 0x7F)
 
-   int __l_isdigit   ( int ch );
-   int __l_isalnum   ( int ch );
-   int __l_isalpha   ( int ch );
-   int __l_isblank   ( int ch );
-   int __l_iscntrl   ( int ch );
-   int __l_isgraph   ( int ch );
-   int __l_islower   ( int ch );
-   int __l_isprint   ( int ch );
-   int __l_isspace   ( int ch );
-   int __l_ispunct   ( int ch );
-   int __l_isupper   ( int ch );
-   int __l_isxdigit  ( int ch );
-   int __l_tolower   ( int ch );
-   int __l_toupper   ( int ch );
+   int __lepton_libc_isdigit   ( int ch );
+   int __lepton_libc_isalnum   ( int ch );
+   extern int __lepton_libc_isalpha   ( int ch );
+   int __lepton_libc_isblank   ( int ch );
+   int __lepton_libc_iscntrl   ( int ch );
+   int __lepton_libc_isgraph   ( int ch );
+   int __lepton_libc_islower   ( int ch );
+   int __lepton_libc_isprint   ( int ch );
+   int __lepton_libc_isspace   ( int ch );
+   int __lepton_libc_ispunct   ( int ch );
+   int __lepton_libc_isupper   ( int ch );
+   int __lepton_libc_isxdigit  ( int ch );
+   int __lepton_libc_tolower   ( int ch );
+   int __lepton_libc_toupper   ( int ch );
 
    //
    #ifdef isdigit
       #undef isdigit
    #endif
-   #define isdigit   __l_isdigit
+   #define isdigit   __lepton_libc_isdigit
    //
    #ifdef isalnum
       #undef isalnum
    #endif
-   #define isalnum   __l_isalnum
+   #define isalnum   __lepton_libc_isalnum
    //
    #ifdef isalpha
       #undef isalpha
    #endif
-   #define isalpha   __l_isalpha
+   #define isalpha(__ch__)   __lepton_libc_isalpha(__ch__)
    //
    #ifdef isblank
       #undef isblank
    #endif
-   #define isblank   __l_isblank
+   #define isblank   __lepton_libc_isblank
    //
    #ifdef iscntrl
       #undef iscntrl
    #endif
-   #define iscntrl   __l_iscntrl
+   #define iscntrl   __lepton_libc_iscntrl
    //
    #ifdef isgraph
       #undef isgraph
    #endif
-   #define isgraph   __l_isgraph
+   #define isgraph   __lepton_libc_isgraph
    //
    #ifdef islower
       #undef islower
    #endif
-   #define islower   __l_islower
+   #define islower   __lepton_libc_islower
    //
    #ifdef isprint
       #undef isprint
    #endif
-   #define isprint   __l_isprint
+   #define isprint   __lepton_libc_isprint
    //
    #ifdef isspace
       #undef isspace
    #endif
-   #define isspace   __l_isspace
+   #define isspace   __lepton_libc_isspace
    //
    #ifdef ispunct
       #undef ispunct
    #endif
-   #define ispunct   __l_ispunct
+   #define ispunct   __lepton_libc_ispunct
    //
    #ifdef isupper
       #undef isupper
    #endif
-   #define isupper   __l_isupper
+   #define isupper   __lepton_libc_isupper
    //
    #ifdef isxdigit
       #undef isxdigit
    #endif
-   #define isxdigit   __l_isxdigit
+   #define isxdigit   __lepton_libc_isxdigit
    //
    #ifdef tolower
       #undef tolower
    #endif
-   #define tolower   __l_tolower
+   #define tolower   __lepton_libc_tolower
    //
    #ifdef toupper
       #undef toupper
    #endif
-   #define toupper   __l_toupper
+   #define toupper   __lepton_libc_toupper
 
 #endif //ifndef __KERNEL_UCORE_ECOS
 
 
 //
-int __l_isascii   ( int ch );
+int __lepton_libc_isascii   ( int ch );
 
 #ifdef isascii
    #undef isascii
 #endif
-#define isascii   __l_isascii
+#define isascii   __lepton_libc_isascii
 
 //
 #endif
