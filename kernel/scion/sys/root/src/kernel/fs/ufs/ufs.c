@@ -607,8 +607,10 @@ int _ufs_write(desc_t desc, char* buf, int size)
                break;
             }
 
-            //write current data block
-            __ufs_writeblk(desc,(char*)&blkdata, curblk_no,ufs_block_size);
+            //write current data block if curblk_no is valid
+            if(curblk_no!=INVALID_UFSBLOCK){
+              __ufs_writeblk(desc,(char*)&blkdata, curblk_no,ufs_block_size);
+            }
             //set new current data block
             curblk_no = blocknode.blk[0];
             //load current data block
