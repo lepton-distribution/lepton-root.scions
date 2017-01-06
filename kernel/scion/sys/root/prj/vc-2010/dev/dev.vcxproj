@@ -79,15 +79,15 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\dev_win32_flash.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\dev_win32_sdcard.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\dev_win32_flash.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\dev_win32_sdcard.h" />
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_nor_amd.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\all\flash\amd\lldapi\lld_bdsxxx_asp.h" />
@@ -109,11 +109,12 @@
     <ClInclude Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_lcd_matrix\dev_win32_lcd_matrix.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rtc\rtc_win32_isolation.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_1.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_2.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\all\flash\amd\dev_flash_am29dlxxxx_3.c" />
@@ -159,6 +160,7 @@
     <ClCompile Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\dev_tty.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\tty_font-8x16.c" />
+    <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\tty_font-8x8.c" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\..\..\..\tools\scion\tools\host\win32\WpdPack_4_1_2\WpdPack\Lib\Packet.lib" />
