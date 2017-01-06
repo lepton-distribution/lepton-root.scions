@@ -92,6 +92,11 @@
        <dev name="dev_win32_rtc_map" use="on"/>
        <!-- /dev/eth0 -->
        <dev name="dev_win32_eth_map" use="on"/>
+       <!-- /dev/kbw32 -->
+       <dev name="dev_win32_kb_map" use="on"/>
+       <!-- /dev/lcd0 -->
+       <dev name="dev_win32_lcd_matrix_map" use="on"/>
+
    </devices>
 </target>
 
@@ -126,7 +131,7 @@
 <!-- launch process on boot target path: /usr/etc/.boot-->
 <target name="win32_lepton">
         <boot dest_path="c:/tauon/sys/user/tauon-basic/etc">
-                <command arg="initd -i /dev/ttyp0 -o /dev/ttyp0" />
+          <command arg="initd -i /dev/ttyp0 -o /dev/ttyp0" />
         </boot>
 </target>
 
