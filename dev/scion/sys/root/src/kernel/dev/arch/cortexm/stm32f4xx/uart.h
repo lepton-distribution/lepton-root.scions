@@ -96,4 +96,6 @@ int uart_put_char(char Data, const _Uart_Descriptor *Uart);
 int uart_read(void *WrPtr, u16 Size, const _Uart_Descriptor *Uart);
 int uart_write(const void *RdPtr, u16 Size, const _Uart_Descriptor *Uart);
 
+int uart_flush_rx(const _Uart_Descriptor *Uart);
+
 #endif /* __UART_H */

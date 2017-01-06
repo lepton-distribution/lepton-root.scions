@@ -98,7 +98,11 @@ int dev_stm32f4xx_uart_x_open(desc_t desc, int o_flag,
                           
    //
    if(uart_info->desc_r<0 && uart_info->desc_w<0) {
-      uart_open(&uart_info->uart_descriptor, 115200, 32, 128, 128, UART_HW_FLOW_CTRL_NONE, 0);
+      if(uart_info->baudrate==0){
+         uart_info->baudrate=115200;
+      }
+      //
+      uart_open(&uart_info->uart_descriptor, uart_info->baudrate, 64, 256, 256, UART_HW_FLOW_CTRL_NONE, 0);
    }
    //
    if(o_flag & O_RDONLY) {
@@ -273,6 +277,47 @@ int dev_stm32f4xx_uart_x_seek(desc_t desc,int offset,int origin){
 | See:
 ---------------------------------------------*/
 int dev_stm32f4xx_uart_x_ioctl(desc_t desc,int request,va_list ap) {
+   struct termios* termios_p = (struct termios*)0;
+
+   switch(request) {
+      case TCFLSH: {
+         //
+         int flush_io= va_arg( ap, int);
+         board_stm32f4xx_uart_info_t * p_uart_info = (board_stm32f4xx_uart_info_t*)ofile_lst[desc].p;
+         _Uart_Descriptor *p_uart_descriptor;
+         //
+         if(!p_uart_info)
+            return -1;
+         // 
+         p_uart_descriptor=&p_uart_info->uart_descriptor;
+         //
+         if(flush_io>2)
+            return -1;
+         //TCIFLUSH 0 -> 1:01
+         //TCIFLUSH 1 -> 2:10
+         //TCOFLUSH 2 -> 3:11
+         flush_io+=1;
+         //
+         if( (flush_io&(TCIFLUSH+1)) ) {
+            if( (ofile_lst[desc].oflag & O_RDONLY) )
+               return -1;   //not compatible open mode
+            uart_flush_rx(p_uart_descriptor);
+         }
+         if( (flush_io&(TCOFLUSH+1)) ) {
+            if( (ofile_lst[desc].oflag & O_WRONLY) )
+               return -1;   //not compatible open mode
+            //
+            //nothing to do
+         }
+      }
+      break;
+
+      //
+      default:
+         return -1;
+
+   }
+
    return 0;
 }
 

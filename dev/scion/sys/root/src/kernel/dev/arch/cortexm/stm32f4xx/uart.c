@@ -451,3 +451,40 @@ int uart_write(const void *RdPtr, u16 Size, const _Uart_Descriptor *Uart)
   //
   return((int)(i));
 }
+
+/*******************************************************************************
+* Function Name  : uart_flush_rx
+* Description    :flush rx buffer
+* Input          : - Uart: Select the USART or the UART peripheral.
+* Output         : None
+* Return         : 
+* Note: lepton development
+*******************************************************************************/
+int uart_flush_rx(const _Uart_Descriptor *Uart)
+{
+
+  #ifdef _UART_OS_SUPPORT
+    if (!(*Uart->Ctrl) || (sys_task_self() != (*Uart->Ctrl)->Task) || !(*Uart->Ctrl)->RxCnt) return(0);
+  #else
+    if (!(*Uart->Ctrl) || !(*Uart->Ctrl)->RxCnt) return(0);
+  #endif
+  //
+  if ((*Uart->Ctrl)->DmaBufSize) 
+    NVIC_DisableIRQ(Uart->DMAx_IRQn);
+  else 
+    USART_ITConfig(Uart->UARTx, USART_IT_RXNE, DISABLE);
+  //
+  (*Uart->Ctrl)->RxCnt=0;
+  //
+  (*Uart->Ctrl)->RxiGet = 0;
+  //
+  if (((*Uart->Ctrl)->HwCtrl & UART_HW_FLOW_CTRL_RX) && (uart_is_rx_hw_fc(Uart)) && ((*Uart->Ctrl)->RxCnt < ((*Uart->Ctrl)->RxBufSize / 2))) 
+    uart_reset_rx_hw_fc(Uart);
+  //
+  if ((*Uart->Ctrl)->DmaBufSize) 
+    NVIC_EnableIRQ(Uart->DMAx_IRQn);
+  else 
+    USART_ITConfig(Uart->UARTx, USART_IT_RXNE, ENABLE);
+  
+  return 0;
+}
