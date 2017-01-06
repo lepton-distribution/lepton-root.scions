@@ -43,7 +43,7 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-const char dev_win32_kb_name[]="kb0\0";
+const char dev_win32_kb_name[]="kbw32\0";
 
 int dev_win32_kb_load(void);
 int dev_win32_kb_open(desc_t desc, int o_flag);
