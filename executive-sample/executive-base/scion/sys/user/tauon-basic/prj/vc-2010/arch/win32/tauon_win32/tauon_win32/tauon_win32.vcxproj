@@ -55,6 +55,7 @@
       <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip2.5</AdditionalIncludeDirectories>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
