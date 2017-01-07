@@ -39,7 +39,7 @@ Includes
 #include "kernel/core/core_rttimer.h"
 #include "kernel/fs/vfs/vfsdev.h"
 
-//#include "lib/libc/termios/termios.h"
+
 #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/types.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/gpio.h"
@@ -47,6 +47,7 @@ Includes
 
 #include "dev_stm32f4xx_uart_x.h"
 
+#include "lib/libc/termios/termios.h"
 
 /*===========================================
 Global Declaration
