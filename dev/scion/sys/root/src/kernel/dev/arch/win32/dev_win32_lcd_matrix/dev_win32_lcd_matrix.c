@@ -9,8 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Chauvin-Arnoux.
-Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -83,8 +83,8 @@ dev_map_t dev_win32_lcd_matrix_map = {
 #define BUF_SIZE (unsigned long)((float)(LCD_MATRIX_DISPLAY_X_SIZE*LCD_MATRIX_DISPLAY_Y_SIZE) * (float)( (float)LCD_MATRIX_DISPLAY_BPP/(float)(sizeof(unsigned char)*8.0) ))
 
 
-HANDLE hLcdMatrixSemaphore=(HANDLE)NULL;
-HANDLE hLcdMatrixMapFile = (HANDLE)NULL;
+HANDLE hLcdMatrixSemaphore=INVALID_HANDLE_VALUE;
+HANDLE hLcdMatrixMapFile = INVALID_HANDLE_VALUE;
 unsigned char *pLcdMatrixMapViewOfFileBuffer;
 
 static desc_t lcd_matrix_display_desc_w = -1;
@@ -107,6 +107,10 @@ static int win32_lcd_matrix_frame_buffer_flush() {
    BOOL bSucceed;
    LONG lPreviousCount;
    DWORD dwError;
+   
+   //flush could be call directly without write if app layer use video buffer ioctl(,LCDGETVADDR,)
+   if (win32_lcd_matrix_connect2simulation() < 0)
+      return -1;
 
    //
    CopyMemory((PVOID)pLcdMatrixMapViewOfFileBuffer, lcd_matrix_display_frame_buffer, sizeof(lcd_matrix_display_frame_buffer));
@@ -114,6 +118,62 @@ static int win32_lcd_matrix_frame_buffer_flush() {
    bSucceed = ReleaseSemaphore(hLcdMatrixSemaphore, 1, &lPreviousCount);
    dwError = GetLastError();
 
+   return 0;
+}
+
+/*-------------------------------------------
+| Name:win32_lcd_matrix_connect2simulation
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+static int win32_lcd_matrix_connect2simulation() {
+   BOOL bSucceed;
+   LONG lPreviousCount;
+   DWORD dwError;
+   int frame_buffer_size = BUF_SIZE;
+
+   //already connected?
+   if (hLcdMatrixSemaphore != INVALID_HANDLE_VALUE && hLcdMatrixMapFile != INVALID_HANDLE_VALUE) {
+      return 0;
+   }
+
+   //not connected
+   if (hLcdMatrixSemaphore == INVALID_HANDLE_VALUE) {
+
+      hLcdMatrixSemaphore = OpenSemaphore(SYNCHRONIZE | SEMAPHORE_MODIFY_STATE, TRUE, "testmapsemaphore");
+      if (hLcdMatrixSemaphore == INVALID_HANDLE_VALUE) {
+         dwError = GetLastError();
+         return -1;
+      }
+   }
+
+   //
+   if (hLcdMatrixMapFile == INVALID_HANDLE_VALUE) {
+      hLcdMatrixMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "MyFileMappingObject");
+      if (hLcdMatrixMapFile == INVALID_HANDLE_VALUE) {
+         dwError = GetLastError();
+         return -1;
+      }
+   }
+
+   //
+   pLcdMatrixMapViewOfFileBuffer = (LPTSTR)MapViewOfFile(hLcdMatrixMapFile, FILE_MAP_ALL_ACCESS, 0, 0, BUF_SIZE);
+
+   //clear screen
+   memset(lcd_matrix_display_frame_buffer, 0x00, sizeof(lcd_matrix_display_frame_buffer));
+   //
+   CopyMemory((PVOID)pLcdMatrixMapViewOfFileBuffer, lcd_matrix_display_frame_buffer, sizeof(lcd_matrix_display_frame_buffer));
+   //
+   bSucceed = ReleaseSemaphore(hLcdMatrixSemaphore, 1, &lPreviousCount);
+   dwError = GetLastError();
+   //
+   if (bSucceed == 0) {
+      return -1;
+   }
+   //
    return 0;
 }
 
@@ -126,34 +186,6 @@ static int win32_lcd_matrix_frame_buffer_flush() {
 | See:
 ---------------------------------------------*/
 static int dev_win32_lcd_matrix_load(void) {
-   BOOL bSucceed;
-   LONG lPreviousCount;
-   DWORD dwError;
-   int frame_buffer_size = BUF_SIZE;
-
-
-   hLcdMatrixSemaphore = OpenSemaphore(SYNCHRONIZE | SEMAPHORE_MODIFY_STATE, TRUE, "testmapsemaphore");
-   if (hLcdMatrixSemaphore == NULL) {
-      dwError = GetLastError();
-      return -1;
-   }
-   //
-   hLcdMatrixMapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "MyFileMappingObject");
-   if (hLcdMatrixMapFile == NULL){
-      dwError = GetLastError();
-      return -1;
-   }
-   //
-   pLcdMatrixMapViewOfFileBuffer = (LPTSTR)MapViewOfFile(hLcdMatrixMapFile,FILE_MAP_ALL_ACCESS,0,0,BUF_SIZE);
-
-   //
-   memset(lcd_matrix_display_frame_buffer, 0x00, sizeof(lcd_matrix_display_frame_buffer));
-   //
-   CopyMemory((PVOID)pLcdMatrixMapViewOfFileBuffer, lcd_matrix_display_frame_buffer, sizeof(lcd_matrix_display_frame_buffer));
-   //
-
-   bSucceed = ReleaseSemaphore(hLcdMatrixSemaphore, 1, &lPreviousCount);
-   dwError = GetLastError();
 
    return 0;
 }
@@ -170,7 +202,7 @@ static int dev_win32_lcd_matrix_open(desc_t desc, int o_flag) {
 
    //
    if (o_flag & O_RDONLY) {
-
+     
    }
 
    if (o_flag & O_WRONLY) {
@@ -247,7 +279,9 @@ static int dev_win32_lcd_matrix_read(desc_t desc, char* buf, int size) {
 static int dev_win32_lcd_matrix_write(desc_t desc, const char* buf, int size) {
    int i;
    int cb = 0;
-
+   //
+   if (win32_lcd_matrix_connect2simulation() < 0)
+      return -1;
    //
    if ((ofile_lst[desc].offset + size) > sizeof(lcd_matrix_display_frame_buffer)) {
       size = sizeof(lcd_matrix_display_frame_buffer) - ofile_lst[desc].offset;
