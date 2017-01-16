@@ -217,6 +217,9 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\kernel_printk.c">
       <Filter>kernel\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_ring_buffer.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.h">

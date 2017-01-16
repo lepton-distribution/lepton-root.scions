@@ -117,6 +117,7 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\kal.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\kernel_io.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\kernel_printk.c" />
+    <ClCompile Include="..\..\..\..\src\kernel\core\kernel_ring_buffer.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\lib.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\malloc.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net.c">
