@@ -143,9 +143,8 @@ int dev_win32_lcd_vga_open(desc_t desc, int o_flag){
       else
          map_file_sz = GUI_YSIZE*GUI_YSIZE/8 + sizeof(int);
 
-
       hFile = CreateFile(
-         "c:\\map",          //  LPCTSTR lpFileName,
+         "c:\\temp\\map",          //  LPCTSTR lpFileName,
          GENERIC_WRITE | GENERIC_READ,           //DWORD dwDesiredAccess,
          FILE_SHARE_READ,           //DWORD dwShareMode,
          NULL,           //LPSECURITY_ATTRIBUTES lpSecurityAttributes,
@@ -154,8 +153,13 @@ int dev_win32_lcd_vga_open(desc_t desc, int o_flag){
          NULL          //HANDLE hTemplateFile
          );
 
-      if(hFile == INVALID_HANDLE_VALUE) return -1;
-
+      //
+      if (hFile == INVALID_HANDLE_VALUE) {
+         int err = GetLastError();
+         return -1;
+      }
+        
+      //
       hFileMapping = CreateFileMapping(
          hFile,          //HANDLE hFile,
          NULL,          //LPSECURITY_ATTRIBUTES lpAttributes,

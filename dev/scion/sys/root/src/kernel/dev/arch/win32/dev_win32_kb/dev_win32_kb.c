@@ -121,7 +121,6 @@ char _dev_read_rotary(void){
 
    // Break if the pipe handle is valid.
    if (hPipe == INVALID_HANDLE_VALUE) {
-      return 0;
 
       // Exit if an error other than ERROR_PIPE_BUSY occurs.
       if (GetLastError() != ERROR_PIPE_BUSY) {
