@@ -85,10 +85,10 @@ int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer, void *bu
 | See:
 ----------------------------------------------*/
 int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,size_t size){
-   int16_t r;
-   int16_t w;
-   int16_t sz;
-   int16_t available_sz;
+   size_t r;
+   size_t w;
+   size_t sz;
+   size_t available_sz;
    uint8_t* p_ring_buffer;
    
    //
@@ -109,8 +109,13 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
       available_sz=(sz-r)+w;
 
    //
-   if(size>available_sz)
-      return -1;//not enough available data
+   if (available_sz == 0)
+      return 0;
+
+   //
+   if (size > available_sz) {
+      size = available_sz; //copy all data available in user buffer
+   }
   
    //
    if( (r+size) <= sz ){
@@ -136,10 +141,10 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
 | See:
 ----------------------------------------------*/
 int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,size_t size){
-   int16_t r;
-   int16_t w;
-   int16_t sz;
-   int16_t free_sz;
+   size_t r;
+   size_t w;
+   size_t sz;
+   size_t free_sz;
    uint8_t* p_ring_buffer;
    
    //
@@ -158,7 +163,6 @@ int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const vo
     free_sz=(r-w); 
   else
     free_sz = (sz-w)+r;
-   
    
   //    
   if(size>free_sz)
@@ -188,11 +192,11 @@ int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const vo
 | See:
 ----------------------------------------------*/
 int kernel_ring_buffer_get_attr(kernel_ring_buffer_t* p_kernel_ring_buffer, kernel_ring_buffer_attr_t* attr){
-   int16_t r;
-   int16_t w;
-   int16_t sz;
-   int16_t available_data_sz;
-   int16_t free_space_sz;
+   size_t r;
+   size_t w;
+   size_t sz;
+   size_t available_data_sz;
+   size_t free_space_sz;
    
    //
    if(p_kernel_ring_buffer==(kernel_ring_buffer_t*)(0))

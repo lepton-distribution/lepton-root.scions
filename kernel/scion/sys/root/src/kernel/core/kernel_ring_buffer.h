@@ -45,8 +45,8 @@ either the MPL or the [eCos GPL] License."
 typedef struct kernel_ring_buffer_st{
   uint8_t*  p_buffer;
   size_t sz;
-  uint16_t r;
-  uint16_t w;
+  size_t r;
+  size_t w;
 }kernel_ring_buffer_t;
   
 typedef struct kernel_ring_buffer_attr_st{
@@ -55,8 +55,8 @@ typedef struct kernel_ring_buffer_attr_st{
   //
   size_t data_sz;
   size_t space_sz;
-  uint16_t r;
-  uint16_t w;
+  size_t r;
+  size_t w;
 }kernel_ring_buffer_attr_t;
 
 //
