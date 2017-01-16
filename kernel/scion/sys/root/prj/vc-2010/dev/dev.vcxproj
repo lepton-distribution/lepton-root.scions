@@ -79,6 +79,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rotary_switch\dev_win32_rotary_switch_x.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\dev_win32_fileflash.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.h" />
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\dev_win32_filerom.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="..\..\..\src\kernel\dev\dev_proc\dev_proc.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rotary_switch\dev_win32_rotary_switch_x.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_fileflash\fileflash_win32_isolation.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_filerom\filerom_win32_isolation.c" />
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_flash\flash_win32_isolation.c" />

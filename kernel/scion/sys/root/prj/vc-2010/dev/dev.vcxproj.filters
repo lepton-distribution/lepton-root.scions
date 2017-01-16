@@ -106,6 +106,9 @@
     <Filter Include="kernel\dev\arch\win32\dev_win32_lcd_matrix">
       <UniqueIdentifier>{e56cc824-869c-4b06-814f-2c4bb9da40fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kernel\dev\arch\win32\dev_win32_rotary_switch">
+      <UniqueIdentifier>{5cf66cb5-68f4-4827-98b8-604c26315138}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_sdcard\sdcard_win32_isolation.h">
       <Filter>kernel\dev\arch\win32\dev_win32_sdcard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rotary_switch\dev_win32_rotary_switch_x.h">
+      <Filter>kernel\dev\arch\win32\dev_win32_rotary_switch</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -337,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\dev\dev_tty\tty_font-8x8.c">
       <Filter>kernel\dev\dev_tty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rotary_switch\dev_win32_rotary_switch_x.c">
+      <Filter>kernel\dev\arch\win32\dev_win32_rotary_switch</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
