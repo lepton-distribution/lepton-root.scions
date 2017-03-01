@@ -30,6 +30,7 @@ Includes
 =============================================*/
 
 #include <stdarg.h>
+#include <stdint.h>
 
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -59,7 +60,7 @@ Implementation
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer, void *buffer, size_t size){
+int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer, void *buffer, int16_t size){
   //
   if(p_kernel_ring_buffer==(kernel_ring_buffer_t*)(0))
     return -1;
@@ -84,12 +85,13 @@ int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer, void *bu
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,size_t size){
-   size_t r;
-   size_t w;
-   size_t sz;
-   size_t available_sz;
+int kernel_ring_buffer_read_min(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,int16_t min_size,int16_t max_size){
+   int16_t r;
+   int16_t w;
+   int16_t sz;
+   int16_t available_sz;
    uint8_t* p_ring_buffer;
+   int16_t size=max_size;
    
    //
    if(p_kernel_ring_buffer==(kernel_ring_buffer_t*)(0))
@@ -110,13 +112,19 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
 
    //
    if (available_sz == 0)
-      return 0;
-
+      return -1;
+   
    //
-   if (size > available_sz) {
-      size = available_sz; //copy all data available in user buffer
+   if (available_sz>=min_size && available_sz<=max_size) {
+      //copy all data available in user buffer
+      size = available_sz; 
+   }else if (available_sz>max_size){
+      //copy all data available in user buffer
+      size = max_size;
+   }else{
+      return -1;
    }
-  
+   
    //
    if( (r+size) <= sz ){
       memcpy(buffer,p_ring_buffer+r,size);
@@ -131,6 +139,18 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
    //
    return size;
 }
+   
+/*--------------------------------------------
+| Name: kernel_ring_buffer_read
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,int16_t size){
+   return kernel_ring_buffer_read_min(p_kernel_ring_buffer,buffer,0,size);
+}
 
 /*--------------------------------------------
 | Name: kernel_ring_buffer_write
@@ -140,11 +160,11 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
 | Comments:
 | See:
 ----------------------------------------------*/
-int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,size_t size){
-   size_t r;
-   size_t w;
-   size_t sz;
-   size_t free_sz;
+int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,int16_t size){
+   int16_t r;
+   int16_t w;
+   int16_t sz;
+   int16_t free_sz;
    uint8_t* p_ring_buffer;
    
    //
@@ -192,11 +212,11 @@ int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const vo
 | See:
 ----------------------------------------------*/
 int kernel_ring_buffer_get_attr(kernel_ring_buffer_t* p_kernel_ring_buffer, kernel_ring_buffer_attr_t* attr){
-   size_t r;
-   size_t w;
-   size_t sz;
-   size_t available_data_sz;
-   size_t free_space_sz;
+   int16_t r;
+   int16_t w;
+   int16_t sz;
+   int16_t available_data_sz;
+   int16_t free_space_sz;
    
    //
    if(p_kernel_ring_buffer==(kernel_ring_buffer_t*)(0))

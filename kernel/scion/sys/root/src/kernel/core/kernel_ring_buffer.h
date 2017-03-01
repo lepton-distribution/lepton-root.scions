@@ -44,25 +44,31 @@ either the MPL or the [eCos GPL] License."
 
 typedef struct kernel_ring_buffer_st{
   uint8_t*  p_buffer;
-  size_t sz;
-  size_t r;
-  size_t w;
+  uint32_t  options;
+  int16_t sz;
+  int16_t r;
+  int16_t w;
 }kernel_ring_buffer_t;
   
 typedef struct kernel_ring_buffer_attr_st{
   uint8_t*  p_buffer;
-  size_t sz;
+  int16_t sz;
   //
-  size_t data_sz;
-  size_t space_sz;
-  size_t r;
-  size_t w;
+  uint32_t  options;
+  //
+  int16_t data_sz;
+  int16_t space_sz;
+  int16_t r;
+  int16_t w;
 }kernel_ring_buffer_attr_t;
 
 //
-int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,size_t size);
-int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,size_t size);
-int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,size_t size);
+int kernel_ring_buffer_read_min(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,int16_t max_size, int16_t min_size);
+
+int kernel_ring_buffer_init(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,int16_t size);
+int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buffer,int16_t size);
+
+int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,int16_t size);
 int kernel_ring_buffer_get_attr(kernel_ring_buffer_t* p_kernel_ring_buffer, kernel_ring_buffer_attr_t* attr);
 
 #define __kernel_ring_buffer_is_empty(__kernel_ring_buffer__) ((__kernel_ring_buffer__).r==(__kernel_ring_buffer__).w?1:0)
