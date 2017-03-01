@@ -26,7 +26,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
 #include <string.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/system.h"
 #include "kernel/core/kernel.h"
@@ -36,7 +39,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl.h"
 #include "kernel/core/ioctl_lcd.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/dev_tty/tty_font.h"
 
@@ -102,13 +105,13 @@ static tty_font_info_t* tty_current_font = (tty_font_info_t*)0;
 typedef struct boot_infos {
    /* NEW (vers. 2) this holds the current _logical_ base addr of
    the frame buffer (for use by early boot message) */
-   uchar8_t*       logicalDisplayBase;
+   uint8_t*       logicalDisplayBase;
    /* Some infos about the current MacOS display */
    uint32_t dispDeviceRect[4];
    /* left,top,right,bottom */
    uint32_t dispDeviceDepth;
    /* (2, 4, 8, 16 or 32) */
-   uchar8_t*       dispDeviceBase;
+   uint8_t*       dispDeviceBase;
    /* base address (physical) */
    uint32_t dispDeviceRowBytes;
    /* rowbytes (in bytes) */
@@ -197,7 +200,7 @@ static const uint32_t expand_bits_16[4]  = {
 #endif
 
 
-static const uchar8_t bits_depth2[16] = {
+static const uint8_t bits_depth2[16] = {
        0x00,  /* 0  : 0000 -> 00000000 */
        0x03,  /* 1  : 0001 -> 00000011 */
        0x0c,  /* 2  : 0010 -> 00001100 */
@@ -217,7 +220,7 @@ static const uchar8_t bits_depth2[16] = {
 };
 
 
-static const uchar8_t bits_depth4[4] = {
+static const uint8_t bits_depth4[4] = {
        0x00,  /* 0 : 00 -> 00000000 */
        0x0f,  /* 1 : 01 -> 00001111 */
        0xf0,  /* 2 : 10 -> 11110000 */
@@ -226,7 +229,7 @@ static const uchar8_t bits_depth4[4] = {
 
 
 #if 0
-static const uchar8_t bits_depth4[4] = {
+static const uint8_t bits_depth4[4] = {
        0x00,  /* 0 : 00 -> 00000000 */
        0x01,  /* 1 : 01 -> 00001111 */
        0x10,  /* 2 : 10 -> 11110000 */
@@ -315,7 +318,7 @@ static void draw_byte_4(unsigned char *font, unsigned char *base,uint32_t rb )
 
 static void draw_byte_1(unsigned char *font,  unsigned char *base, uint32_t rb){
    uint32_t l;
-   uchar8_t bits;
+   uint8_t bits;
    for (l = 0; l < tty_current_font->height; ++l)
    {
       bits = *font++;

@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "lib/libc/termios/termios.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 //for uip ethernet address
 //#include "kernel\net\uip1.0\net\uipopt.h"
 

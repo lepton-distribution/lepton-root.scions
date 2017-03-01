@@ -68,7 +68,7 @@ typedef struct {
    addr_t addr;
 }mem_header_t;
 
-typedef uchar8_t mem_data_t;
+typedef uint8_t mem_data_t;
 
 #pragma pack(pop)
 
@@ -177,7 +177,7 @@ int memd_copy_from_cpu(int fd[]){
    while((cb=read(fd[0],p_mem_packet,sizeof(mem_header_t)+MAX_DATA_SZ))>0) {
       crc16_t crc;
       int crc_byte_no=0;
-      uchar8_t* p_crc_mem_packet=((uchar8_t*)p_mem_packet);
+      uint8_t* p_crc_mem_packet=((uint8_t*)p_mem_packet);
 
       if(cb<=sizeof(mem_header_t))
          continue;
@@ -190,12 +190,12 @@ int memd_copy_from_cpu(int fd[]){
          for(crc_byte_no=0; crc_byte_no<((int)((cb-sizeof(crc16_t)) )); crc_byte_no++) {
             crc=crc16(crc,p_crc_mem_packet[crc_byte_no]);
          }
-         if( p_crc_mem_packet[crc_byte_no++] != ( ((uchar8_t)(crc&0xff00)) >> 8 ) ) { //msb
+         if( p_crc_mem_packet[crc_byte_no++] != ( ((uint8_t)(crc&0xff00)) >> 8 ) ) { //msb
             //error continue???
             ++memd_rec_error_crc;
             continue;
          }
-         if( p_crc_mem_packet[crc_byte_no] != ( ((uchar8_t)(crc&0x00ff)) ) ) { //lsb
+         if( p_crc_mem_packet[crc_byte_no] != ( ((uint8_t)(crc&0x00ff)) ) ) { //lsb
             //error continue???
             ++memd_rec_error_crc;
             continue;
@@ -258,7 +258,7 @@ int memd_copy_to_cpu(int fd[],int secure){
             if(secure) {
                crc16_t crc;
                int crc_byte_no=0;
-               uchar8_t* p_crc_mem_packet=((uchar8_t*)p_mem_packet);
+               uint8_t* p_crc_mem_packet=((uint8_t*)p_mem_packet);
 
                //crc
                __init_crc16(crc);
@@ -266,8 +266,8 @@ int memd_copy_to_cpu(int fd[],int secure){
                for(crc_byte_no=0; crc_byte_no<((int)(sizeof(mem_header_t)+cb)); crc_byte_no++) {
                   crc=crc16(crc,p_crc_mem_packet[crc_byte_no]);
                }
-               p_crc_mem_packet[crc_byte_no++]  = ( ((uchar8_t)(crc&0xff00)) >> 8 ); //msb
-               p_crc_mem_packet[crc_byte_no]    = ( ((uchar8_t)(crc&0x00ff)) ); //lsb
+               p_crc_mem_packet[crc_byte_no++]  = ( ((uint8_t)(crc&0xff00)) >> 8 ); //msb
+               p_crc_mem_packet[crc_byte_no]    = ( ((uint8_t)(crc&0x00ff)) ); //lsb
                cb+=sizeof(crc16_t);
             }
             //write to distant cpu

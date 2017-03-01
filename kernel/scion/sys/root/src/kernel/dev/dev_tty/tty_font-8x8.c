@@ -37,6 +37,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/dev/dev_tty/tty_font.h"
 

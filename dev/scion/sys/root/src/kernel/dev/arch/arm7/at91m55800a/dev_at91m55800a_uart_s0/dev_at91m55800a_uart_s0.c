@@ -64,7 +64,7 @@ Includes
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
 #include "kernel/core/core_rttimer.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "lib/libc/termios/termios.h"
 
@@ -121,7 +121,7 @@ dev_map_t dev_at91m55800a_uart_s0_map={
 
 typedef struct {
    uint16_t cb;
-   uchar8_t* p;
+   uint8_t* p;
 }fifo_buf_pool_t;
 
 static fifo_buf_pool_t _fifo_buf_pool[MAX_POOL];
@@ -282,8 +282,8 @@ Implementation
 ----------------------------------------------*/
 static int dev_at91m55800a_uart_s0_fifo_pool_init(void){
    int i;
-   uchar8_t* p = _at91m55800a_uart_fifo_input_buffer;
-   uchar8_t c;
+   uint8_t* p = _at91m55800a_uart_fifo_input_buffer;
+   uint8_t c;
 
    //
    for(i=0; i<MAX_POOL; i++) {

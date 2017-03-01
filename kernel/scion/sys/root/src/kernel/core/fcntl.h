@@ -116,7 +116,7 @@ struct flock {
 #ifdef __cplusplus
 extern "C" {
 #endif
-int fcntl(unsigned int fd, unsigned int cmd,...);
+int fcntl(int fd, unsigned int cmd,...);
 #ifdef __cplusplus
 }
 #endif

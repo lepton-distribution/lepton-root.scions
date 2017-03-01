@@ -77,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.40.3.8937</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -127,7 +127,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
         <option>
@@ -144,7 +144,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
         <option>
@@ -167,7 +167,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
       </data>
@@ -666,7 +666,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -938,7 +938,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -949,6 +949,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1193,6 +1201,18 @@
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_eth.c</name>
               </file>
               <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_flash.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_flash.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_sdio.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_sdio.h</name>
+              </file>
+              <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\dev_stm32f4xx\dev_stm32f4xx_spi_x.c</name>
               </file>
               <file>
@@ -1429,6 +1449,12 @@
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\eth.h</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\flash_if.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\flash_if.h</name>
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\stm32f4xx\gpio.c</name>

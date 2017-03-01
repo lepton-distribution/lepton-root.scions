@@ -26,6 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 
 #include "kernel/core/ioctl_hd.h"
 #include "kernel/core/system.h"
@@ -173,7 +174,7 @@ int dev_win32_fileflash_write(desc_t desc, const char* buf, int size) {
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_win32_fileflash_seek(desc_t desc, int offset, int origin) {
+int dev_win32_fileflash_seek(desc_t desc, off_t offset, int origin) {
    unsigned long dev_current_addr = (unsigned long)ofile_lst[desc].offset;
 
    switch (origin) {

@@ -185,7 +185,7 @@ int _is_cloexec(pid_t pid,int fd);
 //process system call
 int _sys_dup(pid_t pid,int fd,int limit);
 int _sys_dup2(pid_t pid,int fd,int fd2);
-int _sys_fcntl(pid_t pid,unsigned int fd, unsigned int cmd, unsigned int argc,void* argv[]);
+int _sys_fcntl(pid_t pid, int fd, unsigned int cmd, unsigned int argc,void* argv[]);
 
 
 pid_t _sys_krnl_exec(const char *path, const char* argv[], const char* envp, pid_t ppid,pid_t pid);

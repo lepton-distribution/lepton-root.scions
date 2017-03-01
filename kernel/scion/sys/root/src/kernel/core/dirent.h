@@ -34,7 +34,7 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
-#define NAME_MAX           32 //16
+#define NAME_MAX  __KERNEL_FILENAME_MAX //16
 
 typedef struct dirent {
    ino_t d_ino;        //file serial number

@@ -23,7 +23,7 @@ freertos_tcb_t *pxTCB_task;
 
 typedef unsigned long OS_U32;
 
-#define __cortex_m0__
+#define __cortex_m4__
 
 #if defined(__cortex_m4__)
 //cortex M3/M4
@@ -149,10 +149,13 @@ void sighandler(void){
 ----------------------------------------------*/
 void lepton_start( void ){
    /* Spawn the task. */
-   xTaskCreate( lepton_task_kernel, ( signed char * ) "kernel", configMINIMAL_STACK_SIZE, NULL,  tskIDLE_PRIORITY + 10UL, ( xTaskHandle * ) &handle_lepton_task_kernel );
+   xTaskCreate( lepton_task_kernel, ( char const * ) "kernel", configMINIMAL_STACK_SIZE, NULL,  tskIDLE_PRIORITY + 10UL, ( xTaskHandle * ) &handle_lepton_task_kernel );
     /* Spawn the task. */
-   xTaskCreate( lepton_task_1, ( signed char * ) "task_1", configMINIMAL_STACK_SIZE, NULL,  tskIDLE_PRIORITY + 1UL, ( xTaskHandle * ) &handle_lepton_task_1 );
+   xTaskCreate( lepton_task_1, ( char const * ) "task_1", configMINIMAL_STACK_SIZE, NULL,  tskIDLE_PRIORITY + 1UL, ( xTaskHandle * ) &handle_lepton_task_1 );
+   /* Start the tasks and timer running. */
+   vTaskStartScheduler();
 }
+
 /*--------------------------------------------
 | Name:        lepton_task_kernel
 | Description:

@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 
 /* Exported define -----------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
-#pragma anon_unions
+//#pragma anon_unions
 #pragma pack(4)
 
 typedef enum {FALSE = 0, TRUE = !FALSE} bool;

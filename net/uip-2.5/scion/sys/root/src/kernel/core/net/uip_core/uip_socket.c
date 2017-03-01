@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"

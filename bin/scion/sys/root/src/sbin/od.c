@@ -27,6 +27,7 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "kernel/core/signal.h"
 #include "kernel/core/libstd.h"

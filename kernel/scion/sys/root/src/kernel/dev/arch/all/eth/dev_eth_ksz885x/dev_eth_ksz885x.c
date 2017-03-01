@@ -37,7 +37,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_eth.h"
 #include "kernel/core/system.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/arch/all/eth/common/dev_eth_common.h"
 

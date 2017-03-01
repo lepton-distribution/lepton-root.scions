@@ -25,11 +25,14 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
@@ -357,7 +360,7 @@ int _fat_mknod(desc_t desc,inodenb_t inodenb,dev_t dev) {
 | Comments: fill gap between old offset and new offset by 0
 | See:
 ---------------------------------------------*/
-int _fat_seek(desc_t desc, int offset, int origin) {
+int _fat_seek(desc_t desc, off_t offset, int origin) {
    int result = 0;
    int new_offset=0;
 

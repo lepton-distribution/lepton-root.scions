@@ -976,7 +976,7 @@ typedef struct {
       pid_t _pid_=__pthread_ptr__->pid; \
       void* src_stack_ptr; \
       stack_size = process_lst[_pid_]->bckup_context.os_task.pStack - __pthread_ptr__->start_context.os_task.pStack;\
-      src_stack_ptr = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+stack_size); \
+      src_stack_ptr = (void*)(((uint8_t*)__pthread_ptr__->start_context.os_task.pStack)+stack_size); \
       process_lst[_pid_]->bckup_stack = (char*)malloc( abs(stack_size) ); \
       if(!process_lst[_pid_]->bckup_stack) \
          return -ENOMEM; \
@@ -988,7 +988,7 @@ typedef struct {
       pid_t _pid_=__pthread_ptr->pid; \
       void* src_stack_ptr; \
       stack_size = process_lst[_pid_]->bckup_context.os_task.pStack- __pthread_ptr->start_context.os_task.pStack;\
-      src_stack_ptr = (void*)(((uchar8_t*)__pthread_ptr->start_context.os_task.pStack)+stack_size); \
+      src_stack_ptr = (void*)(((uint8_t*)__pthread_ptr->start_context.os_task.pStack)+stack_size); \
       memcpy(src_stack_ptr,process_lst[_pid_]->bckup_stack,abs(stack_size)); \
       free(process_lst[_pid_]->bckup_stack); \
 }
@@ -1179,7 +1179,7 @@ typedef struct {
       int __stack_size__; \
       void* __src_stack_ptr__; \
       __stack_size__ = ((int)(__pthread_ptr__->bckup_context.os_task.pStack) - (int)(__pthread_ptr__->start_context.os_task.pStack));\
-      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
+      __src_stack_ptr__ = (void*)(((uint8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
       __pthread_ptr__->bckup_stack = (char*)_sys_malloc( abs(__stack_size__) ); \
       if(!__pthread_ptr__->bckup_stack) \
          return -ENOMEM; \
@@ -1190,7 +1190,7 @@ typedef struct {
       int __stack_size__; \
       void* __src_stack_ptr__; \
       __stack_size__ = ((int)(__pthread_ptr__->bckup_context.os_task.pStack)- (int)(__pthread_ptr__->start_context.os_task.pStack));\
-      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
+      __src_stack_ptr__ = (void*)(((uint8_t*)__pthread_ptr__->start_context.os_task.pStack)+__stack_size__);\
       memcpy(__src_stack_ptr__,__pthread_ptr__->bckup_stack,abs(__stack_size__)); \
       _sys_free(__pthread_ptr__->bckup_stack); \
 }
@@ -1577,11 +1577,12 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
- || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__))
 
-   #include <stdlib.h>
-   #include <string.h>   
- 
+   //#include <stdlib.h>
+   //#include <string.h>   
+
    #include "FreeRTOS.h"
    #include "task.h"
    #include "semphr.h"
@@ -1625,7 +1626,9 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
            uint32_t  OS_REG_PC;
            uint32_t  OS_REG_XPSR;
          } cpu_regs_t;
-   #elif ( (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM3__) || (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM4__) )
+   #elif (  (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM3__)\
+         || (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM4__)\
+         || (__tauon_cpu_core__ ==__tauon_cpu_core_arm_cortexM7__) )
       typedef struct cpu_regs_st {
            uint32_t  OS_REG_R4;
            uint32_t  OS_REG_R5;
@@ -1716,7 +1719,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       int __stack_size__; \
       void* __src_stack_ptr__; \
       __stack_size__ = ((int)(__pthread_ptr__->bckup_context.tcb.pStack) - (int)(__pthread_ptr__->start_context.tcb.pStack));\
-      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.tcb.pStack)+__stack_size__);\
+      __src_stack_ptr__ = (void*)(((uint8_t*)__pthread_ptr__->start_context.tcb.pStack)+__stack_size__);\
       __pthread_ptr__->bckup_stack = (char*)_sys_malloc( abs(__stack_size__) ); \
       if(!__pthread_ptr__->bckup_stack) \
          return -ENOMEM; \
@@ -1727,7 +1730,7 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       int __stack_size__; \
       void* __src_stack_ptr__; \
       __stack_size__ = ((int)(__pthread_ptr__->bckup_context.tcb.pStack)- (int)(__pthread_ptr__->start_context.tcb.pStack));\
-      __src_stack_ptr__ = (void*)(((uchar8_t*)__pthread_ptr__->start_context.tcb.pStack)+__stack_size__);\
+      __src_stack_ptr__ = (void*)(((uint8_t*)__pthread_ptr__->start_context.tcb.pStack)+__stack_size__);\
       memcpy(__src_stack_ptr__,__pthread_ptr__->bckup_stack,abs(__stack_size__)); \
       _sys_free(__pthread_ptr__->bckup_stack); \
    }
@@ -1770,7 +1773,8 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
    //GD all Cortex-M3 and cortex M4 MCUs have the same systick registers
    #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM0__)\
        ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
-       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)\
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__)
       #define __LEPTON_KAL_PIT_BASE    (0xE000E010)
       #define __LEPTON_KAL_PIT_MR      (*(volatile uint32_t*)(__LEPTON_KAL_PIT_BASE + 0x00))
       #define __stop_sched() __LEPTON_KAL_PIT_MR &= ~(1uL << (1));

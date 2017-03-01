@@ -27,6 +27,8 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include "kernel/core/types.h"
@@ -38,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl.h"
 #include "kernel/core/malloc.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/arch/gnu32/common/linux_hdwr_ops.h"

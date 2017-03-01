@@ -26,6 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"

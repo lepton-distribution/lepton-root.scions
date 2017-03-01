@@ -64,7 +64,7 @@ Includes
 
 #include "lib/libc/termios/termios.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 /*===========================================
 Global Declaration

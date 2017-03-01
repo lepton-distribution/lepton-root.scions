@@ -50,13 +50,13 @@ typedef struct rotary_switch_info_st {
 
    desc_t desc_r;
    uint32_t interrupt_no;
-   uchar8_t input_r;
-   uchar8_t input_w;
+   uint8_t input_r;
+   uint8_t input_w;
    //
    int16_t counter;
    //
    kernel_ring_buffer_t krb_ring_buffer_info;
-   uchar8_t buffer_read[16];
+   uint8_t buffer_read[16];
 
 }rotary_switch_info_t;
 

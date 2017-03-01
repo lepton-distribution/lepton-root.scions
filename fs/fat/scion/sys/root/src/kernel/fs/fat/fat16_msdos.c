@@ -26,11 +26,14 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 #include <string.h>
 
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/stat.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
@@ -54,27 +57,28 @@ int _fat_msdos_rename(desc_t desc,const char*  old_name, char* new_name);
 
 //file system operations
 fsop_t fat_msdos_op={
-   _fat_loadfs,
-   _fat_checkfs,
-   _fat_makefs,
-   _fat_readfs,
-   _fat_writefs,
-   _fat_msdos_statfs,
-   _fat_mountdir,
-   _fat_msdos_readdir,
-   _fat_telldir,
-   _fat_seekdir,
-   _fat_msdos_lookupdir,
-   _fat_mknod,
-   _fat_msdos_create,
-   _fat_msdos_open,
-   _fat_close,
-   _fat_read,
-   _fat_write,
-   _fat_seek,
-   _fat_truncate,
-   _fat_msdos_remove,
-   _fat_msdos_rename
+   .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+   .fs.loadfs        = _fat_loadfs,
+   .fs.checkfs       = _fat_checkfs,
+   .fs.makefs        = _fat_makefs,
+   .fs.readfs        = _fat_readfs,
+   .fs.writefs       = _fat_writefs,
+   .fs.statfs        = _fat_msdos_statfs,
+   .fs.mountdir      = _fat_mountdir,
+   .fs.readdir       = _fat_msdos_readdir,
+   .fs.telldir       = _fat_telldir,
+   .fs.seekdir       = _fat_seekdir,
+   .fs.lookupdir     = _fat_msdos_lookupdir,
+   .fs.mknod         = _fat_mknod,
+   .fs.create        = _fat_msdos_create,
+   .fs.open          = _fat_msdos_open,
+   .fs.close         = _fat_close,
+   .fs.read          = _fat_read,
+   .fs.write         = _fat_write,
+   .fs.seek          = _fat_seek,
+   .fs.truncate      = _fat_truncate,
+   .fs.remove        = _fat_msdos_remove,
+   .fs.rename        = _fat_msdos_rename
 };
 
 /*============================================
@@ -215,11 +219,10 @@ int _fat_msdos_readdir(desc_t desc,dirent_t* dirent) {
             dirent->inodenb = ofile_lst[desc].pmntdev->inodenb_offset;
          }
          else {
-            dirent->inodenb = dirent->inodenb =
+               dirent->inodenb =
                                  __cvt2logicnode(desc,
                                                  (__get_BPB_RootEntCnt(ofile_lst[desc].pmntdev)+
-                                                  (current_addr-
-                                                   __get_ud_addr(ofile_lst[desc].pmntdev))/RD_SIZE));
+                                                 (current_addr-__get_ud_addr(ofile_lst[desc].pmntdev))/RD_SIZE));
          }
          //copy name
          _fat16_msdos_fillname(dirent->d_name, fat_entry.DIR_Name);

@@ -26,7 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
-
+#include <stdint.h>
 
 #include "lib/libc/libc.h"
 #include "lib/libc/stdio/stdio.h"

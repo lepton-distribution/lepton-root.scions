@@ -29,6 +29,11 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
@@ -36,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/malloc.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/fs/vfs/vfs.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/ioctl.h"
 #include "kernel/core/ioctl_lcd.h"
@@ -118,14 +123,14 @@ typedef struct link_info_st{
   desc_t desc_oled_io;
   desc_t desc_spi_w;
   desc_t desc_w;
-  uchar8_t * p_fbuf;
+  uint8_t * p_fbuf;
 }link_info_t;
 
 static link_info_t link_info_oled_ssd1322;
 
 
 static void ssd1322_reset(desc_t desc_w){   
-   uchar8_t v8;  
+   uint8_t v8;  
    desc_t desc_oled_io = link_info_oled_ssd1322.desc_oled_io;
    va_list ap={0};
    //
@@ -136,8 +141,8 @@ static void ssd1322_reset(desc_t desc_w){
    ofile_lst[desc_oled_io].pfsop->fdev.fdev_ioctl(desc_oled_io,IOCTL_OLED_SSD1322_IO_RESET,ap);
 }
 
-static void ssd1322_write_command(desc_t desc_w, uchar8_t cmd){   
-   uchar8_t v8;  
+static void ssd1322_write_command(desc_t desc_w, uint8_t cmd){   
+   uint8_t v8;  
    desc_t desc_oled_io = link_info_oled_ssd1322.desc_oled_io;
    desc_t desc_spi_w = link_info_oled_ssd1322.desc_spi_w;
    va_list ap={0};
@@ -161,7 +166,7 @@ static void ssd1322_write_command(desc_t desc_w, uchar8_t cmd){
 }
 
 //
-static void ssd1322_write_data(desc_t desc_w, uchar8_t *data, int len){
+static void ssd1322_write_data(desc_t desc_w, uint8_t *data, int len){
 	
    desc_t desc_oled_io = link_info_oled_ssd1322.desc_oled_io;
    desc_t desc_spi_w = link_info_oled_ssd1322.desc_spi_w;
@@ -196,7 +201,7 @@ static void ssd1322_unsleep(desc_t desc_w){
 
 void ssd1322_set_gray_scale_table(desc_t desc_w)
 {  
-   uchar8_t data[]={0x0C,0x18,0x24,0x30,0x3C,0x48,0x54,0x60,0x6C,0x78,0x84,0x90,0x9C,0xA8,0xB4};
+   uint8_t data[]={0x0C,0x18,0x24,0x30,0x3C,0x48,0x54,0x60,0x6C,0x78,0x84,0x90,0x9C,0xA8,0xB4};
 	//
    ssd1322_write_command(desc_w,0xB8);			// Set Gray Scale Table
 	//
@@ -207,7 +212,7 @@ void ssd1322_set_gray_scale_table(desc_t desc_w)
 
 static int ssd1322_init(desc_t desc_w)
 {
-	uchar8_t data[3];
+	uint8_t data[3];
 	int i;
    
    ssd1322_reset(desc_w);

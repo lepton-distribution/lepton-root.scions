@@ -60,7 +60,7 @@ Includes
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
 #include "lib/libc/termios/termios.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/core_rttimer.h"
 #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common.h"
 #include "kernel/dev/arch/all/sdcard/drv_sdcard_arch.h"

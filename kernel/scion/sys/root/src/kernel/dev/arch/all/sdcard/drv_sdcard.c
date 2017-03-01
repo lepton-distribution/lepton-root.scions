@@ -22,6 +22,8 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
+#include <stdint.h>
+
 #if defined(__IAR_SYSTEMS_ICC) || defined(__IAR_SYSTEMS_ICC__)
    #include <ioat91sam9261.h>
    #include <intrinsic.h>

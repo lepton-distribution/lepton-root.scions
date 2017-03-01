@@ -37,7 +37,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl.h"
 #include "kernel/core/ioctl_usb.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "usbstd.h"
 #include "kernel/dev/arch/all/usb/usbcore.h"

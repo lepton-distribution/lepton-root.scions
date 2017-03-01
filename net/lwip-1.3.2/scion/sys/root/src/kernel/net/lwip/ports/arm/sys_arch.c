@@ -258,7 +258,19 @@ sys_mbox_t sys_mbox_new(int size){
       //
       OS_CreateMB(&p_sys_mbox->os_mailbox,sizeof(void*),size,p_sys_mbox->p_buf);
    #elif defined(__KERNEL_UCORE_FREERTOS)
-      p_sys_mbox->os_mailbox = xQueueCreate( size, sizeof( void * ) );
+      
+      #if (configSUPPORT_STATIC_ALLOCATION==1)
+         //alloc mailbox buffer
+         p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
+         /* out of memory? */
+         if(!p_sys_mbox->p_buf) {
+            return SYS_MBOX_NULL;
+         }
+         //
+         p_sys_mbox->os_mailbox = xQueueCreateStatic( size, sizeof( void * ),p_sys_mbox->p_buf, &p_sys_mbox->queue_static );
+      #else
+         p_sys_mbox->os_mailbox = xQueueCreate( size, sizeof( void * ) );
+      #endif
    #endif
    //
    return p_sys_mbox;
@@ -451,8 +463,19 @@ sys_sem_t sys_sem_new(u8_t count)
       //
       OS_CreateCSema(p_sem,count);
    #elif defined(__KERNEL_UCORE_FREERTOS)
-      sys_sem_t p_sem;
-      p_sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count);
+      sys_sem_static_t* p_sem;
+      //
+      #if (configSUPPORT_STATIC_ALLOCATION==1)
+         p_sem=(sys_sem_static_t*)_sys_malloc(sizeof(sys_sem_static_t));
+         /* out of memory? */
+         if(!p_sem) {
+            return SYS_SEM_NULL;
+         }
+         //
+         p_sem->sem = xSemaphoreCreateCountingStatic( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count,&p_sem->sem_static);
+      #else
+         p_sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count);
+      #endif
    #endif
      
    return p_sem;

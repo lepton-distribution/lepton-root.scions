@@ -54,12 +54,17 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
+
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
 #include "ufsinfo.h"
@@ -67,9 +72,6 @@ Includes
 #include "ufscore.h"
 #include "ufs.h"
 #include "ufsx.h"
-
-
-
 
 
 #ifdef _TRACE_DEBUG
@@ -100,27 +102,28 @@ static const char __ufsstr[]="..";
 
 //
 fsop_t ufsx_op={
-   _ufs_loadfs,
-   _ufs_checkfs,
-   _ufs_makefs,
-   _ufs_readfs,
-   _ufs_writefs,
-   _ufsx_statfs,
-   _ufsx_mountdir,
-   _ufsx_readdir,
-   _ufsx_telldir,
-   _ufsx_seekdir,
-   _ufsx_lookupdir,
-   _ufs_mknod,
-   _ufsx_create,
-   _ufs_open,    //open
-   _ufs_close,   //close
-   _ufs_read,    //read
-   _ufs_write,   //write
-   _ufs_seek,    //seek
-   _ufs_truncate,
-   _ufsx_remove,
-   _ufsx_rename
+   .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+   .fs.loadfs        = _ufs_loadfs,
+   .fs.checkfs       = _ufs_checkfs,
+   .fs.makefs        = _ufs_makefs,
+   .fs.readfs        = _ufs_readfs,
+   .fs.writefs       = _ufs_writefs,
+   .fs.statfs        = _ufsx_statfs,
+   .fs.mountdir      = _ufsx_mountdir,
+   .fs.readdir       = _ufsx_readdir,
+   .fs.telldir       = _ufsx_telldir,
+   .fs.seekdir       = _ufsx_seekdir,
+   .fs.lookupdir     = _ufsx_lookupdir,
+   .fs.mknod         = _ufs_mknod,
+   .fs.create        = _ufsx_create,
+   .fs.open          = _ufs_open,    //open
+   .fs.close         = _ufs_close,   //close
+   .fs.read          = _ufs_read,    //read
+   .fs.write         = _ufs_write,   //write
+   .fs.seek          = _ufs_seek,    //seek
+   .fs.truncate      = _ufs_truncate,
+   .fs.remove        = _ufsx_remove,
+   .fs.rename        = _ufsx_rename
 };
 
 

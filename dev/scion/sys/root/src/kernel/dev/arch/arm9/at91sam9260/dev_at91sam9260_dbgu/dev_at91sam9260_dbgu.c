@@ -35,7 +35,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
 #include "lib/libc/termios/termios.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 // drivers
 #include "kernel/dev/arch/arm9/at91sam9260/dev_at91sam9260_uart/dev_at91sam9260_uart_x.h"

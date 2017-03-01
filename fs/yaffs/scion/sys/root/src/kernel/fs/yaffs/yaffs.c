@@ -30,14 +30,16 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
-
 
 #include "kernel/fs/yaffs/core/yaffs_guts.h"
 #include "kernel/fs/yaffs/core/yportenv.h"
@@ -52,30 +54,29 @@ Global Declaration
 =============================================*/
 
 //
-fsop_t yaffs_op={
-   _yaffs_loadfs,
-   _yaffs_checkfs,
-   _yaffs_makefs,
-   _yaffs_readfs,
-   _yaffs_writefs,
-   _yaffs_statfs,
-   _yaffs_mountdir,
-   _yaffs_readdir,
-   _yaffs_telldir,
-   _yaffs_seekdir,
-   _yaffs_lookupdir,
-   _yaffs_mknod,
-   _yaffs_create,
-   _yaffs_open,    //open
-   _yaffs_close,   //close
-   _yaffs_read,    //read
-   _yaffs_write,   //write
-   _yaffs_seek,    //seek
-   _yaffs_truncate,
-   _yaffs_remove,
-   _yaffs_rename
+fsop_t yaffs_op = {
+   .fs.loadfs = _yaffs_loadfs,
+   .fs.checkfs = _yaffs_checkfs,
+   .fs.makefs = _yaffs_makefs,
+   .fs.readfs = _yaffs_readfs,
+   .fs.writefs = _yaffs_writefs,
+   .fs.statfs = _yaffs_statfs,
+   .fs.mountdir = _yaffs_mountdir,
+   .fs.readdir = _yaffs_readdir,
+   .fs.telldir = _yaffs_telldir,
+   .fs.seekdir = _yaffs_seekdir,
+   .fs.lookupdir = _yaffs_lookupdir,
+   .fs.mknod = _yaffs_mknod,
+   .fs.create = _yaffs_create,
+   .fs.open = _yaffs_open,    //open
+   .fs.close = _yaffs_close,   //close
+   .fs.read = _yaffs_read,    //read
+   .fs.write = _yaffs_write,   //write
+   .fs.seek = _yaffs_seek,    //seek
+   .fs.truncate = _yaffs_truncate,
+   .fs.remove = _yaffs_remove,
+   .fs.rename = _yaffs_rename
 };
-
 extern int yaffs_UnlinkObject(yaffs_Object *obj);//from yaffs_guts.c
 
 /*===========================================
@@ -390,7 +391,7 @@ int _yaffs_read(desc_t desc, char* buf, int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _yaffs_seek(desc_t desc, int offset, int origin)
+int _yaffs_seek(desc_t desc, off_t offset, int origin)
 {
    struct iattr attr;
    yaffs_Object* p_yaffs_object=yaffs_core_context_lst[desc].obj;

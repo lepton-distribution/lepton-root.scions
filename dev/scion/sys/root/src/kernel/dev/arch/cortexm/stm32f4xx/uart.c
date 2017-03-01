@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 */
 
 /* Includes ------------------------------------------------------------------*/
+#include <stdint.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -33,7 +35,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/cpu.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/malloc.h"
 
 #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"

@@ -31,6 +31,15 @@
     <Filter Include="kernel\fs\fat">
       <UniqueIdentifier>{c6ab913e-366a-4212-8961-d7396be4f0d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kernel\fs\fatfs">
+      <UniqueIdentifier>{d913dd56-6854-483d-bac7-ee9cca2c6e68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\fatfs\core">
+      <UniqueIdentifier>{d5675408-8f94-4ef5-a163-5d3a4a158e6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\fs\fatfs\core\drivers">
+      <UniqueIdentifier>{4ab4dbe2-b630-4618-b1fc-84b0303f1f4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -180,6 +189,33 @@
     <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ydirectenv.h">
       <Filter>kernel\fs\yaffs\core\direct</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfs.h">
+      <Filter>kernel\fs\fatfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfscore.h">
+      <Filter>kernel\fs\fatfs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\diskio.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff_gen_drv.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ffconf.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ffconf_template.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\integer.h">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\drivers\sd_diskio.h">
+      <Filter>kernel\fs\fatfs\core\drivers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\src\kernel\fs\vfs\vfs.c">
@@ -295,6 +331,24 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\fs\yaffs\core\direct\ynorsim.c">
       <Filter>kernel\fs\yaffs\core\direct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfs.c">
+      <Filter>kernel\fs\fatfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfscore.c">
+      <Filter>kernel\fs\fatfs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\diskio.c">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff.c">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff_gen_drv.c">
+      <Filter>kernel\fs\fatfs\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\drivers\sd_diskio.c">
+      <Filter>kernel\fs\fatfs\core\drivers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

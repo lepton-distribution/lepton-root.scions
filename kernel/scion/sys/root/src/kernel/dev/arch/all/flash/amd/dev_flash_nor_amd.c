@@ -27,12 +27,16 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/ioctl_hd.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/arch/all/flash/amd/lldapi/lld.h"
 

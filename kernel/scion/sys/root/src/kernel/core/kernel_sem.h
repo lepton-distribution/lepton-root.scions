@@ -59,6 +59,7 @@ typedef struct kernel_sem_st {
 #endif
 #ifdef __KERNEL_UCORE_FREERTOS
    xSemaphoreHandle sem;
+   StaticSemaphore_t sem_static;
    signed portBASE_TYPE xHigherPriorityTaskWoken; //used by semaphore in interrupt context 
 #endif
 #ifdef __KERNEL_UCORE_ECOS

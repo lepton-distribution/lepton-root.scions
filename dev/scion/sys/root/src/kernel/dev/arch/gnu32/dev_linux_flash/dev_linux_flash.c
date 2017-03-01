@@ -88,7 +88,7 @@ static const dev_flash_t dev_flash_am29dlxxxx_linux={
 
 //
 typedef  uint32_t addr_t;
-typedef  uchar8_t sector_data_t;
+typedef  uint8_t sector_data_t;
 typedef  uint32_t sector_addr_t;
 typedef  int16_t sector_no_t;
 typedef  uint32_t sector_sz_t;

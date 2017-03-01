@@ -29,6 +29,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
@@ -37,7 +40,7 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/cpu.h"
 #include "kernel/core/core_rttimer.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/arch/at91/asf/sam0/drivers/sercom/usart/usart.h"
 #include "kernel/dev/arch/at91/asf/sam0/drivers/sercom/usart/usart_interrupt.h"
@@ -460,7 +463,7 @@ int dev_at91samd20_uart_x_read(desc_t desc, char* buf,int size){
    board_at91samd20_uart_info_t * p_board_at91samd20_uart_info = (board_at91samd20_uart_info_t*)ofile_lst[desc].p;
    uint16_t r = p_board_at91samd20_uart_info->rx_buffer_r;
    uint16_t w = p_board_at91samd20_uart_info->rx_buffer_w;
-   uchar8_t* p_rx_buffer = p_board_at91samd20_uart_info->internal_buffer_rx;
+   uint8_t* p_rx_buffer = p_board_at91samd20_uart_info->internal_buffer_rx;
    //
    if(!p_board_at91samd20_uart_info)
       return -1;

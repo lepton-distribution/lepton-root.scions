@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
@@ -35,7 +37,7 @@ Includes
 
 #include "lib/libc/termios/termios.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/dev/arch/win32/dev_win32_com2/dev_win32uart.h"
 
 /*===========================================

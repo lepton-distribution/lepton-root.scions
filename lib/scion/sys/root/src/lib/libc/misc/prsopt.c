@@ -26,7 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
-#include "string.h"
+#include <stdint.h>
+#include <string.h>
+
 #include "prsopt.h"
 
 /*===========================================

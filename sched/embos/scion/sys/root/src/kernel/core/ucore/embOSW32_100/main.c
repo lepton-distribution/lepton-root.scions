@@ -30,6 +30,8 @@
 Includes
 =============================================*/
 //#include "kernel/core/windows.h"
+#include <stdint.h>
+
 #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
 #include "kernel/core/ucore/embosW32_100/seggerwin32.h"
 #include "kernel/core//kernel.h"

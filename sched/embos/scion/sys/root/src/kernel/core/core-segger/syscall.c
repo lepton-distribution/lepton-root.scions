@@ -26,6 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/process.h"
 #include "kernel/core/fork.h"
 #include "kernel/core/wait.h"
@@ -35,6 +38,7 @@ Includes
 #include "kernel/core/sysctl.h"
 #include "kernel/core/flock.h"
 #include "kernel/core/malloc.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 
@@ -276,7 +280,7 @@ int _syscall_atexit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    __stop_sched();
 
 #if ATEXIT_MAX>0
-      if( process_lst[pid]->p_atexit_func!=(atexit_func_t*)((uchar8_t*)process_lst[pid]->pthread_ptr->heap_floor+(ATEXIT_MAX+1)*sizeof(atexit_func_t)) ){
+      if( process_lst[pid]->p_atexit_func!=(atexit_func_t*)((uint8_t*)process_lst[pid]->pthread_ptr->heap_floor+(ATEXIT_MAX+1)*sizeof(atexit_func_t)) ){
       process_lst[pid]->p_atexit_func++;
       *process_lst[pid]->p_atexit_func = atexit_dt->func;
       atexit_dt->ret = 0;

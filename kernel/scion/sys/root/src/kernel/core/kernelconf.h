@@ -48,6 +48,7 @@ Includes
 #define __tauon_cpu_core_arm_cortexM0__      (0x0007)
 #define __tauon_cpu_core_arm_cortexM3__      (0x0008)
 #define __tauon_cpu_core_arm_cortexM4__      (0x0009)
+#define __tauon_cpu_core_arm_cortexM7__      (0x000A)
 
 #define __tauon_cpu_device_win32_simulation__      (0x0001)
 #define __tauon_cpu_device_gnu_synthetic__         (0x0002)
@@ -57,6 +58,7 @@ Includes
 #define __tauon_cpu_device_arm9_at91sam9260__      (0x1905)
 #define __tauon_cpu_device_arm9_at91sam9261__      (0x1906)
 #define __tauon_cpu_device_cortexM0_at91samd20__   (0x1001)
+#define __tauon_cpu_device_cortexM7_at91samv71__   (0x1701)
 #define __tauon_cpu_device_cortexM3_trifecta__     (0x1301)
 #define __tauon_cpu_device_cortexM3_LM3S__         (0x1302)
 #define __tauon_cpu_device_cortexM3_stm32f1__      (0x1303)
@@ -145,7 +147,7 @@ Includes
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_arm926ejs__
 
 #elif __tauon_cpu_device__==__tauon_cpu_device_cortexM0_at91samd20__
-   #define __KERNEL_CPU_DEVICE_NAME "cortexM0+-at91samd20"
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM0+-atmel-samd20"
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM0__
 
 #elif __tauon_cpu_device__==__tauon_cpu_device_cortexM3_trifecta__
@@ -166,6 +168,10 @@ Includes
 
 #elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM4_stm32f4__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM4-stm32f4"
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
+
+#elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM7_at91samv71__
+   #define __KERNEL_CPU_DEVICE_NAME "cortexM7-atmel-samv71"
    #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
 #endif
 
@@ -196,6 +202,16 @@ Declaration
    #endif
 #elif (__tauon_compiler__==__compiler_keil_arm__)
    #define __KERNEL_UCORE_EMBOS
+#endif
+
+// avoid stdint redefinition conflict
+//in C99 stdint included embedded type xxx_t
+#if (__tauon_compiler__==__compiler_win32__)
+   #define __KERNEL_COMPILER_STDINT_INCLUDED__
+#elif (__tauon_compiler__==__compiler_iar_arm__) 
+   #if (__STDC_VERSION__== 199901L) 
+      #define __KERNEL_COMPILER_STDINT_INCLUDED__
+   #endif
 #endif
 
 #define __KERNEL_COMPILER_SUPPORT_32_BITS_TYPE 32
@@ -593,6 +609,14 @@ Declaration
    #define __KERNEL_VFS_SUPPORT_VFAT   1
    #define __KERNEL_VFS_SUPPORT_YAFFS  1
 #endif 
+
+#ifndef __KERNEL_FILENAME_MAX
+   #if (defined __KERNEL_VFS_SUPPORT_FATFS) && (__KERNEL_VFS_SUPPORT_FATFS == 1)
+      #define __KERNEL_FILENAME_MAX 64
+   #else
+      #define __KERNEL_FILENAME_MAX 32
+   #endif
+#endif
 
 //file system ufs
 #if !defined(__GNUC__)

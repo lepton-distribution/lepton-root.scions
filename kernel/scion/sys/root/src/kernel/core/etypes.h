@@ -34,31 +34,35 @@ Includes
 Declaration
 =============================================*/
 //embedded types
+#ifndef __KERNEL_COMPILER_STDINT_INCLUDED__
 
-typedef signed char schar8_t;
-typedef unsigned char uchar8_t;
-typedef uchar8_t char8_t;
+   typedef signed char schar8_t;
+   typedef unsigned char uint8_t;
+   typedef uint8_t char8_t;
 
-typedef signed char int8_t;
-typedef unsigned char uint8_t;
+   typedef signed char int8_t;
+   typedef unsigned char uint8_t;
 
 
-typedef short int int16_t;
+   typedef short int int16_t;
 
-typedef unsigned short int uint16_t;
-#if (__KERNEL_CPU_ARCH == CPU_ARCH_16)
-typedef long  int          int32_t;
-typedef unsigned long int uint32_t;
-#elif (__KERNEL_CPU_ARCH == CPU_ARCH_32)
-typedef int                int32_t;
-typedef unsigned int       uint32_t;
-#endif
+   typedef unsigned short int uint16_t;
+   #if (__KERNEL_CPU_ARCH == CPU_ARCH_16)
+   typedef long  int          int32_t;
+   typedef unsigned long int uint32_t;
+   #elif (__KERNEL_CPU_ARCH == CPU_ARCH_32)
+   typedef int                int32_t;
+   typedef unsigned int       uint32_t;
+   #endif
 
-#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
-typedef signed long long int64_t;
-typedef unsigned long long uint64_t;
-#else 
-typedef signed long int64_t;
-typedef unsigned long uint64_t;
-#endif
+   #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
+   typedef signed long long int64_t;
+   typedef unsigned long long uint64_t;
+   #else 
+   typedef signed long int64_t;
+   typedef unsigned long uint64_t;
+   #endif
+   
+#endif  //__KERNEL_COMPILER_STDINT_INCLUDED__
+   
 #endif

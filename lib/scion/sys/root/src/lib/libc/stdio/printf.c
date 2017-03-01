@@ -46,9 +46,11 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdlib.h>
+#include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
-#include <stdlib.h>
+
 
 #include "kernel/core/types.h"
 #include "kernel/core/libstd.h"
@@ -57,6 +59,7 @@ Includes
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 #include "lib/libc/misc/ltostr.h"
+#include "lib/libc/libc.h"
 
 
 
@@ -84,7 +87,7 @@ int __printf_r(const char * fmt, ...){
    int cb=0;
    FILE string[1] =
    {
-      {0, 0, (char*)(unsigned) -1, 0, (char*) (unsigned) -1, -1,
+      {0, 0, (unsigned char*)(unsigned) -1, 0, (unsigned char*) (unsigned) -1, -1,
        _IOFBF | __MODE_WRITE}
    };
 
@@ -92,8 +95,8 @@ int __printf_r(const char * fmt, ...){
    int rv;
 
    va_strt(ptr, fmt);
-   string->bufpos = buf;
-   string->bufend = buf+sizeof(buf);
+   string->bufpos = (unsigned char *) buf;
+   string->bufend = (unsigned char *)(buf+sizeof(buf));
 
 #if USE_FULL_STDIO_PRINTF
    rv = __vfnprintf(string, PRINTF_R_BUF_SZ, fmt, ptr);
@@ -236,7 +239,7 @@ int __snprintf(char *sp, size_t size, const char *fmt, ...)
 int __sprintf(char * sp, const char * fmt, ...){
    FILE string[1] =
    {
-      {0, 0, (char*)(unsigned) -1, 0, (char*) (unsigned) -1, -1,
+      {0, 0, (unsigned char*) (unsigned)-1, 0, (unsigned char*) (unsigned) -1, -1,
        _IOFBF | __MODE_WRITE}
    };
 
@@ -345,8 +348,8 @@ int __vsnprintf(char * sp, size_t size,const char *  fmt, va_list ap)
     * As we're only using the putc macro in vfnprintf, we don't need to
     * initialize all FILE f's fields.
     */
-   f.bufwrite = (char *) ((unsigned) -1);
-   f.bufpos = sp;
+   f.bufwrite = (unsigned char *) ((unsigned) -1);
+   f.bufpos = (unsigned char *)sp;
    f.mode = _IOFBF;
 
    rv = __vfnprintf(&f, size, fmt, ap);
@@ -357,7 +360,7 @@ int __vsnprintf(char * sp, size_t size,const char *  fmt, va_list ap)
 #else
    FILE string[1] =
    {
-      {0, 0, (char*)(unsigned) -1, 0, (char*) (unsigned) -1, -1,
+      {0, 0, (unsigned char*) -1, 0, (unsigned char*) -1, -1,
        _IOFBF | __MODE_WRITE}
    };
 

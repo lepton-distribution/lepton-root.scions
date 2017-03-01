@@ -26,6 +26,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
@@ -34,6 +38,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/kernel_object.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
 #include "kofs.h"
@@ -47,28 +52,31 @@ static const char __kofsstr[]="..";
 
 //
 fsop_t kofs_op={
-   _kofs_loadfs,
-   _kofs_checkfs,
-   _kofs_makefs,
-   _kofs_readfs,
-   _kofs_writefs,
-   _kofs_statfs,
-   _kofs_mountdir,
-   _kofs_readdir,
-   _kofs_telldir,
-   _kofs_seekdir,
-   _kofs_lookupdir,
-   _kofs_mknod,
-   _kofs_create,
-   _kofs_open,    //open
-   _kofs_close,   //close
-   _kofs_read,    //read
-   _kofs_write,   //write
-   _kofs_seek,    //seek
-   _kofs_truncate,
-   _kofs_remove,
-   _kofs_rename
+   .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+   .fs.loadfs        = _kofs_loadfs,
+   .fs.checkfs       = _kofs_checkfs,
+   .fs.makefs        = _kofs_makefs,
+   .fs.readfs        = _kofs_readfs,
+   .fs.writefs       = _kofs_writefs,
+   .fs.statfs        = _kofs_statfs,
+   .fs.mountdir      = _kofs_mountdir,
+   .fs.readdir       = _kofs_readdir,
+   .fs.telldir       = _kofs_telldir,
+   .fs.seekdir       = _kofs_seekdir,
+   .fs.lookupdir     = _kofs_lookupdir,
+   .fs.mknod         = _kofs_mknod,
+   .fs.create        = _kofs_create,
+   .fs.open          = _kofs_open,    //open
+   .fs.close         = _kofs_close,   //close
+   .fs.read          = _kofs_read,    //read
+   .fs.write         = _kofs_write,   //write
+   .fs.seek          = _kofs_seek,    //seek
+   .fs.truncate      = _kofs_truncate,
+   .fs.remove        = _kofs_remove,
+   .fs.rename        = _kofs_rename
 };
+
+
 
 typedef uint16_t kofs_ino_t;
 typedef uint16_t kofs_attr_t;
@@ -270,7 +278,7 @@ int _kofs_readdir(desc_t desc,dirent_t* dirent){
    _ino_phys = (kofs_ino_t)__cvt2physnode(desc,_ino_logic);
 
    if(_ino_phys==KOFS_INO_ROOT) {
-      uchar8_t* p=(uchar8_t*)&kofs_root_node[0];
+      uint8_t* p=(uint8_t*)&kofs_root_node[0];
       kofs_node_t* p_kofs_node;
 
       if(ofile_lst[desc].offset>=kofs_root_node_sz)
@@ -489,7 +497,7 @@ inodenb_t _kofs_lookupdir(desc_t desc,char* filename){
       return ofile_lst[desc].dir_inodenb;
 
    }else if(_ino_phys==KOFS_INO_ROOT) {
-      uchar8_t* p=(uchar8_t*)&kofs_root_node[0];
+      uint8_t* p=(uint8_t*)&kofs_root_node[0];
       kofs_node_t* p_kofs_node;
       int offset=0;
       while(offset<kofs_root_node_sz) {
@@ -815,7 +823,7 @@ int _kofs_read(desc_t desc, char* buf, int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _kofs_seek(desc_t desc, int offset, int origin)
+int _kofs_seek(desc_t desc, off_t offset, int origin)
 {
    switch(origin)
    {

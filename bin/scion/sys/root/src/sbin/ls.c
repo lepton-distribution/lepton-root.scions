@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+
 #include "kernel/core/limits.h"
 #include "kernel/core/libstd.h"
 #include "kernel/core/stat.h"
@@ -129,7 +131,7 @@ int ls_main(int argc,char* argv[]){
          else
             printf("?");
 
-         printf("rwxrwxrwx %6d ",_stat.st_size);
+         printf("rwxrwxrwx %6d ",(int)_stat.st_size);
 
          if(!_stat.st_ctime) {
             ctime_r(&cur_time,cbuf);

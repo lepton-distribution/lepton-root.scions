@@ -55,6 +55,9 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
 #ifdef WRAPR_STDLN
    #include <io.h>
    #include <stdio.h>

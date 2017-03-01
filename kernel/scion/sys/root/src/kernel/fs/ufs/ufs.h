@@ -47,7 +47,7 @@ int _ufs_open(desc_t desc);
 int _ufs_close(desc_t desc);
 int _ufs_read(desc_t desc,char* buffer,int size);
 int _ufs_write(desc_t desc,char* buffer,int size);
-int _ufs_seek(desc_t desc, int offset, int origin);
+int _ufs_seek(desc_t desc, off_t offset, int origin);
 int _ufs_truncate(desc_t desc, off_t length);
 int _ufs_remove(desc_t desc_ancst,desc_t desc);
 int _ufs_rename(desc_t desc,const char*  old_name, char* new_name);

@@ -35,6 +35,11 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
+
 #include "kernel/core/types.h"
 #include "kernel/core/libstd.h"
 #include "kernel/core/fcntl.h"
@@ -42,8 +47,8 @@ Includes
 
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
+#include "lib/libc/libc.h"
 
-#include <string.h>
 /*===========================================
 Global Declaration
 =============================================*/
@@ -302,7 +307,7 @@ try_again:
 ---------------------------------------------*/
 int __fflush(FILE *fp){
    int len, cc, rv=0;
-   char * bstart;
+   unsigned char * bstart;
    //int errno;
 
    __thr_safe_lock(fp);
@@ -339,7 +344,7 @@ int __fflush(FILE *fp){
 
       if (len)
       {
-         bstart = fp->bufstart;
+         bstart =(unsigned char*) fp->bufstart;
          /*
           * The loop is so we don't get upset by signals or partial writes.
           */
@@ -858,8 +863,8 @@ FILE * __fopen(const char *fname,int fd,FILE *fp,char *mode)
       if (fp->bufstart == 0)    /* Oops, no mem */
       {                         /* Humm, full buffering with a two(!) byte
                                  * buffer. */
-         fp->bufstart = fp->unbuf;
-         fp->bufend = fp->unbuf + sizeof(fp->unbuf);
+         fp->bufstart = (unsigned char*) fp->unbuf;
+         fp->bufend = (unsigned char*) (fp->unbuf + sizeof(fp->unbuf));
       }
       else
       {
@@ -945,14 +950,14 @@ void __setbuffer(FILE * fp,char * buf,int size){
 
    if( buf == 0 )
    {
-      fp->bufstart = fp->unbuf;
-      fp->bufend = fp->unbuf + sizeof(fp->unbuf);
+      fp->bufstart = (unsigned char*) fp->unbuf;
+      fp->bufend = (unsigned char*) (fp->unbuf + sizeof(fp->unbuf));
       fp->mode |= _IONBF;
    }
    else
    {
-      fp->bufstart = buf;
-      fp->bufend = buf+size;
+      fp->bufstart = (unsigned char*) buf;
+      fp->bufend = (unsigned char*)(buf+size);
       fp->mode |= _IOFBF;
    }
    fp->bufpos = fp->bufread = fp->bufwrite = fp->bufstart;
@@ -972,8 +977,8 @@ int __setvbuf(FILE * fp,char * buf,int mode,size_t size){
    __fflush(fp);
    if( fp->mode & __MODE_FREEBUF ) free(fp->bufstart);
    fp->mode &= ~(__MODE_FREEBUF|__MODE_BUF);
-   fp->bufstart = fp->unbuf;
-   fp->bufend = fp->unbuf + sizeof(fp->unbuf);
+   fp->bufstart = (unsigned char*) fp->unbuf;
+   fp->bufend = (unsigned char*) (fp->unbuf + sizeof(fp->unbuf));
    fp->mode |= _IONBF;
 
    if( mode == _IOFBF || mode == _IOLBF )
@@ -985,8 +990,8 @@ int __setvbuf(FILE * fp,char * buf,int mode,size_t size){
          return EOF;
       }
 
-      fp->bufstart = buf;
-      fp->bufend = buf+size;
+      fp->bufstart = (unsigned char*)buf;
+      fp->bufend =(unsigned char*) (buf+size);
       fp->mode |= mode;
    }
    fp->bufpos = fp->bufread = fp->bufwrite = fp->bufstart;

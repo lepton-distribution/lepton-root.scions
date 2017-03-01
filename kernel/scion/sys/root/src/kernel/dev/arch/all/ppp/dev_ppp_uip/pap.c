@@ -49,7 +49,9 @@
 /* include files 	*/
 /*			*/ 
 
+#include <stdint.h>
 #include	<string.h>
+
 #include	"ppp.h"
 #include	"pap.h"
 #include	"lcp.h"

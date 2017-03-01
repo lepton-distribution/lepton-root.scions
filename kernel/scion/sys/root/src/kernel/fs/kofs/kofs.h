@@ -55,7 +55,7 @@ int _kofs_open(desc_t desc);
 int _kofs_close(desc_t desc);
 int _kofs_read(desc_t desc,char* buffer,int size);
 int _kofs_write(desc_t desc,char* buffer,int size);
-int _kofs_seek(desc_t desc, int offset, int origin);
+int _kofs_seek(desc_t desc, off_t offset, int origin);
 int _kofs_truncate(desc_t desc, off_t length);
 int _kofs_remove(desc_t desc_ancst,desc_t desc);
 int _kofs_rename(desc_t desc,const char*  old_name, char* new_name);

@@ -34,7 +34,7 @@ This code is based on a file that contains the following:
 /*===========================================
 Includes
 =============================================*/
-
+#include <stdint.h>
 #include <stdarg.h>
 
 #include "kernel/core/types.h"
@@ -46,7 +46,9 @@ Includes
 
 #include "kernel/core/process.h"
 #include "kernel/core/pipe.h"
+
 #include "kernel/fs/vfs/vfs.h"
+#include "kernel/core/kernel_device.h"
 
 /*===========================================
 Global Declaration

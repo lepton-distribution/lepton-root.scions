@@ -70,7 +70,6 @@ Includes
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/kernel_pthread_mutex.h"
 #include "kernel/core/interrupt.h"
-#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/kal.h"
 /*===========================================
 Declaration
@@ -537,50 +536,7 @@ __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_count
 
 #define _SYSCALL_NET_SND         100
 
-//console device 
-extern desc_t __g_kernel_desc_tty;
-#define __set_kernel_tty_desc(__kernel_desc_tty__) __g_kernel_desc_tty = __kernel_desc_tty__
-#define __get_kernel_tty_desc() (__g_kernel_desc_tty)
 
-//cpu device
-extern fdev_map_t*   __g_kernel_cpu;
-extern desc_t __g_kernel_desc_cpu;
-
-#define __set_cpu(__p_kernel_cpu__) __g_kernel_cpu = __p_kernel_cpu__
-#define __get_cpu() __g_kernel_cpu
-
-#define __set_cpu_desc(__desc_kernel_cpu__) __g_kernel_desc_cpu = __desc_kernel_cpu__
-#define __get_cpu_desc() __g_kernel_desc_cpu
-
-//i2c interface
-extern fdev_map_t*   __g_kernel_if_i2c_master;
-extern desc_t __g_kernel_desc_if_i2c_master;
-
-#define __set_if_i2c_master(__p_if_i2c_master__) __g_kernel_if_i2c_master = __p_if_i2c_master__
-#define __get_if_i2c_master() __g_kernel_if_i2c_master
-
-#define __set_if_i2c_master_desc(__desc_if_i2c_master__) __g_kernel_desc_if_i2c_master = __desc_if_i2c_master__
-#define __get_if_i2c_master_desc() __g_kernel_desc_if_i2c_master
-
-extern kernel_pthread_mutex_t _i2c_core_mutex;
-
-#define _i2c_lock() kernel_pthread_mutex_lock(&_i2c_core_mutex);
-#define _i2c_unlock() kernel_pthread_mutex_unlock(&_i2c_core_mutex);
-
-//spi interface
-extern fdev_map_t*   __g_kernel_if_spi_master;
-extern desc_t __g_kernel_desc_if_spi_master;
-
-#define __set_if_spi_master(__p_if_spi_master__) __g_kernel_if_spi_master = __p_if_spi_master__
-#define __get_if_spi_master() __g_kernel_if_spi_master
-
-#define __set_if_spi_master_desc(__desc_if_spi_master__) __g_kernel_desc_if_spi_master = __desc_if_spi_master__
-#define __get_if_spi_master_desc() __g_kernel_desc_if_spi_master
-
-extern kernel_pthread_mutex_t _spi_core_mutex;
-
-#define _spi_lock()   kernel_pthread_mutex_lock  (&_spi_core_mutex);
-#define _spi_unlock() kernel_pthread_mutex_unlock(&_spi_core_mutex);
 
 #if defined(__GNUC__)
 //gestion des syscall sous synthetic

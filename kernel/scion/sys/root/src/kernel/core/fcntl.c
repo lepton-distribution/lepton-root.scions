@@ -26,6 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kal.h"
 #include "kernel/core/syscall.h"
@@ -50,7 +53,7 @@ Implementation
 | Comments:
 | See:
 ---------------------------------------------*/
-int fcntl(unsigned int fd, unsigned int cmd,...){
+int fcntl(int fd, unsigned int cmd,...){
    fcntl_t fcntl_dt;
    int argc=0;
 

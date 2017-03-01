@@ -26,12 +26,16 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 
 #include "ufsinfo.h"
@@ -68,27 +72,28 @@ static const char __ufsstr[]="..";
 
 //
 fsop_t ufs_op={
-   _ufs_loadfs,
-   _ufs_checkfs,
-   _ufs_makefs,
-   _ufs_readfs,
-   _ufs_writefs,
-   _ufs_statfs,
-   _ufs_mountdir,
-   _ufs_readdir,
-   _ufs_telldir,
-   _ufs_seekdir,
-   _ufs_lookupdir,
-   _ufs_mknod,
-   _ufs_create,
-   _ufs_open,    //open
-   _ufs_close,   //close
-   _ufs_read,    //read
-   _ufs_write,   //write
-   _ufs_seek,    //seek
-   _ufs_truncate,
-   _ufs_remove,
-   _ufs_rename
+   .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+   .fs.loadfs        = _ufs_loadfs,
+   .fs.checkfs       = _ufs_checkfs,
+   .fs.makefs        = _ufs_makefs,
+   .fs.readfs        = _ufs_readfs,
+   .fs.writefs       = _ufs_writefs,
+   .fs.statfs        = _ufs_statfs,
+   .fs.mountdir      = _ufs_mountdir,
+   .fs.readdir       = _ufs_readdir,
+   .fs.telldir       = _ufs_telldir,
+   .fs.seekdir       = _ufs_seekdir,
+   .fs.lookupdir     = _ufs_lookupdir,
+   .fs.mknod         = _ufs_mknod,
+   .fs.create        = _ufs_create,
+   .fs.open          = _ufs_open,    //open
+   .fs.close         = _ufs_close,   //close
+   .fs.read          = _ufs_read,    //read
+   .fs.write         = _ufs_write,   //write
+   .fs.seek          = _ufs_seek,    //seek
+   .fs.truncate      = _ufs_truncate,
+   .fs.remove        = _ufs_remove,
+   .fs.rename        = _ufs_rename
 };
 
 
@@ -754,7 +759,7 @@ int _ufs_read(desc_t desc, char* buf, int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _ufs_seek(desc_t desc, int offset, int origin)
+int _ufs_seek(desc_t desc, off_t offset, int origin)
 {
    ufs_block_node_t blocknode;
    ufs_inodenb_t _inode=(ufs_inodenb_t)ofile_lst[desc].inodenb;

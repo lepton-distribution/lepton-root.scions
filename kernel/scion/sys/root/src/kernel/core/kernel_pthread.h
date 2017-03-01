@@ -172,6 +172,9 @@ typedef struct kernel_pthread_st {
    
 #ifdef __KERNEL_UCORE_FREERTOS
    freertos_tcb_t* tcb;
+   StaticTask_t  task_static;
+   
+   StaticEventGroup_t event_group_static;
    EventGroupHandle_t event_group_handle; //used by kernel (KERNEL_INTERRUPT and KERNEL_RET_INTERRUPT).
 #endif
 
@@ -258,9 +261,9 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size);
 
 //debug
 #if defined (WIN32) && defined(_DEBUG)
-   #define _dbg_printf printf
+   #define _dbg_printf(...) printf(__VA_ARGS__)
 #else
-   #define _dbg_printf //printf
+   #define _dbg_printf(...) 
 #endif
 
 //size of kernel stack

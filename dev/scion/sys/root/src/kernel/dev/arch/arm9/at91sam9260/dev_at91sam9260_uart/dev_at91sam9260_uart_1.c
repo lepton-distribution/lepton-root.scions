@@ -64,7 +64,7 @@ Includes
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
 #include "lib/libc/termios/termios.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 // drivers
 #include "dev_at91sam9260_uart_x.h"

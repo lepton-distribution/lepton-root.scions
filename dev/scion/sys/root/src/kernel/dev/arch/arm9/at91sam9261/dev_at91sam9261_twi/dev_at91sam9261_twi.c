@@ -31,7 +31,7 @@ Includes
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 //I2C
 #include "at91sam9261_twi_io.h"

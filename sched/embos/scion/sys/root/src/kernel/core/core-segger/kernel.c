@@ -30,6 +30,8 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/limits.h"
@@ -42,6 +44,7 @@ Includes
 #include "kernel/core/syscall.h"
 #include "kernel/core/process.h"
 #include "kernel/core/signal.h"
+#include "kernel/core/dirent.h"
 #include "kernel/core/statvfs.h"
 #include "kernel/core/bin.h"
 #include "kernel/core/rttimer.h"
@@ -56,6 +59,7 @@ Includes
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 
+#include "kernel/core/kernel_device.h"
 #include "kernel/core/kernel_printk.h"
 
 #if defined (__KERNEL_NET_IPSTACK)

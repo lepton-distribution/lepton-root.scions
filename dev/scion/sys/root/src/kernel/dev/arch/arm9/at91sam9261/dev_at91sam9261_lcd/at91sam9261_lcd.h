@@ -91,26 +91,26 @@ typedef struct dev_panel_info
    uint32_t vl_pixclock;        // pixel clock in ps
 
    /* LCD configuration register */
-   uchar8_t vl_clkp;                 // Clock polarity
-   uchar8_t vl_oep;             // Output Enable polarity
-   uchar8_t vl_hsp;             // Horizontal Sync polarity
-   uchar8_t vl_vsp;             // Vertical Sync polarity
-   uchar8_t vl_dp;              // Data polarity
-   uchar8_t vl_bpix;                 // Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
-   uchar8_t vl_lbw;             // LCD Bus width, 0 = 4, 1 = 8
-   uchar8_t vl_splt;                 // Split display, 0 = single-scan, 1 = dual-scan
-   uchar8_t vl_clor;                 // Color, 0 = mono, 1 = color
-   uchar8_t vl_tft;             // 0 = passive, 1 = TFT
+   uint8_t vl_clkp;                 // Clock polarity
+   uint8_t vl_oep;             // Output Enable polarity
+   uint8_t vl_hsp;             // Horizontal Sync polarity
+   uint8_t vl_vsp;             // Vertical Sync polarity
+   uint8_t vl_dp;              // Data polarity
+   uint8_t vl_bpix;                 // Bits per pixel, 0 = 1, 1 = 2, 2 = 4, 3 = 8, 4 = 16
+   uint8_t vl_lbw;             // LCD Bus width, 0 = 4, 1 = 8
+   uint8_t vl_splt;                 // Split display, 0 = single-scan, 1 = dual-scan
+   uint8_t vl_clor;                 // Color, 0 = mono, 1 = color
+   uint8_t vl_tft;             // 0 = passive, 1 = TFT
 
    /* Horizontal control register. Timing from data sheet */
    uint16_t vl_hpw;             // Horz sync pulse width
-   uchar8_t vl_blw;             // Wait before of line
-   uchar8_t vl_elw;             // Wait end of line
+   uint8_t vl_blw;             // Wait before of line
+   uint8_t vl_elw;             // Wait end of line
 
    /* Vertical control register. */
-   uchar8_t vl_vpw;             // Vertical sync pulse width
-   uchar8_t vl_bfw;             // Wait before of frame
-   uchar8_t vl_efw;             // Wait end of frame
+   uint8_t vl_vpw;             // Vertical sync pulse width
+   uint8_t vl_bfw;             // Wait before of frame
+   uint8_t vl_efw;             // Wait end of frame
 
    /* PXA LCD controller params */
    struct       lcdc_info controller;

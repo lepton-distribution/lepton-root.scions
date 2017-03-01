@@ -36,7 +36,7 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f4xx.h"
 #include "kernel/dev/arch/cortexm/stm32f4xx/types.h"

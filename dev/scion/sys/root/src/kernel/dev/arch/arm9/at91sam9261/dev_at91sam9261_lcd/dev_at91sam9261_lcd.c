@@ -35,7 +35,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_fb.h"
 
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "at91sam9261_lcd_lut.h"
 #include "at91sam9261_lcd.h"
@@ -179,7 +179,7 @@ int dev_at91sam9261_lcd_isset_write(desc_t desc){
 ---------------------------------------------*/
 int dev_at91sam9261_lcd_read(desc_t desc, char* buf,int size){
    int cb=size;
-   uchar8_t* p_vmem=(char*)at91sam9261_lcd_get_current_frame_buffer();
+   uint8_t* p_vmem=(char*)at91sam9261_lcd_get_current_frame_buffer();
    p_vmem+=ofile_lst[desc].offset;
 
    if(ofile_lst[desc].offset+size>=at91sam9261_lcd_frame_buffer_sz)
@@ -203,7 +203,7 @@ int dev_at91sam9261_lcd_write(desc_t desc, const char* buf,int size){
    int cb=size;
    int vmem_size=at91sam9261_lcd_frame_buffer_sz;
 
-   uchar8_t* p_vmem=(char*)at91sam9261_lcd_get_shadow_frame_buffer();
+   uint8_t* p_vmem=(char*)at91sam9261_lcd_get_shadow_frame_buffer();
 
    p_vmem+=ofile_lst[desc].offset;
 

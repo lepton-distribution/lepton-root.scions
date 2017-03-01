@@ -28,6 +28,8 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 
 #include "kernel/core/kernelconf.h"
 
@@ -111,7 +113,6 @@ either the MPL or the [eCos GPL] License."
 #endif
 
 
-#include "kernel/fs/vfs/vfskernel.h"
 
 /*============================================
 | Global Declaration
@@ -273,7 +274,7 @@ desc_t uip_core_if_indextodesc(int ifindex, unsigned long oflag){
 ---------------------------------------------*/
 unsigned char _uip_core_recv_char(desc_t desc){
    unsigned char c;
-   uchar8_t _kernel_int;
+   uint8_t _kernel_int;
    while(ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
       _kernel_int = __wait_io_int(ofile_lst[desc].owner_pthread_ptr_read);
       if (!__K_IS_IOINTR(_kernel_int))
@@ -292,7 +293,7 @@ unsigned char _uip_core_recv_char(desc_t desc){
 | See:
 ---------------------------------------------*/
 void _uip_core_send_char(desc_t desc,unsigned char c){
-   uchar8_t _kernel_int;
+   uint8_t _kernel_int;
    int r=-1;
    ofile_lst[desc].pfsop->fdev.fdev_write(desc,&c,1);
    do {
@@ -311,7 +312,7 @@ void _uip_core_send_char(desc_t desc,unsigned char c){
 | See:
 ---------------------------------------------*/
 int _uip_core_recv_frame(desc_t desc, char* buf, int size){
-   uchar8_t _kernel_int;
+   uint8_t _kernel_int;
    #if defined(USE_IF_ETHERNET)  
    while(ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
          _kernel_int = __wait_io_int(ofile_lst[desc].owner_pthread_ptr_read);
@@ -331,7 +332,7 @@ int _uip_core_recv_frame(desc_t desc, char* buf, int size){
 | See:
 ---------------------------------------------*/
 int _uip_core_send_frame(desc_t desc, const char* buf, int size){
-   uchar8_t _kernel_int;
+   uint8_t _kernel_int;
    int cb;
    cb=ofile_lst[desc].pfsop->fdev.fdev_write(desc,buf,size);
    #if defined(USE_IF_ETHERNET) 

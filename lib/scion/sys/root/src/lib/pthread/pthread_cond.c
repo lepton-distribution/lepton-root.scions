@@ -26,7 +26,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
 #include <string.h>
+
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/syscall.h"
 #include "lib/pthread/pthread.h"

@@ -26,6 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/kernel_io.h"
@@ -35,7 +38,6 @@ Includes
 #include "kernel/core/process.h"
 #include "kernel/core/ioctl.h"
 #include "kernel/fs/vfs/vfs.h"
-#include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/core/stat.h"
 
 #include "kernel/core/kal.h"
@@ -285,7 +287,91 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
    return cb;
 }
 
+/*-------------------------------------------
+| Name: kernel_io_ll_read
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int kernel_io_ll_read(desc_t desc,void *buf, size_t nbyte){
+   //
+   if(desc<0)
+      return -1;
+   //
+   if(ofile_lst[desc].pfsop->fdev.fdev_read==(void*)0){
+      return -1;
+   }
+   //
+   return ofile_lst[desc].pfsop->fdev.fdev_read(desc,(void*)buf,nbyte);
+}
 
+/*-------------------------------------------
+| Name: kernel_io_ll_write
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int kernel_io_ll_write(desc_t desc,const void *buf, size_t nbyte){
+   //
+   if(desc<0)
+      return -1;
+   //
+   if(ofile_lst[desc].pfsop->fdev.fdev_write==(void*)0){
+      return -1;
+   }
+   //
+   return ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte);
+}
+
+/*-------------------------------------------
+| Name: kernel_io_ll_lseek
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/ 
+int kernel_io_ll_lseek(desc_t desc, off_t offset, int origin){
+   //
+   if(desc<0)
+      return -1;
+   //
+   if(ofile_lst[desc].pfsop->fdev.fdev_seek==(void*)0){
+      return -1;
+   }
+   //
+   return ofile_lst[desc].pfsop->fdev.fdev_seek(desc,offset,origin);;
+}
+
+
+/*-------------------------------------------
+| Name: kernel_io_ll_ioctl
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int kernel_io_ll_ioctl(desc_t desc,int request,...){
+   va_list ap;
+   int r=-1;
+   //
+   if(desc<0)
+      return -1;
+   //
+   if(ofile_lst[desc].pfsop->fdev.fdev_ioctl==(void*)0){
+      return -1;
+   }
+   //
+   va_start(ap, request);
+   r= ofile_lst[desc].pfsop->fdev.fdev_ioctl(desc,request,ap);
+   va_end(ap);
+   return r;
+}
 
 
 /*===========================================

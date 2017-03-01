@@ -32,7 +32,7 @@
 //
 //#include "lib/libc/termios/termios.h"
 //
-//#include "kernel/fs/vfs/vfsdev.h"
+//#include "kernel/fs/vfs/vfstypes.h"
 
 #include "inc/hw_ints.h"
 #include "inc/hw_memmap.h"

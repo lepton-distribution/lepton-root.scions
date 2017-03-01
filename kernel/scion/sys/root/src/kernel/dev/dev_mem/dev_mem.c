@@ -27,6 +27,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/system.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/process.h"
@@ -34,7 +38,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "dev_mem.h"
 

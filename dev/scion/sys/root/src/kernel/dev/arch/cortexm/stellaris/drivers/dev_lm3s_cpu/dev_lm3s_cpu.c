@@ -29,6 +29,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
@@ -38,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_lcd.h"
 #include "kernel/core/ioctl_board.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #if defined(__KERNEL_UCORE_EMBOS)
 //#include "kernel/core/ucore/embOSARM7_332/arch/cpu_lm3s/lm3s_init.h"

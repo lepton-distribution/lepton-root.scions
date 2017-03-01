@@ -48,7 +48,7 @@ typedef struct board_at91samd20_uart_info_st {
    struct usart_module usart_instance;
    
    //lepton
-   uchar8_t com_no; 
+   uint8_t com_no; 
    //
    int desc_r;
    int desc_w;
@@ -60,8 +60,8 @@ typedef struct board_at91samd20_uart_info_st {
    uint16_t tx_buffer_r;
    uint16_t tx_buffer_w;
    //
-   uchar8_t internal_buffer_rx[MAX_AT91SAMD20_RX_BUFFER];
-   uchar8_t internal_buffer_tx[MAX_AT91SAMD20_TX_BUFFER];
+   uint8_t internal_buffer_rx[MAX_AT91SAMD20_RX_BUFFER];
+   uint8_t internal_buffer_tx[MAX_AT91SAMD20_TX_BUFFER];
    
    
 } board_at91samd20_uart_info_t;

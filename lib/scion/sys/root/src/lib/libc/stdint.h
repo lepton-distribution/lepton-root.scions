@@ -39,88 +39,146 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
-#define CHAR_BIT      8         /* number of bits in a char */
-#define SCHAR_MIN   (-128)      /* minimum signed char value */
-#define SCHAR_MAX     127       /* maximum signed char value */
-#define UCHAR_MAX     0xff      /* maximum unsigned char value */
+#ifndef CHAR_BIT
+   #define CHAR_BIT      8         /* number of bits in a char */
+#endif
+
+#ifndef SCHAR_MIN
+   #define SCHAR_MIN   (-128)      /* minimum signed char value */
+#endif
+
+#ifndef SCHAR_MAX
+   #define SCHAR_MAX     127       /* maximum signed char value */
+#endif
+
+#ifndef UCHAR_MAX
+   #define UCHAR_MAX     0xff      /* maximum unsigned char value */
+#endif
 
 #ifndef _CHAR_UNSIGNED
-   #define CHAR_MIN    SCHAR_MIN /* mimimum char value */
-   #define CHAR_MAX    SCHAR_MAX /* maximum char value */
+   #ifndef CHAR_MIN
+      #define CHAR_MIN    SCHAR_MIN /* mimimum char value */
+   #endif
+   #ifndef CHAR_MAX
+      #define CHAR_MAX    SCHAR_MAX /* maximum char value */
+   #endif
 #else
-   #define CHAR_MIN      0
-   #define CHAR_MAX    UCHAR_MAX
+   #ifndef CHAR_MIN
+      #define CHAR_MIN      0
+   #endif
+   #ifndef CHAR_MAX
+      #define CHAR_MAX    UCHAR_MAX
+   #endif
 #endif  /* _CHAR_UNSIGNED */
 
 #if __KERNEL_CPU_ARCH == CPU_ARCH_16
-   #define SHRT_MIN    (-32768)           /* minimum (signed) short value */
-   #define SHRT_MAX      (32767)          /* maximum (signed) short value */
-   #define USHRT_MAX     (0xffff)         /* maximum unsigned short value */
-   #define INT_MIN     (-32767 - 1)       /* minimum (signed) int value */
-   #define INT_MAX       (32767)          /* maximum (signed) int value */
-   #define UINT_MAX      0xffffffff       /* maximum unsigned int value */
-   #define LONG_MIN    (-2147483647L - 1) /* minimum (signed) long value */
-   #define LONG_MAX      (2147483647L)    /* maximum (signed) long value */
-   #define ULONG_MAX     (0xffffffffUL)   /* maximum unsigned long value */
+   #ifndef SHRT_MIN
+      #define SHRT_MIN    (-32768)           /* minimum (signed) short value */
+   #endif
+   #ifndef SHRT_MAX
+      #define SHRT_MAX      (32767)          /* maximum (signed) short value */
+   #endif
+   #ifndef USHRT_MAX
+      #define USHRT_MAX     (0xffff)         /* maximum unsigned short value */
+   #endif
+   #ifndef INT_MIN
+      #define INT_MIN     (-32767 - 1)       /* minimum (signed) int value */
+   #endif
+   #ifndef INT_MAX
+      #define INT_MAX       (32767)          /* maximum (signed) int value */
+   #endif
+   #ifndef UINT_MAX
+      #define UINT_MAX      0xffffffff       /* maximum unsigned int value */
+   #endif
+   #ifndef LONG_MIN
+      #define LONG_MIN    (-2147483647L - 1) /* minimum (signed) long value */
+   #endif
+   #ifndef LONG_MAX
+      #define LONG_MAX      (2147483647L)    /* maximum (signed) long value */
+   #endif
+   #ifndef ULONG_MAX
+      #define ULONG_MAX     (0xffffffffUL)   /* maximum unsigned long value */
+   #endif
 #else
-   #define SHRT_MIN    (-32768)           /* minimum (signed) short value */
-   #define SHRT_MAX      (32767)          /* maximum (signed) short value */
-   #define USHRT_MAX     (0xffff)         /* maximum unsigned short value */
-   #define INT_MIN     (-2147483647 - 1)  /* minimum (signed) int value */
-   #define INT_MAX       (2147483647)     /* maximum (signed) int value */
-   #define UINT_MAX      (0xffffffff)     /* maximum unsigned int value */
-   #define LONG_MIN    (-2147483647L - 1) /* minimum (signed) long value */
-   #define LONG_MAX      (2147483647L)    /* maximum (signed) long value */
-   #define ULONG_MAX     (0xffffffffUL)   /* maximum unsigned long value */
+   #ifndef SHRT_MIN
+      #define SHRT_MIN    (-32768)           /* minimum (signed) short value */
+   #endif
+   #ifndef SHRT_MAX
+      #define SHRT_MAX      (32767)          /* maximum (signed) short value */
+   #endif
+   #ifndef USHRT_MAX
+      #define USHRT_MAX     (0xffff)         /* maximum unsigned short value */
+   #endif
+   #ifndef INT_MIN
+      #define INT_MIN     (-2147483647 - 1)  /* minimum (signed) int value */
+   #endif
+   #ifndef INT_MAX
+      #define INT_MAX       (2147483647)     /* maximum (signed) int value */
+   #endif
+   #ifndef UINT_MAX
+      #define UINT_MAX      (0xffffffff)     /* maximum unsigned int value */
+   #endif
+   #ifndef LONG_MIN
+      #define LONG_MIN    (-2147483647L - 1) /* minimum (signed) long value */
+   #endif
+   #ifndef LONG_MAX
+      #define LONG_MAX      (2147483647L)    /* maximum (signed) long value */
+   #endif
+   #ifndef ULONG_MAX
+      #define ULONG_MAX     (0xffffffffUL)   /* maximum unsigned long value */
+   #endif
 #endif
 
+#ifndef __KERNEL_COMPILER_STDINT_INCLUDED__
 
-typedef short int int_least8_t;
-typedef int int_least16_t;
-typedef long int int_least32_t;
+   typedef short int int_least8_t;
 
-typedef unsigned short int uint_least8_t;
-typedef unsigned int uint_least16_t;
-typedef unsigned long int uint_least32_t;
+   typedef int int_least16_t;
+   typedef long int int_least32_t;
 
-typedef short int int_fast8_t;
-typedef int int_fast16_t;
-typedef long int int_fast32_t;
+   typedef unsigned short int uint_least8_t;
+   typedef unsigned int uint_least16_t;
+   typedef unsigned long int uint_least32_t;
 
-typedef unsigned short int uint_fast8_t;
-typedef unsigned int uint_fast16_t;
-typedef unsigned long int uint_fast32_t;
+   typedef short int int_fast8_t;
+   typedef int int_fast16_t;
+   typedef long int int_fast32_t;
 
-
-#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
-typedef long long int int_least64_t;
-typedef long long int int64_t;
-typedef unsigned long long int uint64_t;
-typedef unsigned long long int uint_least64_t;
-typedef long long int int_fast64_t;
-typedef unsigned long long int uint_fast64_t;
+   typedef unsigned short int uint_fast8_t;
+   typedef unsigned int uint_fast16_t;
+   typedef unsigned long int uint_fast32_t;
 
 
-typedef int64_t intptr_t;
-typedef uint64_t uintptr_t;
-typedef int64_t intmax_t;
-typedef uint64_t uintmax_t;
+   #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
 
-#else
+   typedef long long int int_least64_t;
+   typedef long long int int64_t;
+   typedef unsigned long long int uint64_t;
+   typedef unsigned long long int uint_least64_t;
+   typedef long long int int_fast64_t;
+   typedef unsigned long long int uint_fast64_t;
 
-typedef int32_t intptr_t;
-typedef uint32_t uintptr_t;
-typedef int32_t intmax_t;
-typedef uint32_t uintmax_t;
+   typedef int64_t intptr_t;
+   typedef uint64_t uintptr_t;
+   typedef int64_t intmax_t;
+   typedef uint64_t uintmax_t;
 
-#endif
+   #else
 
-//from $(TOOLCHAIN)/lib/gcc/arm-elf/4.3.3/include/stddef.h
-#if defined (__PTRDIFF_TYPE__)
-   #undef __PTRDIFF_TYPE__
-   #define __PTRDIFF_TYPE__   int
-typedef __PTRDIFF_TYPE__ ptrdiff_t;
-#endif
+   typedef int32_t intptr_t;
+   typedef uint32_t uintptr_t;
+   typedef int32_t intmax_t;
+   typedef uint32_t uintmax_t;
 
+   #endif
+
+   //from $(TOOLCHAIN)/lib/gcc/arm-elf/4.3.3/include/stddef.h
+   #if defined (__PTRDIFF_TYPE__)
+      #undef __PTRDIFF_TYPE__
+      #define __PTRDIFF_TYPE__   int
+   typedef __PTRDIFF_TYPE__ ptrdiff_t;
+   #endif
+   
+#endif //__KERNEL_COMPILER_STDINT_INCLUDED__
 
 #endif

@@ -26,6 +26,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
@@ -37,8 +41,10 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl.h"
 #include "kernel/core/cpu.h"
 
+#include "kernel/core/malloc.h"
+
 #include "lib/libc/termios/termios.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/core/ioctl_hd.h"
 #include "kernel/dev/arch/all/flash/flash.h"
@@ -83,7 +89,7 @@ typedef  uint32_t addr_t;
 typedef  uint32_t cluster_no_t;
 typedef  uint16_t cluster_sz_t;
 
-typedef  uchar8_t sector_data_t;
+typedef  uint8_t sector_data_t;
 typedef  uint32_t sector_addr_t;
 typedef  uint16_t sector_no_t;
 typedef  uint32_t sector_sz_t;
@@ -109,7 +115,7 @@ typedef struct {
 
 //
 typedef struct physector_tag_st {
-   uchar8_t sector_tag;
+   uint8_t sector_tag;
    bits_stat_t sector_stat;
    cluster_no_t cluster_no;
 }cluster_tag_t;
@@ -242,7 +248,7 @@ static int _ftl_scan_flash(desc_t desc, desc_t desc_link){
    if((r=_ftl_ioctl_flash(desc_link,HDGETSZ,&dev_sz))<0)
       return -1;
 
-   if( !(ofile_lst[desc].p = malloc(sizeof(ftl_t))) )
+   if( !(ofile_lst[desc].p = _sys_malloc(sizeof(ftl_t))) )
       return -1;
 
    //
@@ -252,7 +258,7 @@ static int _ftl_scan_flash(desc_t desc, desc_t desc_link){
    p_ftl->cluster_no_max   = (dev_sz/p_ftl->cluster_sz);
    //
    alloc_cluster_lst_sz=(dev_sz/p_ftl->cluster_sz)*sizeof(cluster_t);
-   p_ftl->p_cluster_lst    = (cluster_t*)malloc(alloc_cluster_lst_sz);
+   p_ftl->p_cluster_lst    = (cluster_t*)_sys_malloc(alloc_cluster_lst_sz);
    if(!p_ftl->p_cluster_lst)
       return -1;
    //

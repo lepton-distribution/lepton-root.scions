@@ -69,8 +69,8 @@ extern const flash_type_t flash_type_lst[];
      char tab[3];
      __compiler_directive__packed struct
      {
-       uchar8_t manufacturer_id;
-       uchar8_t device_Id[2];
+       uint8_t manufacturer_id;
+       uint8_t device_Id[2];
      };
    } flash_jedec_did_u;
    
@@ -80,9 +80,9 @@ extern const flash_type_t flash_type_lst[];
      flash_jedec_did_u did;
      uint32_t flash_size;
      uint16_t page_size;
-     uchar8_t sector_count;
-     uchar8_t firmware_from_sector;
-     uchar8_t firmware_sector_count;
+     uint8_t sector_count;
+     uint8_t firmware_from_sector;
+     uint8_t firmware_sector_count;
      uint32_t firmware_address;
      const char *device_name;
    } dev_flash_nand_spi_t;

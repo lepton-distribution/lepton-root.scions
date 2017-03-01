@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
 
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel.h"
@@ -50,27 +52,28 @@ static const char __rtfsstr[]="..";
 
 
 fsop_t rootfs_op={
-   _rtfs_loadfs,
-   _rtfs_checkfs,
-   _rtfs_makefs,
-   _rtfs_readfs,
-   _rtfs_writefs,
-   _rtfs_statfs,
-   _rtfs_mountdir,
-   _rtfs_readdir,
-   _rtfs_telldir,
-   _rtfs_seekdir,
-   _rtfs_lookupdir,
-   _rtfs_mknod,
-   _rtfs_create,
-   _rtfs_open,    //open
-   _rtfs_close,   //close
-   _rtfs_read,    //read
-   _rtfs_write,   //write
-   _rtfs_seek,    //seek
-   _rtfs_truncate,
-   _rtfs_remove,
-   _rtfs_rename
+   .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+   .fs.loadfs        = _rtfs_loadfs,
+   .fs.checkfs       = _rtfs_checkfs,
+   .fs.makefs        = _rtfs_makefs,
+   .fs.readfs        = _rtfs_readfs,
+   .fs.writefs       = _rtfs_writefs,
+   .fs.statfs        = _rtfs_statfs,
+   .fs.mountdir      = _rtfs_mountdir,
+   .fs.readdir       = _rtfs_readdir,
+   .fs.telldir       = _rtfs_telldir,
+   .fs.seekdir       = _rtfs_seekdir,
+   .fs.lookupdir     = _rtfs_lookupdir,
+   .fs.mknod         = _rtfs_mknod,
+   .fs.create        = _rtfs_create,
+   .fs.open          = _rtfs_open,    //open
+   .fs.close         = _rtfs_close,   //close
+   .fs.read          = _rtfs_read,    //read
+   .fs.write         = _rtfs_write,   //write
+   .fs.seek          = _rtfs_seek,    //seek
+   .fs.truncate      = _rtfs_truncate,
+   .fs.remove        = _rtfs_remove,
+   .fs.rename        = _rtfs_rename
 };
 
 /*===========================================
@@ -464,7 +467,7 @@ int _rtfs_write(desc_t desc,char* buffer,int size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _rtfs_seek(desc_t desc, int offset, int origin)
+int _rtfs_seek(desc_t desc, off_t offset, int origin)
 {
    switch(origin)
    {

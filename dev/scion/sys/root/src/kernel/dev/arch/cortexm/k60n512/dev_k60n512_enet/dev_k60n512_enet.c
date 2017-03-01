@@ -33,7 +33,7 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/cpu.h"
 #include "kernel/core/core_rttimer.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/ioctl_eth.h"
 
 #include "dev_k60n512_enet.h"

@@ -26,7 +26,10 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 
+#include "lib/libc/unistd.h"
+#include "lib/libc/termios/termios.h"
 
 /*===========================================
 Global Declaration
@@ -36,15 +39,12 @@ Global Declaration
 /*===========================================
 Implementation
 =============================================*/
-
+int tcgetattr(int fd, struct termios *termios_p){
+   return ioctl(fd, TCGETS, termios_p);
+}
 
 /*===========================================
 End of Source tcgetattr.c
 =============================================*/
-#include "lib/libc/unistd.h"
-#include "lib/libc/termios/termios.h"
 
-int tcgetattr(int fd, struct termios *termios_p)
-{
-   return ioctl(fd, TCGETS, termios_p);
-}
+

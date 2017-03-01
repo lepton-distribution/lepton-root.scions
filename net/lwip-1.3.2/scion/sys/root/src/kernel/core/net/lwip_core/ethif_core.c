@@ -25,6 +25,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdarg.h>
+#include <string.h>
 
 #include "lwip/debug.h"
 
@@ -41,7 +43,6 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/types.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
-#include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/core/ioctl_eth.h"
 #include "kernel/core/ioctl.h"

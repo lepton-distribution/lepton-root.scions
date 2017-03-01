@@ -51,7 +51,7 @@
 /*			*/ 
 /* include files 	*/
 /*			*/ 
-
+#include <stdint.h>
 #include "contiki-conf.h"
 
 /*#include "time.h"*/

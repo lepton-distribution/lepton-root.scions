@@ -27,6 +27,7 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "kernel/core/libstd.h"
@@ -55,6 +56,9 @@ static const char* fstype_list[]={
 #endif
 #if __KERNEL_VFS_SUPPORT_KOFS==1
    "kofs",
+#endif
+#if __KERNEL_VFS_SUPPORT_FATFS==1
+    "fatfs",
 #endif
 #if __KERNEL_VFS_SUPPORT_MSDOS==1
    "msdos",

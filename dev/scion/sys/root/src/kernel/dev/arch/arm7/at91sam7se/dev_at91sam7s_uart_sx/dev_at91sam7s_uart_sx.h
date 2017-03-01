@@ -63,7 +63,7 @@ either the MPL or the [eCos GPL] License."
 
 typedef struct {
    uint16_t cb;
-   uchar8_t *p;
+   uint8_t *p;
 }fifo_buf_pool_t;
 
 

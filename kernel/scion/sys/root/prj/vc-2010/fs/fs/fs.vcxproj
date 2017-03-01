@@ -39,7 +39,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CodeAnalysisRuleSet>C:\Program Files\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
@@ -52,6 +55,8 @@
       <CompileAsManaged>false</CompileAsManaged>
       <CompileAs>CompileAsC</CompileAs>
       <ShowIncludes>false</ShowIncludes>
+      <EnablePREfast>false</EnablePREfast>
+      <UseFullPaths>false</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -79,6 +84,15 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\diskio.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\drivers\sd_diskio.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ffconf.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ffconf_template.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff_gen_drv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\integer.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfscore.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fat16.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore.h" />
     <ClInclude Include="..\..\..\..\src\kernel\fs\fat\fatcore_msdos.h" />
@@ -139,6 +153,12 @@
     <ClInclude Include="..\..\..\..\src\kernel\fs\yaffs\yaffsinfo.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\diskio.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\drivers\sd_diskio.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\core\ff_gen_drv.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfs.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\fs\fatfs\scion\sys\root\src\kernel\fs\fatfs\fatfscore.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_msdos.c" />
     <ClCompile Include="..\..\..\..\src\kernel\fs\fat\fat16_vfat.c" />

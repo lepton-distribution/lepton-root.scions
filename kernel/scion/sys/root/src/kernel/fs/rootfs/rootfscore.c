@@ -27,6 +27,9 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/dirent.h"
@@ -40,9 +43,6 @@ Includes
 
 #include "kernel/fs/rootfs/rootfscore.h"
 
-#if defined(__GNUC__)
-   #include <string.h>
-#endif
 
 /*===========================================
 Global Declaration

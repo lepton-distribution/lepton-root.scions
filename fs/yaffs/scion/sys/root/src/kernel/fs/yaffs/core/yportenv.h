@@ -18,6 +18,7 @@
 #define __YPORTENV_H__
 
 //lepton modif
+#include <stdint.h>
 #include "kernel/core/kernelconf.h"
 
 #ifdef __tauon_posix__

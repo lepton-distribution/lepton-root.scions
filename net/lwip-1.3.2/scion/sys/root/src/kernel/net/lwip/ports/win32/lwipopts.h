@@ -28,7 +28,7 @@
 #define MEMP_SANITY_CHECK       1
 //#define MEMP_OVERFLOW_CHECK     2
 #define MEM_LIBC_MALLOC 1 //lepton modifs use libc malloc instead   // default 0
-
+#include <stdint.h>
 #include "kernel/core/types.h"
 #include "kernel/core/malloc.h"
 

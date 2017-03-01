@@ -34,6 +34,9 @@
 /* This is the part of the API that is linked with
    the application */
 
+#include <stdint.h>
+#include <string.h>
+
 #include "lwip/opt.h"
 
 #if LWIP_NETCONN /* don't build if not configured for use in lwipopts.h */
@@ -47,7 +50,6 @@
 #include "lwip/udp.h"
 #include "lwip/tcp.h"
 
-#include <string.h>
 
 /**
  * Create a new netconn (of a specific type) that has a callback function.

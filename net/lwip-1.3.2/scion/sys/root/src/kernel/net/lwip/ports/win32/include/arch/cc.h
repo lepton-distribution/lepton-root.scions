@@ -2,6 +2,7 @@
 #define __ARCH_CC_H__
 
 /* Include some files for defining library routines */
+#include <stdint.h>
 #include <string.h>
 #include <ctype.h>
 

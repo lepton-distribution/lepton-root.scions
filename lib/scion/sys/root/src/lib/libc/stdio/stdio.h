@@ -27,9 +27,9 @@ either the MPL or the [eCos GPL] License."
 #ifndef _L_STDIO_H
 #define _L_STDIO_H
 
-#include <stdarg.h>
 
 //#include <features.h>
+#include <stdarg.h>
 #include <kernel/core/kernelconf.h>
 #include <kernel/core/types.h>
 #include <kernel/core/kernel_pthread.h>

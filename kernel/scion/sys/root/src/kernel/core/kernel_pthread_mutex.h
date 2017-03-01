@@ -52,6 +52,7 @@ typedef struct {
 #endif
 #ifdef __KERNEL_UCORE_FREERTOS
    xSemaphoreHandle mutex;
+   StaticSemaphore_t mutex_static;
 #endif
 #ifdef __KERNEL_UCORE_ECOS
    cyg_mutex_t mutex;

@@ -65,7 +65,7 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/cpu.h"
 #include "lib/libc/termios/termios.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 
 #include "kernel/dev/arch/arm9/at91sam9261/common/dev_at91sam9261_common_uart.h"
@@ -166,7 +166,7 @@ static void dev_at91sam9261_uart_x_fifo_pool_init (desc_t desc)
    p_inf_uart = (board_inf_uart_t *)ofile_lst[desc].p;
    p_adr      = (AT91_REG *)p_inf_uart->base_adr;
 
-   uchar8_t* p = (uchar8_t *)&p_inf_uart->fifo_input_buffer[0];
+   uint8_t* p = (uint8_t *)&p_inf_uart->fifo_input_buffer[0];
 
    // fifo pointers initialization
    for (i=0; i < MAX_POOL; i++)
@@ -180,7 +180,7 @@ static void dev_at91sam9261_uart_x_fifo_pool_init (desc_t desc)
    p_inf_uart->buf_in_rcv_no = 0;
 
    // flush input register
-   uchar8_t c = *(p_adr+US_RHR);
+   uint8_t c = *(p_adr+US_RHR);
 
    *(p_adr+US_RTOR)     = (20 * 4 * 10);  // Time_out delay period
    *(p_adr+US_CR)       = US_STTTO;       // Resets the status bit TIMOUT
@@ -842,7 +842,7 @@ int dev_at91sam9261_uart_x_read(desc_t desc, char* buf,int size)
       if (p_inf_uart->fifo_buf_pool[_buf_in_rcv_no].cb <= 0)
       {
          p_inf_uart->fifo_buf_pool[_buf_in_rcv_no].p =
-            (uchar8_t *)&p_inf_uart->fifo_input_buffer[
+            (uint8_t *)&p_inf_uart->fifo_input_buffer[
                _buf_in_rcv_no*MAX_POOL_BUF_SZ];
          _buf_in_rcv_no = ((_buf_in_rcv_no+1)&(~MAX_POOL));
       }

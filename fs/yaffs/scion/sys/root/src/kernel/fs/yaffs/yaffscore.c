@@ -30,6 +30,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
@@ -37,6 +39,8 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/malloc.h"
 #include "kernel/core/stat.h"
 
+#include "kernel/core/dirent.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/fs/yaffs/core/yaffs_guts.h"
 #include "kernel/fs/yaffs/core/yportenv.h"

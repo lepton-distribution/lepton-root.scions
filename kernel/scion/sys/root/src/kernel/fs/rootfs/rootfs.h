@@ -47,7 +47,7 @@ int _rtfs_open(desc_t desc);
 int _rtfs_close(desc_t desc);
 int _rtfs_read(desc_t desc,char* buffer,int size);
 int _rtfs_write(desc_t desc,char* buffer,int size);
-int _rtfs_seek(desc_t desc, int offset, int origin);
+int _rtfs_seek(desc_t desc, off_t offset, int origin);
 int _rtfs_truncate(desc_t desc, off_t length);
 int _rtfs_remove(desc_t desc_ancst,desc_t desc);
 int _rtfs_rename(desc_t desc,const char*  old_name, char* new_name);

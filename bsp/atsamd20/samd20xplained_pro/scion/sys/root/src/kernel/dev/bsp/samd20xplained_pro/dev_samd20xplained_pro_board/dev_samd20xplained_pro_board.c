@@ -31,6 +31,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
@@ -40,7 +41,7 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/ioctl_board.h"
 
 #include "kernel/dev/arch/at91/asf/sam0/drivers/system/system.h" 

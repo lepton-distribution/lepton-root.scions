@@ -147,6 +147,8 @@ to be implemented as well:
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+
 #include "lwip/opt.h"
 #include "arch/sys_arch.h"
 #include "lwip/sys.h"

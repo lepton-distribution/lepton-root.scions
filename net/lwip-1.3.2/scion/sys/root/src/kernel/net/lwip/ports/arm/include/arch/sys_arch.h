@@ -9,7 +9,9 @@
 
 /* Use this pragma instead of the one below to disable all
 warnings     */
-#pragma warning(disable:4761;disable:4244)
+#ifdef WIN32
+   #pragma warning(disable:4761;disable:4244)
+#endif
 
 #define SYS_MBOX_NULL (sys_mbox_t)NULL
 #define SYS_SEM_NULL  (sys_sem_t)NULL
@@ -20,6 +22,7 @@ typedef struct {
    OS_MAILBOX os_mailbox;
 #elif defined(__KERNEL_UCORE_FREERTOS)
    xQueueHandle os_mailbox;   
+   StaticQueue_t queue_static;
 #else
    long  os_mailbox;
 #endif
@@ -36,7 +39,12 @@ typedef sys_mbox_st* sys_mbox_t;
 #if defined(__KERNEL_UCORE_EMBOS)
    typedef OS_CSEMA* sys_sem_t;
 #elif defined(__KERNEL_UCORE_FREERTOS)
-   typedef xSemaphoreHandle sys_sem_t;
+   typedef struct{
+      xSemaphoreHandle sem;
+      StaticQueue_t    sem_static;
+   }sys_sem_static_t;
+   
+   typedef sys_sem_static_t* sys_sem_t;
 #else
    typedef void*  sys_sem_t;
 #endif

@@ -27,7 +27,9 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
+
 #include "kernel/core/kernel.h"
 #include "kernel/core/process.h"
 #include "kernel/core/libstd.h"

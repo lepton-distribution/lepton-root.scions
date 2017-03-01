@@ -53,7 +53,7 @@ Includes
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/stat.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 
 /*===========================================

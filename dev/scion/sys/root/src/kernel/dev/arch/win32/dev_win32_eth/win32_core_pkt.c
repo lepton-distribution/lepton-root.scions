@@ -35,6 +35,8 @@ either the MPL or the [eCos GPL] License."
 
 //#include <commdlg.h>
 //#include <string.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <conio.h>
 #include <io.h>

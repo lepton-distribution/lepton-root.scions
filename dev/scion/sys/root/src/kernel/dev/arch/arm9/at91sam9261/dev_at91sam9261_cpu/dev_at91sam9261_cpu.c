@@ -35,7 +35,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/ioctl_lcd.h"
 #include "kernel/core/ioctl_board.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #if defined(__KERNEL_UCORE_EMBOS)  
    //#include "kernel/core/ucore/embOSARM7-9_388/arch/cpu_at91sam9261/at91sam9261_init.h"

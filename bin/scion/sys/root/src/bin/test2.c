@@ -26,6 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
@@ -1442,7 +1443,7 @@ void tst_fs_sdcard(void){
 | See:
 ----------------------------------------------*/
 /*
-uchar8_t g_write_buffer [512];   // 120 voies*4 octet d'entete => 480 octets
+uint8_t g_write_buffer [512];   // 120 voies*4 octet d'entete => 480 octets
 void test_benchmark_write_fich(char *nom){
    // clock_gettime variable
    struct   timespec tp_deb,tp_fin;
@@ -1489,6 +1490,51 @@ void test_benchmark_write_fich(char *nom){
 }
 */
 
+/*--------------------------------------------
+| Name:        test_lcd
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void test_lcd(void) {
+   int fd_lcd;
+   char buf[16] = { 0xff };
+   //
+   fd_lcd=open("/dev/lcd0", O_WRONLY, 0);
+   //
+   write(fd_lcd, buf, sizeof(buf));
+   //
+   usleep(100000);
+   return;
+}
+
+/*--------------------------------------------
+| Name:        test_lcd
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void test_rotary(void) {
+   int fd_rotary;
+   char buf[16] = { 0 };
+   int i=0;
+   int cb;
+   //
+   fd_rotary = open("/dev/rotry1", O_RDONLY, 0);
+   //
+   for (;;) {
+      cb = read(fd_rotary, buf, sizeof(buf));
+      for (i = 0; i < cb; i++) {
+         printf("%d\r\n", buf[i]);
+      }
+   }
+   return;
+}
+
 /*-------------------------------------------
 | Name:sh_main
 | Description:
@@ -1529,12 +1575,14 @@ int test2_main(int argc,char* argv[]){
 
    //write(1,"echo ctrl-x to exit\r\n",strlen("echo ctrl-x to exit\r\n"));
 
+   test_rotary();
+   //test_lcd();
    //test_waitpid();
    //basic_test();
    //socket_test();
    //socket_client_tcp();
    //file_test();
-   test_eth();
+   //test_eth();
    //write_test();
    //alarm_test();
    //timer_test();

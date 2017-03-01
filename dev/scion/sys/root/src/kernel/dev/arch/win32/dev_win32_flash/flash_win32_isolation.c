@@ -31,6 +31,7 @@ Includes
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -57,7 +58,7 @@ static char memory_file_path[MAX_PATH] = { 0 };
 
 //
 typedef  uint32_t addr_t;
-typedef  uchar8_t sector_data_t;
+typedef  uint8_t sector_data_t;
 typedef  uint32_t sector_addr_t;
 typedef  int16_t sector_no_t;
 typedef  uint32_t sector_sz_t;

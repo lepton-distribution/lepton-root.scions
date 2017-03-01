@@ -43,6 +43,7 @@ Includes
 =============================================*/
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "kernel/core/kernel.h"

@@ -26,7 +26,12 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/types.h"
+#include "kernel/core/kal.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/kernel_io.h"
 #include "kernel/core/fcntl.h"
@@ -34,11 +39,12 @@ Includes
 #include "kernel/core/syscall.h"
 #include "kernel/core/process.h"
 #include "kernel/core/ioctl.h"
+#include "kernel/core/dirent.h"
+
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/core/stat.h"
 
-#include "kernel/core/kal.h"
 
 
 

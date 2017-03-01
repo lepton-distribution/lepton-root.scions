@@ -27,6 +27,9 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
@@ -37,7 +40,6 @@ Includes
 #include "kernel/core/process.h"
 #include "kernel/core/time.h"
 #include "kernel/fs/vfs/vfs.h"
-#include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/kernel_io.h"

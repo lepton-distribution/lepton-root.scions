@@ -26,10 +26,14 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
 #include <string.h>
+
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/stat.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"
@@ -53,27 +57,28 @@ int _fat_vfat_rename(desc_t desc,const char*  old_name, char* new_name);
 
 //file system operations
 fsop_t fat_vfat_op={
-   _fat_loadfs,
-   _fat_checkfs,
-   _fat_makefs,
-   _fat_readfs,
-   _fat_writefs,
-   _fat_vfat_statfs,
-   _fat_mountdir,
-   _fat_vfat_readdir,
-   _fat_telldir,
-   _fat_seekdir,
-   _fat_vfat_lookupdir,
-   _fat_mknod,
-   _fat_vfat_create,
-   _fat_vfat_open,
-   _fat_close,
-   _fat_read,
-   _fat_write,
-   _fat_seek,
-   _fat_truncate,
-   _fat_vfat_remove,
-   _fat_vfat_rename
+    .fs.vfstype       = VFS_TYPE_INTERNAL_FS,
+    .fs.loadfs        = _fat_loadfs,
+    .fs.checkfs       = _fat_checkfs,
+    .fs.makefs        = _fat_makefs,
+    .fs.readfs        = _fat_readfs,
+    .fs.writefs       = _fat_writefs,
+    .fs.statfs        = _fat_vfat_statfs,
+    .fs.mountdir      = _fat_mountdir,
+    .fs.readdir       = _fat_vfat_readdir,
+    .fs.telldir       = _fat_telldir,
+    .fs.seekdir       = _fat_seekdir,
+    .fs.lookupdir     = _fat_vfat_lookupdir,
+    .fs.mknod         = _fat_mknod,
+    .fs.create        = _fat_vfat_create,
+    .fs.open          = _fat_vfat_open,
+    .fs.close         = _fat_close,
+    .fs.read          = _fat_read,
+    .fs.write         = _fat_write,
+    .fs.seek          = _fat_seek,
+    .fs.truncate      = _fat_truncate,
+    .fs.remove        = _fat_vfat_remove,
+    .fs.rename        = _fat_vfat_rename
 };
 
 #define FAT16_MAX_LONGNAME_TAB_ENTRY   (FAT16_MAX_NAME_FIL_VFAT/FAT16_LONGNAME_SUM+1)

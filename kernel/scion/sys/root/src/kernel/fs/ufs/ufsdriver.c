@@ -25,9 +25,12 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "kernel/core/system.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/fs/vfs/vfs.h"

@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/core_rttimer.h"
 #include "lib/libc/termios/termios.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "usbeth.h"
 #include "kernel/dev/arch/all/usb/usbcore.h"

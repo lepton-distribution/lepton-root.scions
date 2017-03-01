@@ -127,7 +127,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
         <option>
@@ -144,7 +144,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
         <option>
@@ -167,7 +167,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
       </data>
@@ -682,7 +682,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -954,7 +954,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -965,6 +965,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1120,7 +1128,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>0</state>
         </option>
         <option>
@@ -1137,7 +1145,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>0</state>
         </option>
         <option>
@@ -1160,7 +1168,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>0</state>
         </option>
       </data>
@@ -1637,7 +1645,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1909,7 +1917,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1920,6 +1928,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1951,141 +1967,144 @@
     </settings>
   </configuration>
   <group>
-    <name>dev</name>
+    <name>kernel</name>
     <group>
-      <name>arch</name>
+      <name>dev</name>
       <group>
-        <name>at91</name>
+        <name>arch</name>
         <group>
-          <name>asf</name>
+          <name>at91</name>
           <group>
-            <name>common</name>
+            <name>asf</name>
             <group>
-              <name>utils</name>
+              <name>common</name>
               <group>
-                <name>interrupt</name>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\common\utils\interrupt\interrupt_sam_nvic.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\common\utils\interrupt\interrupt_sam_nvic.h</name>
-                </file>
-              </group>
-            </group>
-          </group>
-          <group>
-            <name>sam0</name>
-            <group>
-              <name>drivers</name>
-              <group>
-                <name>port</name>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\port\port.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\port\port.h</name>
-                </file>
-              </group>
-              <group>
-                <name>sercom</name>
-                <group>
-                  <name>usart</name>
-                  <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart.c</name>
-                  </file>
-                  <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart.h</name>
-                  </file>
-                  <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart_interrupt.c</name>
-                  </file>
-                  <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart_interrupt.h</name>
-                  </file>
-                </group>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom.h</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_interrupt.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_interrupt.h</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_pinout.h</name>
-                </file>
-              </group>
-              <group>
-                <name>system</name>
-                <group>
-                  <name>clock</name>
-                  <group>
-                    <name>clock_samd20</name>
-                    <excluded>
-                      <configuration>Debug</configuration>
-                    </excluded>
-                    <group>
-                      <name>module_config</name>
-                      <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\module_config\conf_clocks.h</name>
-                      </file>
-                    </group>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\clock.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\clock_config_check.h</name>
-                    </file>
-                  </group>
-                  <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\gclk.c</name>
-                  </file>
-                </group>
+                <name>utils</name>
                 <group>
                   <name>interrupt</name>
                   <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\interrupt\system_interrupt.c</name>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\common\utils\interrupt\interrupt_sam_nvic.c</name>
                   </file>
                   <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\interrupt\system_interrupt.h</name>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\common\utils\interrupt\interrupt_sam_nvic.h</name>
+                  </file>
+                </group>
+              </group>
+            </group>
+            <group>
+              <name>sam0</name>
+              <group>
+                <name>drivers</name>
+                <group>
+                  <name>port</name>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\port\port.c</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\port\port.h</name>
                   </file>
                 </group>
                 <group>
-                  <name>pinmux</name>
+                  <name>sercom</name>
+                  <group>
+                    <name>usart</name>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart.h</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart_interrupt.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\usart\usart_interrupt.h</name>
+                    </file>
+                  </group>
                   <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\pinmux\pinmux.c</name>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom.c</name>
                   </file>
                   <file>
-                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\pinmux\pinmux.h</name>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom.h</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_interrupt.c</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_interrupt.h</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\sercom\sercom_pinout.h</name>
                   </file>
                 </group>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\system.c</name>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\system.h</name>
-                </file>
+                <group>
+                  <name>system</name>
+                  <group>
+                    <name>clock</name>
+                    <group>
+                      <name>clock_samd20</name>
+                      <excluded>
+                        <configuration>Debug</configuration>
+                      </excluded>
+                      <group>
+                        <name>module_config</name>
+                        <file>
+                          <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\module_config\conf_clocks.h</name>
+                        </file>
+                      </group>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\clock.c</name>
+                      </file>
+                      <file>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\clock_config_check.h</name>
+                      </file>
+                    </group>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\clock\clock_samd20\gclk.c</name>
+                    </file>
+                  </group>
+                  <group>
+                    <name>interrupt</name>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\interrupt\system_interrupt.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\interrupt\system_interrupt.h</name>
+                    </file>
+                  </group>
+                  <group>
+                    <name>pinmux</name>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\pinmux\pinmux.c</name>
+                    </file>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\pinmux\pinmux.h</name>
+                    </file>
+                  </group>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\system.c</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\asf\sam0\drivers\system\system.h</name>
+                  </file>
+                </group>
               </group>
             </group>
           </group>
         </group>
-      </group>
-      <group>
-        <name>cortexm</name>
         <group>
-          <name>at91samd20</name>
+          <name>cortexm</name>
           <group>
-            <name>at91samd20_uart</name>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.h</name>
-            </file>
+            <name>at91samd20</name>
+            <group>
+              <name>at91samd20_uart</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samd20\at91samd20_uart\dev_at91samd20_uart_x.h</name>
+              </file>
+            </group>
           </group>
         </group>
       </group>

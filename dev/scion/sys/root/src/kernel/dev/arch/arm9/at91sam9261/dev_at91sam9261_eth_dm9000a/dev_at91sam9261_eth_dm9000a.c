@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "lib/libc/termios/termios.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/ioctl_eth.h"
 
 #include "kernel/dev/arch/all/eth/dev_eth_dm9000a/dev_eth_dm9000a.h"

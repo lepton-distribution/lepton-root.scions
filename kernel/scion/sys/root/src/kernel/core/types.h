@@ -90,12 +90,15 @@ typedef uint32_t fsfilcnt_t;
 #endif
 
 
-typedef int16_t ssize_t;
+typedef int32_t ssize_t;
 
 #ifndef _OFF_T_DEFINED
 //typedef int16_t __off_t;
-typedef int __off_t;
-   #define off_t  __off_t
+   #if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
+      typedef int64_t off_t;
+   #else
+      typedef int32_t off_t;
+   #endif
    #define _OFF_T_DEFINED
 #endif
 

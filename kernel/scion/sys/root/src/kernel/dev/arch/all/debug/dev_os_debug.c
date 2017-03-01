@@ -3,12 +3,17 @@
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
+#include "kernel/fs/vfs/vfstypes.h"
+#include "kernel/core/malloc.h"
 
 #include "dev_os_debug.h"
 #if defined(__KERNEL_UCORE_EMBOS)

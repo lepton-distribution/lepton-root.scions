@@ -27,6 +27,7 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
 
 #include "kernel/core/types.h"
@@ -55,7 +56,7 @@ int dev_win32_lcd_matrix_isset_read(desc_t desc);
 int dev_win32_lcd_matrix_isset_write(desc_t desc);
 int dev_win32_lcd_matrix_read(desc_t desc, char* buf, int size);
 int dev_win32_lcd_matrix_write(desc_t desc, const char* buf, int size);
-int dev_win32_lcd_matrix_seek(desc_t desc, int offset, int origin);
+int dev_win32_lcd_matrix_seek(desc_t desc, off_t offset, int origin);
 int dev_win32_lcd_matrix_ioctl(desc_t desc, int request, va_list ap);
 
 
@@ -304,7 +305,7 @@ static int dev_win32_lcd_matrix_write(desc_t desc, const char* buf, int size) {
 | Comments:
 | See:
 ---------------------------------------------*/
-static int dev_win32_lcd_matrix_seek(desc_t desc, int offset, int origin) {
+static int dev_win32_lcd_matrix_seek(desc_t desc, off_t offset, int origin) {
    switch (origin) {
 
    case SEEK_SET:

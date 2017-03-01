@@ -2,8 +2,10 @@
 #define __ARCH_CC_H__
 
 /* Include some files for defining library routines */
-//#include <string.h>
-//#include <ctype.h>
+#include <string.h>
+#include <stdint.h>
+#include <ctype.h>
+#include <limits.h>
 
 /* Define platform endianness */
 #ifndef BYTE_ORDER
@@ -30,7 +32,10 @@ typedef u32_t mem_ptr_t;
 /* Compiler hints for packing structures */
 #define PACK_STRUCT_FIELD(x) x
 #define PACK_STRUCT_STRUCT
-#pragma warning(disable: 4103)
+#ifdef WIN32
+   #pragma warning(disable: 4103)
+#endif
+
 #define PACK_STRUCT_USE_INCLUDES
 
 //#pragma warning(disable: 4103)
@@ -53,7 +58,7 @@ typedef u32_t mem_ptr_t;
 #define LWIP_PLATFORM_DIAG(x)
 #define LWIP_PLATFORM_ASSERT(x)
 
-#define INT_MAX ((int)(2147483647))
+//#define INT_MAX ((int)(2147483647))
 
 
 #endif /* __ARCH_CC_H__ */

@@ -3,6 +3,9 @@
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 //#include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
@@ -11,9 +14,7 @@
 #include "kernel/core/stat.h"
 #include "kernel/core/fcntl.h"
 
-//#include "lib/libc/termios/termios.h"
-
-//#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "dev_cmsis_itm.h"
 

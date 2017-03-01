@@ -61,6 +61,7 @@ typedef struct kernel_timer_st {
 
 #ifdef __KERNEL_UCORE_FREERTOS
    xTimerHandle timer;
+   StaticTimer_t timer_static;
 #endif
 
 #ifdef __KERNEL_UCORE_ECOS

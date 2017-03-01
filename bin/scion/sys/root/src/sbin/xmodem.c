@@ -65,6 +65,9 @@ Includes
    #include <stdio.h>
 #else
    #include <stdlib.h>
+   #include <stdint.h>
+   #include <string.h>
+   
 
    #include "kernel/core/errno.h"
    #include "kernel/core/kal.h"
@@ -417,7 +420,7 @@ int xmodem_transmit(int fd_ttys_in,int fd_ttys_out, char mode, int fd, int srcsz
       return -2;           /* no sync */
 
       for(;; ) {
-         int cb=0;
+         int cb;
 start_trans:
 
          if(mode==MODE_1K && XMDM_SZ==1024) {

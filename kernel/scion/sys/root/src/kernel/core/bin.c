@@ -26,6 +26,11 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
@@ -37,8 +42,6 @@ Includes
 
 #include "kernel/core/bin.h"
 
-#include <string.h>
-#include <stdlib.h>
 
 /*===========================================
 Global Declaration

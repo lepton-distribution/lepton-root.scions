@@ -33,7 +33,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/fcntl.h"
 #include "kernel/core/ioctl_lcd.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "dev_m16c_nju6433.h"
 

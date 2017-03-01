@@ -70,9 +70,29 @@ either the MPL or the [eCos GPL] License."
  * procedure needs no input table, but tracks the way the table was built.
  */
 
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "kernel/core/errno.h"
+#include "kernel/core/types.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/signal.h"
+#include "kernel/core/libstd.h"
+#include "kernel/core/stat.h"
+#include "kernel/core/statvfs.h"
+#include "kernel/core/time.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/signal.h"
+
+
+//
+#include "lib/libc/unistd.h"
+#include "lib/libc/stdio/stdio.h"
+
 #define AZTEC86 1
 
-//#define min(a,b)        ((a>b) ? b : a)
+#define min(a,b)        ((a>b) ? b : a)
 
 //#define PCDOS
 
@@ -196,23 +216,7 @@ char_type magic_header[] = "\037\235";  /* 1F 9D */
 #include <stdio.h>
 */
 
-#include <stdlib.h>
 
-#include "kernel/core/errno.h"
-#include "kernel/core/types.h"
-#include "kernel/core/kernel.h"
-#include "kernel/core/signal.h"
-#include "kernel/core/libstd.h"
-#include "kernel/core/stat.h"
-#include "kernel/core/statvfs.h"
-#include "kernel/core/time.h"
-#include "kernel/core/fcntl.h"
-#include "kernel/core/signal.h"
-
-
-//
-#include "lib/libc/unistd.h"
-#include "lib/libc/stdio/stdio.h"
 
 
 #define ARGVAL() (*++(*argv) || (--argc && *++argv))
@@ -677,7 +681,7 @@ nextarg: continue;
                   {
                      if (read(fd, response+1, 1) < 0)
                      {                                          /* Ack! */
-                        perror("stderr");
+                        fprintf(stderr, "stderr");
                         break;
                      }
                   }
@@ -694,7 +698,7 @@ nextarg: continue;
          {                              /* Open output file */
             if (freopen(ofname, "w", stdout) == NULL)
             {
-               perror(ofname);
+               fprintf(stderr,ofname);
                continue;
             }
             if(!quiet)
@@ -1402,7 +1406,7 @@ REGISTER int c, stack_top;
 
 void writeerr()
 {
-   perror ( ofname );
+   fprintf(stderr, ofname );
 
    //to do:
    //unlink ( ofname );
@@ -1423,7 +1427,7 @@ char *ifname, *ofname;
    close(fileno(stdout));
    if (stat(ifname, &statbuf))
    {                     /* Get stat on input file */
-      perror(ifname);
+      fprintf(stderr,ifname);
       return;
    }
 #ifndef PCDOS
@@ -1460,7 +1464,7 @@ char *ifname, *ofname;
       mode = statbuf.st_mode & 07777;
 #endif
       if (chmod(ofname, mode))                           /* Copy modes */
-         perror(ofname);
+         fprintf(stderr,ofname);
 #ifndef PCDOS
       /*chown(ofname, statbuf.st_uid, statbuf.st_gid);  //Copy ownership
       timep[0] = statbuf.st_atime;

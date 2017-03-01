@@ -49,6 +49,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>c:/tauon/sys/root/src</AdditionalIncludeDirectories>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

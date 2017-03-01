@@ -31,6 +31,7 @@ Includes
 #define  assert(__cond__)
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
@@ -43,6 +44,7 @@ Includes
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
+#include "lib/libc/libc.h"
 
 
 
@@ -85,7 +87,7 @@ int __sscanf(const char * sp, const char * fmt, ...)
 {
    FILE string[1] =
    {
-      {0, (char*)(unsigned) -1, 0, 0, (char*) (unsigned) -1, -1,
+      {0, (unsigned char*)(unsigned) -1, 0, 0, (unsigned char*) (unsigned) -1, -1,
        _IOFBF | __MODE_READ}
    };
 
@@ -93,7 +95,7 @@ int __sscanf(const char * sp, const char * fmt, ...)
    va_list ptr;
    int rv;
    va_strt(ptr, fmt);
-   string->bufpos = (char*)sp;
+   string->bufpos = (unsigned char*)sp;
    rv = __vfscanf(string,(char *)fmt,ptr);
    va_end(ptr);
 
@@ -144,11 +146,11 @@ int __vsscanf(char * sp,const char *fmt, va_list ap)
    int rv;
    FILE string[1] =
    {
-      {0, (char*)(unsigned) -1, 0, 0, (char*) (unsigned) -1, -1,
+      {0, (unsigned char*)(unsigned) -1, 0, 0, (unsigned char*) (unsigned) -1, -1,
        _IOFBF | __MODE_READ}
    };
 
-   string->bufpos = sp;
+   string->bufpos = (unsigned char*) sp;
    rv = __vfscanf(string,(char *)fmt,ap);
    return rv;
 }

@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+
 #include "kernel/core/sys/sysctl.h"
 #include "kernel/core/sys/utsname.h"
 

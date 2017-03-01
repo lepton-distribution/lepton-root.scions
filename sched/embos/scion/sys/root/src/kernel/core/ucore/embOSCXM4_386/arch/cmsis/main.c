@@ -31,6 +31,7 @@ File    : Start_LEDBlink.c
 Purpose : Sample program for OS running on EVAL-boards with LEDs
 --------- END-OF-HEADER --------------------------------------------*/
 
+#include <stdint.h>
 
 #include "RTOS.h"
 #include "kernel/core/kernel.h"

@@ -43,6 +43,10 @@ Declaration
 extern ssize_t kernel_io_read(desc_t desc, void *buf, size_t nbyte);
 extern ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte);
 
+extern int kernel_io_ll_read(desc_t desc,void *buf, size_t nbyte);
+extern int kernel_io_ll_write(desc_t desc,const void *buf, size_t nbyte);
+extern int kernel_io_ll_lseek(desc_t desc, off_t offset, int origin);
+extern int kernel_io_ll_ioctl(desc_t desc,int request,...);
 #endif
 
 

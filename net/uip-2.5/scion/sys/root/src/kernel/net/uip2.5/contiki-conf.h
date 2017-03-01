@@ -49,6 +49,7 @@
 
 //#include <inttypes.h>
 //modif phlb
+#include <stdint.h>
 #include "kernel/core/etypes.h"
 #include "kernel/core/kernelconf.h"
 #define UIP_RAM_REGION      //_Pragma("location = \"EXT_RAM\"")

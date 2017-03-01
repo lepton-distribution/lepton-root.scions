@@ -53,7 +53,8 @@
 /*			*/ 
 /* include files 	*/
 /*			*/ 
- 
+#include <stdint.h>
+
 #include "net/uip.h"
 #include "ppp.h"
 

@@ -21,6 +21,8 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
+#include <stdint.h>
+
 #include "kernel/core/errno.h"
 #include "lib/libc/unistd.h"
 #include "lib/libc/termios/termios.h"

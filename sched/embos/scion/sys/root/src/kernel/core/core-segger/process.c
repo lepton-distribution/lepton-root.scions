@@ -30,6 +30,8 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+
 #include "kernel/core/limits.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/signal.h"
@@ -592,7 +594,7 @@ int _sys_dup2(pid_t pid,int fd,int fd2){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _sys_fcntl(pid_t pid,unsigned int fd, unsigned int cmd, unsigned int argc,void* argv[])
+int _sys_fcntl(pid_t pid, int fd, unsigned int cmd, unsigned int argc,void* argv[])
 {
    int result;
    desc_t desc;

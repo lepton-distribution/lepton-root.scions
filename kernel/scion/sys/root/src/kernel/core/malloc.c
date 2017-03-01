@@ -27,6 +27,9 @@ either the MPL or the [eCos GPL] License."
 Includes
 =============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/process.h"
@@ -64,7 +67,7 @@ void* _sys_malloc(size_t size){
    }
 #endif
 
-#if defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_FREERTOS) && (configSUPPORT_STATIC_ALLOCATION==0)
    p=pvPortMalloc(size);
 #else
    p=malloc(size);
@@ -99,7 +102,7 @@ void *_sys_calloc(size_t nelem, size_t elsize){
    }
 #endif
 
-#if defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_FREERTOS) && (configSUPPORT_STATIC_ALLOCATION==0)
    p=_sys_malloc(nelem*elsize);
 #else
    p=calloc(nelem,elsize);
@@ -135,7 +138,7 @@ void *_sys_realloc(void *p, size_t size){
    }
 #endif
 
-#if defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_FREERTOS) && (configSUPPORT_STATIC_ALLOCATION==0)
 	  //need to be stub
 #else
    p=realloc(p,size);
@@ -170,7 +173,7 @@ void _sys_free (void* p){
    }
 #endif
 
-#if defined(__KERNEL_UCORE_FREERTOS)
+#if defined(__KERNEL_UCORE_FREERTOS) && (configSUPPORT_STATIC_ALLOCATION==0)
 	vPortFree(p);
 #else
    free(p);

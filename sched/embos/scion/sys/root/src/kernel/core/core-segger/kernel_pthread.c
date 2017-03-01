@@ -54,11 +54,16 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/kernel_pthread_mutex.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/syscall.h"
+   
+#include "kernel/fs/vfs/vfstypes.h"
 
 
 /*===========================================
@@ -208,9 +213,9 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
    p_heap_1byte+=(unsigned long)size;
    {
       uint32_t _stack_addr = (uint32_t)p_heap_1byte;
-      uchar8_t _align = (uchar8_t)(4-(_stack_addr%4));
-      p_heap_1byte+=(_align*sizeof(uchar8_t));
-      size+=(_align*sizeof(uchar8_t));
+      uint8_t _align = (uint8_t)(4-(_stack_addr%4));
+      p_heap_1byte+=(_align*sizeof(uint8_t));
+      size+=(_align*sizeof(uint8_t));
    }
    p->heap_top = p_heap_1byte;
    //clear heap mem allocated
@@ -316,9 +321,9 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
       //don't use the last byte at the bottom of thread stack.
       {
          uint32_t _stack_addr = (uint32_t)thread->attr.stackaddr;
-         uchar8_t _align = (4-(_stack_addr%4))+4; ///to remove: just debug test
+         uint8_t _align = (4-(_stack_addr%4))+4; ///to remove: just debug test
 
-         thread->heap_floor = (uchar8_t*)(thread->attr.stackaddr)+_align*sizeof(uchar8_t); //data alignement 4 bytes
+         thread->heap_floor = (uint8_t*)(thread->attr.stackaddr)+_align*sizeof(uint8_t); //data alignement 4 bytes
          thread->heap_top   = thread->heap_floor;
 
       }

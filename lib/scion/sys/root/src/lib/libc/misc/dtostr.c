@@ -67,6 +67,9 @@ either the MPL or the [eCos GPL] License."
 /*****************************************************************************/
 
 //place it before stdio.h to define __PTRDIFF_TYPE__
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "lib/libc/stdint.h"
 #include "lib/libc/stdio/stdio.h"
 //#include <string.h>

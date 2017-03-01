@@ -26,7 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
 #include <stdlib.h>
+
 #include "lib/libc/misc/ltostr.h"
 
 

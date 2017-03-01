@@ -1,6 +1,9 @@
 /*============================================
 | Includes    
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
@@ -13,7 +16,7 @@
 #include "kernel/core/cpu.h"
 #include "kernel/core/malloc.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "lib/libc/termios/termios.h"
 
@@ -88,7 +91,7 @@ extern u8_t ppp_tx_buffer[];
 | See:         
 ----------------------------------------------*/
 void ppp_arch_putchar(u8_t c){
-   uchar8_t _kernel_int;
+   uint8_t _kernel_int;
    int r=-1;
    desc_t desc_link;
    //

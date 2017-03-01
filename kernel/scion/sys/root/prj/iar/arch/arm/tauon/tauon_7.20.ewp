@@ -127,7 +127,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -144,7 +144,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -167,7 +167,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
       </data>
@@ -659,7 +659,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -931,7 +931,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -942,6 +942,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1047,7 +1055,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.40.3.8937</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1097,7 +1105,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
         <option>
@@ -1114,7 +1122,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
         <option>
@@ -1137,7 +1145,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
       </data>
@@ -1632,7 +1640,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -1904,7 +1912,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1915,6 +1923,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -2070,7 +2086,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
         <option>
@@ -2087,7 +2103,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
         <option>
@@ -2110,7 +2126,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
       </data>
@@ -2604,7 +2620,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -2876,7 +2892,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -2887,6 +2903,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -3042,7 +3066,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -3059,7 +3083,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -3082,7 +3106,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>38</state>
         </option>
       </data>
@@ -3577,7 +3601,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -3849,7 +3873,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -3860,6 +3884,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -4015,7 +4047,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>40</state>
         </option>
         <option>
@@ -4032,7 +4064,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
         <option>
@@ -4055,7 +4087,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>39</state>
         </option>
       </data>
@@ -4551,7 +4583,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -4823,7 +4855,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -4834,6 +4866,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -4989,7 +5029,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
         <option>
@@ -5006,7 +5046,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
         <option>
@@ -5029,7 +5069,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>12</state>
         </option>
       </data>
@@ -5525,7 +5565,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -5797,7 +5837,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -5808,6 +5848,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -5963,7 +6011,7 @@
         </option>
         <option>
           <name>GBECoreSlave</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
         <option>
@@ -5980,7 +6028,7 @@
         </option>
         <option>
           <name>CoreVariant</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
         <option>
@@ -6003,7 +6051,7 @@
         </option>
         <option>
           <name>GFPUCoreSlave2</name>
-          <version>22</version>
+          <version>24</version>
           <state>35</state>
         </option>
       </data>
@@ -6493,7 +6541,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -6765,7 +6813,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -6776,6 +6824,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -8064,6 +8120,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_device.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_io.c</name>
@@ -10402,6 +10461,60 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_vfat.c</name>
           </file>
         </group>
+      </group>
+      <group>
+        <name>fatfs</name>
+        <group>
+          <name>core</name>
+          <group>
+            <name>drivers</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\drivers\sd_diskio.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\drivers\sd_diskio.h</name>
+            </file>
+          </group>
+          <group>
+            <name>option</name>
+          </group>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\diskio.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\diskio.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff_gen_drv.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff_gen_drv.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ffconf.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\integer.h</name>
+          </file>
+        </group>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfs.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfs.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfscore.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfscore.h</name>
+        </file>
       </group>
       <group>
         <name>kofs</name>

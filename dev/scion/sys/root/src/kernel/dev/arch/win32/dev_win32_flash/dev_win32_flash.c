@@ -23,15 +23,10 @@ either the MPL or the [eCos GPL] License."
 */
 
 
-/*============================================
-| Includes
-==============================================*/
-
-
-
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
 
 #include "kernel/core/system.h"
 #include "kernel/core/fcntl.h"

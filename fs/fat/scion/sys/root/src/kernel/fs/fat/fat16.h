@@ -45,7 +45,7 @@ int _fat_writefs(mntdev_t* pmntdev);
 int _fat_mountdir(desc_t desc,inodenb_t original_root_node,inodenb_t target_root_node);
 int _fat_telldir(desc_t desc);
 int _fat_mknod(desc_t desc,inodenb_t inodenb,dev_t dev);
-int _fat_seek(desc_t desc, int offset, int origin);
+int _fat_seek(desc_t desc, off_t offset, int origin);
 int _fat_close(desc_t desc);
 int _fat_read(desc_t desc,char* buffer,int size);
 int _fat_write(desc_t desc,char* buffer,int size);

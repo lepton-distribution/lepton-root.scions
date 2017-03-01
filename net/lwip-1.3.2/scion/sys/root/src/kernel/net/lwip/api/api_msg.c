@@ -31,6 +31,9 @@
  *
  */
 
+#include <string.h>
+#include <stdint.h>
+
 #include "lwip/opt.h"
 
 #if LWIP_NETCONN /* don't build if not configured for use in lwipopts.h */
@@ -47,7 +50,6 @@
 #include "lwip/igmp.h"
 #include "lwip/dns.h"
 
-#include <string.h>
 
 /* forward declarations */
 #if LWIP_TCP

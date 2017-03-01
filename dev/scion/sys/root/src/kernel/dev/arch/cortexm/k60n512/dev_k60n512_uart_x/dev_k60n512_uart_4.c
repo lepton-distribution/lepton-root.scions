@@ -34,7 +34,7 @@ Includes
 #include "kernel/core/stat.h"
 #include "kernel/core/cpu.h"
 #include "kernel/core/core_rttimer.h"
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "dev_k60n512_uart_x.h"
 #include "kernel/dev/arch/cortexm/k60n512/common/dev_k60n512_sim.h"

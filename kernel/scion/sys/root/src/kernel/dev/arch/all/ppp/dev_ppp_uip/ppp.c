@@ -50,7 +50,7 @@
 /*			*/ 
 /* include files 	*/
 /*			*/ 
-
+#include <stdint.h>
 
 #include "lcp.h"
 #include "pap.h"

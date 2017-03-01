@@ -59,7 +59,7 @@ Includes
 #include "kernel/core/fcntl.h"
 
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 //I2C
 #include "dev_eeprom_24xxx.h"

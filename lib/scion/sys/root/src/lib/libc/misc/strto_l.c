@@ -50,8 +50,9 @@ either the MPL or the [eCos GPL] License."
 #if 'A' > 'a'
    #error ordering assumption violated : 'A' > 'a'
 #endif
-
+#include <stdint.h>
 #include <ctype.h>
+
 #include "lib/libc/ctype/ctype.h"
 #include "lib/libc/stdint.h"
 

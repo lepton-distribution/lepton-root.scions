@@ -31,6 +31,7 @@ either the MPL or the [eCos GPL] License."
 | Includes
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
 #include <stdarg.h>
 
 #include "kernel/core/kernelconf.h"
@@ -46,7 +47,6 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/errno.h"
 #include "kernel/core//ioctl_lcd.h"
 #include "kernel/fs/vfs/vfs.h"
-#include "kernel/fs/vfs/vfskernel.h"
 #include "kernel/core/kernel_elfloader.h"
 
 #include "lib/libc/misc/ltostr.h"
@@ -161,7 +161,7 @@ int _elf_printf(const char * fmt, ...){
    int cb=0;
    FILE string[1] =
    {
-      {0, 0, (char*)(unsigned) -1, 0, (char*) (unsigned) -1, -1,
+      {0, 0, (unsigned char*)(unsigned) -1, 0, (unsigned char*) (unsigned) -1, -1,
        _IOFBF | __MODE_WRITE}
    };
 
@@ -172,8 +172,8 @@ int _elf_printf(const char * fmt, ...){
       return -1;
 
    va_strt(ptr, fmt);
-   string->bufpos = buf;
-   string->bufend = buf+sizeof(buf);
+   string->bufpos = (unsigned char*)buf;
+   string->bufend = (unsigned char*)(buf+sizeof(buf));
    rv = __vfprintf(string,fmt,ptr);
    va_end(ptr);
    *(string->bufpos) = 0;

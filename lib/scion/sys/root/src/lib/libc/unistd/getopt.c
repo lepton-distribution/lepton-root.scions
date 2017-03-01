@@ -28,6 +28,7 @@ either the MPL or the [eCos GPL] License."
  */
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>

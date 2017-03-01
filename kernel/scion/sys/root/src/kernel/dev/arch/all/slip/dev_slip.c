@@ -26,6 +26,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernelconf.h"
@@ -38,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/cpu.h"
 #include "kernel/core/malloc.h"
 
-#include "kernel/fs/vfs/vfsdev.h"
+#include "kernel/fs/vfs/vfstypes.h"
 
 #include "lib/libc/termios/termios.h"
 
@@ -271,7 +274,7 @@ int dev_slip_open(desc_t desc, int o_flag){
       slip_io_t* p_slip_io;
       if(ofile_lst[desc].p)
          return 0;
-      p_slip_io= malloc(sizeof(slip_io_t));
+      p_slip_io= _sys_malloc(sizeof(slip_io_t));
       if(!p_slip_io)
          return -1;
       p_slip_io->write.cb = 0;
@@ -307,7 +310,7 @@ int dev_slip_close(desc_t desc){
    if(!ofile_lst[desc].nb_writer
       && !ofile_lst[desc].nb_reader) {
 #ifdef USE_SLIP_IO_BUFFER
-      free(ofile_lst[desc].p);
+      _sys_free(ofile_lst[desc].p);
 #endif
    }
    return 0;

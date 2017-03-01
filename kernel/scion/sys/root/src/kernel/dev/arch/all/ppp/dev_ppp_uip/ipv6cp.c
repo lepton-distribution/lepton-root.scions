@@ -55,6 +55,8 @@
 /* include files 	*/
 /*			*/ 
 
+#include <stdint.h>
+
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define DEBUG DEBUG_NONE //DEBUG_PRINT
 #endif

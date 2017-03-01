@@ -40,6 +40,7 @@ either the MPL or the [eCos GPL] License."
 
 
 #include <stdlib.h>
+#include <stdint.h>
 
 #include "kernel/core/errno.h"
 #include "kernel/core/libstd.h"

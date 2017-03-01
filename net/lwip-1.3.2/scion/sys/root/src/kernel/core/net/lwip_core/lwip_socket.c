@@ -26,6 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdarg.h>
 #include <string.h>
 
 #include "lwip/api.h"
@@ -50,6 +51,8 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/fs/vfs/vfs.h"
 
 #include "kernel/core/net/lwip_core/lwip_socket.h"
+
+#include "lib/libc/unistd.h"
 
 
 /*============================================
