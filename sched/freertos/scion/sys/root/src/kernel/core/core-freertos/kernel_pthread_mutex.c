@@ -29,6 +29,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/interrupt.h"
@@ -55,12 +58,19 @@ int   kernel_pthread_mutex_init(kernel_pthread_mutex_t *mutex, const pthread_mut
    //attr not used. preserved POSIX compatibility
 
 #ifdef __KERNEL_UCORE_FREERTOS
-   //mutex->mutex = xSemaphoreCreateRecursiveMutex();
-  mutex->mutex = xSemaphoreCreateBinary();
-  if(mutex->mutex==(void*)0)
-    return -1;
-  //
-  xSemaphoreGive(mutex->mutex);
+   #if (configSUPPORT_STATIC_ALLOCATION==1)
+      mutex->mutex = xSemaphoreCreateBinaryStatic(&mutex->mutex_static);
+      if(mutex->mutex==(void*)0)
+         return -1;
+   #else
+      //mutex->mutex = xSemaphoreCreateRecursiveMutex();
+      mutex->mutex = xSemaphoreCreateBinary();
+      if(mutex->mutex==(void*)0)
+         return -1;
+   #endif
+   
+   //
+   xSemaphoreGive(mutex->mutex);
 #endif
 
    return 0;

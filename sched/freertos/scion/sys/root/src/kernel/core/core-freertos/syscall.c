@@ -29,6 +29,10 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/process.h"
 #include "kernel/core/fork.h"
 #include "kernel/core/wait.h"
@@ -38,6 +42,7 @@ Includes
 #include "kernel/core/sysctl.h"
 #include "kernel/core/flock.h"
 #include "kernel/core/malloc.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
 
@@ -279,7 +284,7 @@ int _syscall_atexit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    __stop_sched();
 
 #if ATEXIT_MAX>0
-      if( process_lst[pid]->p_atexit_func!=(atexit_func_t*)((uchar8_t*)process_lst[pid]->pthread_ptr->heap_floor+(ATEXIT_MAX+1)*sizeof(atexit_func_t)) ){
+      if( process_lst[pid]->p_atexit_func!=(atexit_func_t*)((uint8_t*)process_lst[pid]->pthread_ptr->heap_floor+(ATEXIT_MAX+1)*sizeof(atexit_func_t)) ){
       process_lst[pid]->p_atexit_func++;
       *process_lst[pid]->p_atexit_func = atexit_dt->func;
       atexit_dt->ret = 0;
@@ -343,6 +348,7 @@ int _syscall_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 
    __stop_sched();
 
+   //to do: kill_dt->pid==0 ?? nothing to do?
    //
    if(kill_dt->pid>PROCESS_MAX || !process_lst[kill_dt->pid]) {
       kill_dt->ret = -1; //error
@@ -790,7 +796,7 @@ int _syscall_fcntl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    case F_SETLK: {
       struct flock* p_flock;
 
-      fcntl_dt->ret;
+      fcntl_dt->ret=-1;
 
       if(fcntl_dt->argc<0) {
          fcntl_dt->ret = -1;

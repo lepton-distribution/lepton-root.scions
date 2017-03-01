@@ -28,6 +28,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/interrupt.h"
@@ -60,7 +63,11 @@ int kernel_sem_init(kernel_sem_t* kernel_sem, int pshared, unsigned int value){
    if(!kernel_sem)
       return -1;
 #ifdef __KERNEL_UCORE_FREERTOS
-   kernel_sem->sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) value);
+   #if (configSUPPORT_STATIC_ALLOCATION==1)
+      kernel_sem->sem = xSemaphoreCreateCountingStatic( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) value,&kernel_sem->sem_static);
+   #else
+      kernel_sem->sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) value);
+   #endif
 #endif
    return 0;
 }

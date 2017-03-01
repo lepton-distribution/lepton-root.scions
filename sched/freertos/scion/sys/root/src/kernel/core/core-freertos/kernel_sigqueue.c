@@ -29,6 +29,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/signal.h"
 #include "kernel/core/kernel_object.h"
 #include "kernel/core/kernel_sigqueue.h"

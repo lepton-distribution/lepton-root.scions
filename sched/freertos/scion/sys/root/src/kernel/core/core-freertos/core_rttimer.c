@@ -29,6 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/core_rttimer.h"
 #include "kernel/core/interrupt.h"
@@ -55,11 +57,20 @@ int rttmr_create(tmr_t* tmr,rttmr_attr_t* rttmr_attr){
       return -1;
 #ifdef __KERNEL_UCORE_FREERTOS
    //OS_CreateTimer(tmr,rttmr_attr->func,rttmr_attr->tm_msec);
-   xTimerCreate( "timer",
-                (portTickType)(rttmr_attr->tm_msec/portTICK_RATE_MS),
-                pdFALSE,
-                tmr,
-                (tmrTIMER_CALLBACK) rttmr_attr->func );
+   #if (configSUPPORT_STATIC_ALLOCATION==1)
+      tmr->timer = xTimerCreateStatic( "timer",
+                                       (portTickType)(rttmr_attr->tm_msec/portTICK_RATE_MS),
+                                       pdFALSE,
+                                       tmr,
+                                       (tmrTIMER_CALLBACK) rttmr_attr->func,
+                                       &tmr->timer_static);
+   #else
+      xTimerCreate( "timer",
+                  (portTickType)(rttmr_attr->tm_msec/portTICK_RATE_MS),
+                  pdFALSE,
+                  tmr,
+                  (tmrTIMER_CALLBACK) rttmr_attr->func );
+   #endif
 #endif
    return 0;
 }

@@ -57,6 +57,10 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel_pthread.h"
@@ -215,9 +219,9 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
    p_heap_1byte+=(unsigned long)size;
    {
       uint32_t _stack_addr = (uint32_t)p_heap_1byte;
-      uchar8_t _align = (uchar8_t)(4-(_stack_addr%4));
-      p_heap_1byte+=(_align*sizeof(uchar8_t));
-      size+=(_align*sizeof(uchar8_t));
+      uint8_t _align = (uint8_t)(4-(_stack_addr%4));
+      p_heap_1byte+=(_align*sizeof(uint8_t));
+      size+=(_align*sizeof(uint8_t));
    }
    p->heap_top = p_heap_1byte;
    //clear heap mem allocated
@@ -308,7 +312,21 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
          name = thread->attr.name;
       else
          name = "daemon_kernel_thread";
-      
+     
+      //
+#if (configSUPPORT_STATIC_ALLOCATION==1)
+      //event group for each pthread used for syscall signalisation
+      thread->event_group_handle = xEventGroupCreateStatic(&thread->event_group_static);
+      //
+      thread->tcb =(tcb_t*)xTaskCreateStatic( pthread_routine, 
+                   name, 
+                   (thread->attr.stacksize/sizeof( StackType_t )), 
+                   (void *)0, 
+                   tskIDLE_PRIORITY + thread->attr.priority, 
+                   (portSTACK_TYPE*)thread->attr.stackaddr,
+                   &thread->task_static
+                 );  
+#else
       //event group for each pthread used for syscall signalisation
       thread->event_group_handle =  xEventGroupCreate();
       //
@@ -323,6 +341,8 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
                  );
       // 
       thread->tcb =(tcb_t*)freertos_task_handle;
+#endif
+      
       //
    #if configCHECK_FOR_STACK_OVERFLOW
       //check bottom stack with OS_STACKFILL_CHAR.
@@ -336,9 +356,9 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
             tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE, tskSTACK_FILL_BYTE 
          };	
          uint32_t _stack_addr = (uint32_t)thread->attr.stackaddr;
-         uchar8_t _align = (4-(_stack_addr%4))+4+sizeof(ucExpectedStackBytes); ///to remove: just debug test
+         uint8_t _align = (4-(_stack_addr%4))+4+sizeof(ucExpectedStackBytes); ///to remove: just debug test
          //
-         thread->heap_floor = (uchar8_t*)(thread->attr.stackaddr)+_align*sizeof(uchar8_t); //data alignement 4 bytes
+         thread->heap_floor = (uint8_t*)(thread->attr.stackaddr)+_align*sizeof(uint8_t); //data alignement 4 bytes
          thread->heap_top   = thread->heap_floor;
 
       }

@@ -29,6 +29,10 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
 #include "kernel/core/syscall.h"
 #include "kernel/core/timer.h"
@@ -193,7 +197,7 @@ int kernel_timer_delete(kernel_timer_t* p_kernel_timer){
 | See:
 ----------------------------------------------*/
 int kernel_timer_gettime(kernel_timer_t* p_kernel_timer, struct itimerspec* value){
-   int elapse_time_ms;
+   int elapse_time_ms=0;
 
    value->it_value.tv_sec=0;
    value->it_value.tv_nsec=0;
@@ -243,7 +247,7 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    //
 #ifdef __KERNEL_UCORE_FREERTOS
    if(ovalue) {
-      int elsapse_time_ms;
+      int elsapse_time_ms=0;
       //elsapse_time_ms = OS_GetTimerValue((OS_TIMER*)p_kernel_timer);
       ovalue->it_value.tv_sec= elsapse_time_ms/1000;
       ovalue->it_value.tv_nsec=__timer_ms_to_ns( (elsapse_time_ms%1000)  );
@@ -260,11 +264,21 @@ int kernel_timer_settime(kernel_timer_t* p_kernel_timer, int flags, const struct
    //
    if(!p_kernel_timer->created) {
       p_kernel_timer->created=KERNEL_TIMER_CREATED;
-      p_kernel_timer->timer = xTimerCreate( "timer",
-                (portTickType)((__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec))/portTICK_RATE_MS),
-                pdFALSE,
-                p_kernel_timer,
-                (tmrTIMER_CALLBACK) kernel_timer_generic_callback );
+      
+      #if (configSUPPORT_STATIC_ALLOCATION==1)
+          p_kernel_timer->timer = xTimerCreateStatic( "timer",
+                   (portTickType)((__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec))/portTICK_RATE_MS),
+                   pdFALSE,
+                   p_kernel_timer,
+                   (tmrTIMER_CALLBACK) kernel_timer_generic_callback,
+                   &p_kernel_timer->timer_static);
+      #else
+         p_kernel_timer->timer = xTimerCreate( "timer",
+                   (portTickType)((__timer_s_to_ms(value->it_value.tv_sec)+__timer_ns_to_ms(value->it_value.tv_nsec))/portTICK_RATE_MS),
+                   pdFALSE,
+                   p_kernel_timer,
+                   (tmrTIMER_CALLBACK) kernel_timer_generic_callback );
+      #endif
    }else{
         while(xTimerStop(p_kernel_timer->timer, 10 )!=pdPASS);//disarm timer
    }
