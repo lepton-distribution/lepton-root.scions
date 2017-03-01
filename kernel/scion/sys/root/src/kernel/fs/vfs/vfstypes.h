@@ -30,7 +30,6 @@ Includes
 =============================================*/
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
-#include "kernel/core/dirent.h"
 #include "kernel/core/pipe.h"
 #include "kernel/core/net/socks.h"
 
@@ -67,6 +66,9 @@ typedef enum {
 #endif
 #if __KERNEL_VFS_SUPPORT_KOFS==1
    fs_kofs,
+#endif
+#if __KERNEL_VFS_SUPPORT_FATFS==1
+    fs_fatfs,
 #endif
 #if __KERNEL_VFS_SUPPORT_MSDOS==1
    fs_msdos,
@@ -156,9 +158,9 @@ extern superblk_t superblk_lst[MAX_SUPER_BLOCK];
  *
  */
 typedef union {
-   ufs_info_t ufs_info;
+   ufs_info_t     ufs_info;
    yaffs_info_t   yaffs_info;
-   fat_info_t fat_info;
+   fat_info_t     fat_info;
 }fsinfo_t;
 
 //mount list
@@ -185,124 +187,134 @@ typedef struct mntdev_st {
 }mntdev_t;
 
 #define MAX_MOUNT_DEVICE   MAX_SUPER_BLOCK
-
 extern mntdev_t mntdev_lst[MAX_MOUNT_DEVICE];
 
-//file system types
+#define VFS_TYPE_EXTERNAL_FS ((uint8_t)(0))
+#define VFS_TYPE_INTERNAL_FS ((uint8_t)(1))
+
+
+//internal file system operation
 typedef int (*FS_LOADFS)(void);
-typedef FS_LOADFS PFS_LOADFS;
-
 typedef int (*FS_CHECKFS)(mntdev_t* pmntdev);
-typedef FS_CHECKFS PFS_CHECKFS;
-
 typedef int (*FS_MAKEFS)(desc_t dev_desc,struct vfs_formatopt_t* vfs_formatopt);
-typedef FS_MAKEFS PFS_MAKEFS;
-
 typedef int (*FS_READFS)(mntdev_t* pmntdev);
-typedef FS_READFS PFS_READFS;
-
 typedef int (*FS_WRITEFS)(mntdev_t* pmntdev);
-typedef FS_WRITEFS PFS_WRITEFS;
-
 typedef int (*FS_STATFS)(mntdev_t* pmntdev,struct statvfs *statvfs);
-typedef FS_STATFS PFS_STATFS;
-
-
 //
 typedef inodenb_t (*FS_GETINODE)(void);
-typedef FS_GETINODE PFS_GETINODE;
-
 typedef int (*FS_PUTINODE)(inodenb_t inodenb);
-typedef FS_PUTINODE PFS_PUTINODE;
-
 //
 typedef int (*FS_MOUNTDIR)(desc_t desc,inodenb_t original_root_node,inodenb_t target_root_node);
-typedef FS_MOUNTDIR PFS_MOUNTDIR;
-
+//
 typedef int (*FS_READDIR)(desc_t desc,struct dirent* pdirent);
-typedef FS_READDIR PFS_READDIR;
-
 typedef int (*FS_TELLDIR)(desc_t desc);
-typedef FS_TELLDIR PFS_TELLDIR;
-
 typedef int (*FS_SEEKDIR)(desc_t desc,int loc);
-typedef FS_SEEKDIR PFS_SEEKDIR;
-
 //
 typedef inodenb_t (*FS_LOOKUPDIR)(desc_t desc,char* filename);
-typedef FS_LOOKUPDIR PFS_LOOKUPDIR;
-
-
 //create node
 typedef int (*FS_MKNOD)(desc_t desc, inodenb_t inodenb,dev_t dev);
-typedef FS_MKNOD PFS_MKNOD;
-
 //
 typedef inodenb_t (*FS_CREATE)(desc_t desc,char* filename, int attr);
-typedef FS_CREATE PFS_CREATE;
-
 typedef int (*FS_OPEN)(desc_t desc);
-typedef FS_OPEN PFS_OPEN;
-
 typedef int (*FS_CLOSE)(desc_t desc);
-typedef FS_CLOSE PFS_CLOSE;
-
 typedef int (*FS_READ)(desc_t desc, char* buf,int size);
-typedef FS_READ PFS_READ;
-
 typedef int (*FS_WRITE)(desc_t desc, char* buf,int size);
-typedef FS_WRITE PFS_WRITE;
-
-typedef int (*FS_SEEK)(desc_t desc, int offset, int origin);
-typedef FS_SEEK PFS_SEEK;
-
+typedef int (*FS_SEEK)(desc_t desc, off_t offset, int origin);
 typedef int (*FS_TRUNCATE)(desc_t desc, off_t length);
-typedef FS_TRUNCATE PFS_TRUNCATE;
 //
 typedef int (*FS_REMOVE)(desc_t desc_ancst,desc_t desc);
-typedef FS_REMOVE PFS_REMOVE;
-
 typedef int (*FS_RENAME)(desc_t desc,const char*  old_name, char* new_name);
-typedef FS_RENAME PFS_RENAME;
 
+
+//external file system operation
+typedef int (*FS_EXTERN_CREATE)(desc_t desc, const char* path, mode_t mode);	
+typedef int (*FS_EXTERN_OPEN)(desc_t desc, const char* path, int oflag, mode_t mode);	
+typedef int (*FS_EXTERN_CLOSE)(desc_t desc);
+typedef int (*FS_EXTERN_READ)(desc_t desc, char* buf, int size);
+typedef int (*FS_EXTERN_WRITE)(desc_t desc, const char* buf, int size);	
+typedef int (*FS_EXTERN_SEEK)(desc_t desc, off_t offset, int origin);
+typedef int (*FS_EXTERN_TRUNCATE)(desc_t desc, off_t length);	
+typedef int (*FS_EXTERN_SYNC)(desc_t desc);
+//
+typedef int (*FS_EXTERN_MKDIR)(const char* path, mode_t mode);								/* Create a sub directory */
+typedef int (*FS_EXTERN_OPENDIR)(desc_t desc, const char* path);						/* Open a directory */
+typedef int (*FS_EXTERN_CLOSEDIR)(desc_t desc);										/* Close an open directory */
+typedef int (*FS_EXTERN_READDIR)(desc_t desc, struct dirent* pdirent);							/* Read a directory item */
+typedef int (*FS_EXTERN_TELLDIR)(desc_t desc);
+typedef int (*FS_EXTERN_SEEKDIR)(desc_t desc, long loc);
+
+//
+typedef int (*FS_EXTERN_UNLINK)(const char* path);								/* Delete an existing file or directory */
+typedef int (*FS_EXTERN_RENAME)(const char*  old_name, char* new_name);	/* Rename/Move a file or directory */
+typedef int (*FS_EXTERN_STAT)(const char* path, struct stat * stat);					/* Get file status */
 
 typedef struct {
-   PFS_LOADFS loadfs;
-   PFS_CHECKFS checkfs;
-   PFS_MAKEFS makefs;
-   PFS_READFS readfs;
-   PFS_WRITEFS writefs;
-   PFS_STATFS statfs;
+ 
+   //external/internal file system 
+   uint8_t vfstype;
+   
+   //file system operation
+   FS_LOADFS loadfs;
+   FS_CHECKFS checkfs;
+   FS_MAKEFS makefs;
+   FS_READFS readfs;
+   FS_WRITEFS writefs;
+   FS_STATFS statfs;
+   
+   //internal file system directory operation
+   FS_MOUNTDIR mountdir;
+   
+   //
+   FS_READDIR readdir;
+   FS_TELLDIR telldir;
+   FS_SEEKDIR seekdir;
+   
+   //
+   FS_LOOKUPDIR lookupdir;
 
    //
-   PFS_MOUNTDIR mountdir;
-   PFS_READDIR readdir;
-   PFS_TELLDIR telldir;
-   PFS_SEEKDIR seekdir;
-   PFS_LOOKUPDIR lookupdir;
+   FS_MKNOD mknod;
 
-   //
-   PFS_MKNOD mknod;
-
-   //
-   PFS_CREATE create;
-   PFS_OPEN open;
-   PFS_CLOSE close;
-   PFS_READ read;
-   PFS_WRITE write;
-   PFS_SEEK seek;
-   PFS_TRUNCATE truncate;
-   PFS_REMOVE remove;
-   PFS_RENAME rename;
+   //internal file system file operation
+   FS_CREATE create;
+   FS_OPEN open;
+   FS_CLOSE close;
+   FS_READ read;
+   FS_WRITE write;
+   FS_SEEK seek;
+   FS_TRUNCATE truncate;
+   FS_REMOVE remove;
+   FS_RENAME rename;
+   
+   //external file system operation
+   FS_EXTERN_CREATE extern_create;
+   FS_EXTERN_OPEN extern_open;
+   FS_EXTERN_CLOSE extern_close;
+   FS_EXTERN_READ extern_read;
+   FS_EXTERN_WRITE extern_write;
+   FS_EXTERN_SEEK extern_seek;
+   FS_EXTERN_TRUNCATE extern_truncate;
+     
+   FS_EXTERN_MKDIR extern_mkdir;
+   FS_EXTERN_OPENDIR extern_opendir;
+   FS_EXTERN_CLOSEDIR extern_closedir;
+   FS_EXTERN_READDIR extern_readdir;
+   FS_EXTERN_TELLDIR extern_telldir;
+   FS_EXTERN_SEEKDIR extern_seekdir;
+     
+   FS_EXTERN_UNLINK extern_unlink;
+   FS_EXTERN_RENAME extern_rename;
+   FS_EXTERN_STAT   extern_stat;
+     
 }fs_map_t;
 
 typedef union {
    fs_map_t fs;
    fdev_map_t fdev;
-}_ufsopt_t;
+}fsopt_u;
 
-typedef const _ufsopt_t fsop_t;
-typedef const _ufsopt_t* pfsop_t;
+typedef const fsopt_u fsop_t;
+typedef const fsopt_u* pfsop_t;
 //typedef const FILESYTEM_OPERATION  fsop_t;
 //typedef const FILESYTEM_OPERATION* pfsop_t;
 typedef struct {
@@ -340,7 +352,7 @@ typedef uint8_t file_status_t;
 
 //Open file list
 typedef void*  hext_t;
-typedef long vfs_off_t;
+typedef off_t vfs_off_t;
 
 typedef struct ofile_s {
 

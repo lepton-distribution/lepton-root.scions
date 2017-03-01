@@ -21,14 +21,14 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-#ifndef _VFSKERNEL_H
-#define _VFSKERNEL_H
+#ifndef __VFSKERNEL_H__
+#define __VFSKERNEL_H__
 
 
 /*===========================================
 Includes
 =============================================*/
-#include "kernel/core/dirent.h"
+
 
 /*===========================================
 Declaration

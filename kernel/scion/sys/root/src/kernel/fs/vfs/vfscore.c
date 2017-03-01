@@ -26,6 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdint.h>
+
 #include "kernel/core/limits.h"
 #include "kernel/core/dirent.h"
 #include "kernel/core/errno.h"
@@ -43,6 +45,8 @@ Includes
 #include "kernel/fs/kofs/kofs.h"
 #include "kernel/fs/ufs/ufs.h"
 #include "kernel/fs/ufs/ufsx.h"
+#include "kernel/fs/fatfs/fatfs.h"
+
 #include "kernel/fs/fat/fat16.h"
 
 //#include <stdio.h>
@@ -67,7 +71,7 @@ superblk_t superblk_lst[MAX_SUPER_BLOCK];
 
 //open file list
 __KERNEL_SRAM_LOCATION
-ofile_t ofile_lst[MAX_OPEN_FILE]={-1};
+ofile_t ofile_lst[MAX_OPEN_FILE];
 
 //mounted device list
 __KERNEL_SRAM_LOCATION
@@ -90,6 +94,9 @@ pfsop_t const fsop_lst[MAX_FILESYSTEM]={
 #endif
 #if __KERNEL_VFS_SUPPORT_KOFS==1
    &kofs_op,
+#endif
+#if __KERNEL_VFS_SUPPORT_FATFS==1
+   &fatfs_op,
 #endif
 #if __KERNEL_VFS_SUPPORT_MSDOS==1
    &fat_msdos_op,
@@ -413,6 +420,7 @@ desc_t _vfs_getdesc(inodenb_t inodenb,desc_t ancestor_desc){
          ofile_lst[desc].pmntdev      = _vfs_getmnt(ancestor_desc,desc);
          ofile_lst[desc].pfsop        = _vfs_mntdev2fsop(ofile_lst[desc].pmntdev);
          ofile_lst[desc].oflag        = 0;
+         ofile_lst[desc].attr         = 0;
 
          //printf("get desc[%d]\n",_desc);
          return desc;
@@ -638,7 +646,7 @@ int _vfs_unlink_desc(desc_t desc){
 int _vfs_lookup(const char* ref,desc_t* desc,char** filename){
 
    inodenb_t _inodenb       = VFS_INODENB_ROOT;
-
+   int ref_index=1;
    desc_t _desc;
    desc_t __desc;
 
@@ -657,14 +665,18 @@ int _vfs_lookup(const char* ref,desc_t* desc,char** filename){
    }
 
    //get current dir for current process
-   if(ref[0]!='/' && pid)
+   if(ref[0]!='/' && pid){
       _inodenb = process_lst[__get_syscall_owner_pid()]->inode_curdir;
-
-
+      ref_index=0;
+   }
+   //
    if((_desc = _vfs_getdesc(_inodenb,INVALID_DESC))<0)
       return -1;
-
+   
+   //
    token = _vfs_token(ref,sep);
+   ref_index+=strlen(token);
+   //
    while( token !=NULL) {
 
       // "." and ".." on roots
@@ -682,23 +694,56 @@ int _vfs_lookup(const char* ref,desc_t* desc,char** filename){
       //
       if(_inodenb==INVALID_INODE_NB) {
          *desc=_desc;
-         //strcpy(filename,token);
          if(filename)
             *filename=token;
          return -1;
       }
-
-      //strcpy(filename,token);
+      //
       if(filename)
          *filename=token;
-      token = _vfs_token(NULL,sep);
-
+     
+      //get desc
       __desc=_desc;
       _desc  = _vfs_getdesc(_inodenb,_desc);
       _vfs_putdesc(__desc);
       if(_desc<0)
          return -1;
 
+      //external file system?
+      if(ofile_lst[_desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+         static struct stat _stat;
+         const char* mounted_root_path = &ref[ref_index+1];
+         //
+         memset(&_stat,0,sizeof(_stat));
+         //
+         if(ref_index==strlen(ref)){
+            mounted_root_path="/";
+         }
+         //
+         *desc=_desc;
+         //
+         *filename=(char*)mounted_root_path;
+         //
+         if(ofile_lst[_desc].pfsop->fs.extern_stat(mounted_root_path,&_stat)<0){
+            //entry not found (just return -1, not call _vfs_putdesc(_desc)
+            // _desc used in _vfs_creat 
+            // and in any another case _vfs_putdesc(_desc) will be called by the calling function (if(_vfs_lookup(...)<0)). 
+            return -1; 
+         }
+         //
+         ofile_lst[_desc].attr     = _stat.st_mode;
+         ofile_lst[_desc].size     = _stat.st_size;
+         ofile_lst[_desc].offset   = 0;//Open at begin of file //bug fix.
+         ofile_lst[_desc].cmtime   = _stat.st_mtime;
+         //
+         return 0;
+      }
+     
+      //internal file system
+      token = _vfs_token(NULL,sep);
+      if(token)
+         ref_index+=strlen(token);
+     //
       ofile_lst[_desc].pfsop->fs.open(_desc);
       if( (ofile_lst[_desc].attr&S_IFDIR)!=S_IFDIR) {
          ofile_lst[_desc].pfsop->fs.close(_desc);

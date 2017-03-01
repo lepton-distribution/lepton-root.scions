@@ -54,7 +54,7 @@ desc_t   _vfs_open(const char* ref, int oflag,mode_t mode);
 int      _vfs_close(desc_t desc);
 int      _vfs_read(desc_t desc,char* buf, size_t size);
 int      _vfs_write(desc_t desc,char* buf, size_t size);
-int      _vfs_lseek(desc_t desc, int offset, int origin);
+int      _vfs_lseek(desc_t desc, off_t offset, int origin);
 int      _vfs_ioctl(desc_t desc, int request, ... );
 int      _vfs_ioctl2(desc_t desc, int request, va_list ap);
 int      _vfs_ftruncate(desc_t desc,off_t length);

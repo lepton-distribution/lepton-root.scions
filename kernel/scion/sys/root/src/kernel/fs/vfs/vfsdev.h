@@ -38,9 +38,12 @@ Compiler Directive
 /*===========================================
 Includes
 =============================================*/
+
+#include <stdint.h>
+#include <stdarg.h>
+
 #include "kernel/core/types.h"
 
-#include <stdarg.h>
 
 #define __fdev_not_implemented  (void*)0
 

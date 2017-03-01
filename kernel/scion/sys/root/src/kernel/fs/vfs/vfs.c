@@ -26,6 +26,11 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+
 #include "kernel/core/kernel.h"
 #include "kernel/core/errno.h"
 #include "kernel/core/process.h"
@@ -34,15 +39,12 @@ Includes
 #include "kernel/core/fcntl.h"
 #include "kernel/core/stat.h"
 #include "kernel/core/statvfs.h"
+#include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfscore.h"
 #include "kernel/fs/vfs/vfs.h"
 
 
-#if defined(__GNUC__)
-   #include <string.h>
-   #include <stdlib.h>
-#endif
 
 /*============================================
 | Global Declaration
@@ -103,10 +105,16 @@ int _vfs_mount(fstype_t fstype,const char* dev_path,const char* mount_path){
       _vfs_putdesc(desc);  //invalid path
       return -1;
    }
-
+   //
+   if(!ofile_lst[desc].pfsop->fs.mountdir){
+      _vfs_close(dev_desc);
+      _vfs_putdesc(desc); 
+      __kernel_set_errno(ENOSYS); //function not supported.
+      return -1;
+   }
+   //restore mount : target become original dir
    ofile_lst[desc].pfsop->fs.mountdir(desc,pmntdev->mnt_inodenb,pmntdev->inodenb_offset);
-
-
+   //
    _vfs_putdesc(desc);
    return 0;
 }
@@ -151,8 +159,14 @@ int _vfs_umount(const char* mount_path){
    _vfs_close(pmntdev->dev_desc); //close device
 
    //restore mount : target become original dir
+   if(!ofile_lst[desc].pfsop->fs.mountdir){
+      _vfs_putdesc(desc);
+      __kernel_set_errno(ENOSYS); //function not supported.
+      return -1;
+   }
+   //
    ofile_lst[desc].pfsop->fs.mountdir(desc,dirent.inodenb,pmntdev->mnt_inodenb);
-
+   //
    _vfs_putdesc(desc);
    return 0;
 }
@@ -175,6 +189,9 @@ int _vfs_sync(void){
          continue;
       //
       fstype = mntdev_lst[i].fstype;
+      //write file system
+      if(!fsop_lst[fstype]->fs.writefs || !fsop_lst[fstype]->fs.readfs)
+         continue;
       //write file system
       fsop_lst[fstype]->fs.writefs(&mntdev_lst[i]);
       fsop_lst[fstype]->fs.readfs(&mntdev_lst[i]);
@@ -203,7 +220,13 @@ int _vfs_makefs(fstype_t fstype,const char* dev_path,struct vfs_formatopt_t* vfs
       __kernel_set_errno(ENOENT);
       return -1;
    }
-
+   //
+   if(fsop_lst[fstype]->fs.makefs){
+      _vfs_putdesc(dev_desc);
+      __kernel_set_errno(ENOSYS); //function not supported.
+      return -1;
+   }
+   //
    error=fsop_lst[fstype]->fs.makefs(dev_desc,vfs_formatopt);
 
    _vfs_putdesc(dev_desc);
@@ -233,7 +256,13 @@ int _vfs_mknod(const char *path, mode_t mode, dev_t dev){
    //
    if(_desc<0)
       return -1;
-
+   
+   //
+   if(!ofile_lst[_desc].pfsop->fs.mknod || !ofile_lst[_desc].pfsop->fs.create){
+      _vfs_putdesc(_desc); 
+      __kernel_set_errno(ENOSYS); //function not supported.
+   }
+   
    //
    _inode = ofile_lst[_desc].pfsop->fs.create(_desc,filename,mode);
    if(_inode==INVALID_INODE_NB) {
@@ -352,7 +381,7 @@ int _vfs_fdetach(const char* path){
 
 
 /*-------------------------------------------
-| Name:_vfs_create
+| Name:_vfs_creat
 | Description:
 | Parameters:
 | Return Type:
@@ -372,6 +401,38 @@ int _vfs_creat(const char* ref, int attr,mode_t mode){
    //
    if(_desc<0)
       return -1;
+   
+   //external file system
+   if(ofile_lst[_desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(attr&S_IFREG){
+         if(ofile_lst[_desc].pfsop->fs.extern_create(_desc,filename,mode)<0){
+             _vfs_putdesc(_desc);
+            __kernel_set_errno(ENFILE);
+            return -1;
+         }
+         
+      }else if(attr&S_IFDIR){
+         if(ofile_lst[_desc].pfsop->fs.extern_mkdir(filename,mode)<0){
+             _vfs_putdesc(_desc);
+            __kernel_set_errno(ENFILE);
+            return -1;
+         }
+      }else{
+         _vfs_putdesc(_desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      
+      //
+      _vfs_putdesc(_desc);
+      return 0;
+   }
+   
+   //internal file system
+   if(!ofile_lst[_desc].pfsop->fs.create){
+      _vfs_putdesc(_desc); 
+      __kernel_set_errno(ENOSYS); //function not supported.
+   }
 
    //
    if(ofile_lst[_desc].pfsop->fs.create(_desc,filename,attr)<0) {
@@ -445,6 +506,41 @@ desc_t _vfs_open(const char* ref, int oflag, mode_t mode){
 
    //open file on physical disk device
    // and ofile_lst[_desc] information is filled by inode information.
+   if(ofile_lst[_desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      //external file system
+      if(ofile_lst[_desc].attr&S_IFREG){
+         if(ofile_lst[_desc].pfsop->fs.extern_open(_desc,filename,oflag,mode)<0){
+            _vfs_putdesc(_desc);
+            __kernel_set_errno(ENFILE);
+            return -1;
+         }
+         
+      }else if(ofile_lst[_desc].attr&S_IFDIR){
+         if(ofile_lst[_desc].pfsop->fs.extern_opendir(_desc,filename)<0){
+            _vfs_putdesc(_desc);
+            __kernel_set_errno(ENFILE);
+            return -1;
+         }
+      }else{
+         _vfs_putdesc(_desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      
+      //
+      if(oflag&O_RDONLY) {
+         ofile_lst[_desc].nb_reader++;
+      }
+      //
+      if(oflag&O_WRONLY) {
+         ofile_lst[_desc].nb_writer++;
+      }
+      //
+      return _desc;
+   }
+   
+   
+   //internal file system
    ofile_lst[_desc].pfsop->fs.open(_desc);
 
    //if attr == S_IFBLK or S_IFCHR (block or character device)
@@ -658,10 +754,17 @@ int _vfs_close(desc_t desc){
             ofile_lst[desc].pfsop->fdev.fdev_close(desc);
       }
    }else{
-      if(   !ofile_lst[desc].nb_reader
-            && !ofile_lst[desc].nb_writer
-            && ofile_lst[desc].used)
-         ofile_lst[desc].pfsop->fs.close(desc);
+      //
+      if(!ofile_lst[desc].nb_reader
+      && !ofile_lst[desc].nb_writer
+      && ofile_lst[desc].used){
+         //
+         if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+            ofile_lst[desc].pfsop->fs.extern_close(desc);
+         }else{
+            ofile_lst[desc].pfsop->fs.close(desc);
+         }
+      }
    }
 
    if(!ofile_lst[desc].nb_reader
@@ -681,13 +784,22 @@ int _vfs_close(desc_t desc){
 | See:
 ---------------------------------------------*/
 int _vfs_read(desc_t desc,char* buf, size_t size){
-   if((ofile_lst[desc].attr&(S_IFCHR|S_IFBLK)))
+   //
+   if((ofile_lst[desc].attr&(S_IFCHR|S_IFBLK))){
       if(ofile_lst[desc].pfsop->fdev.fdev_read) {
          return ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,size);
-      }else{
-         __kernel_set_errno(ENOTSUP);
-         return -1;
       }
+      //
+      __kernel_set_errno(ENOTSUP);
+      return -1;
+   }
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_read(desc,buf,size);
+   }
+   
+   //
    return ofile_lst[desc].pfsop->fs.read(desc,buf,size);
 }
 
@@ -702,13 +814,23 @@ int _vfs_read(desc_t desc,char* buf, size_t size){
 int _vfs_write(desc_t desc,char* buf, size_t size){
    int cb;
    static char _buf[32]={0};
-   if((ofile_lst[desc].attr&(S_IFCHR|S_IFBLK)))
+   
+   //
+   if((ofile_lst[desc].attr&(S_IFCHR|S_IFBLK))){
       if(ofile_lst[desc].pfsop->fdev.fdev_write) {
          return ofile_lst[desc].pfsop->fdev.fdev_write(desc,buf,size);
-      }else{
-         __kernel_set_errno(ENOTSUP);
-         return -1;
       }
+      //
+      __kernel_set_errno(ENOTSUP);
+      return -1;
+   }
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_write(desc,buf,size);
+   }
+   
+   //
    if((cb=ofile_lst[desc].offset-ofile_lst[desc].size)>0) {
       ofile_lst[desc].offset-=cb;
       for(; cb>0; ) {
@@ -732,14 +854,22 @@ int _vfs_write(desc_t desc,char* buf, size_t size){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _vfs_lseek(desc_t desc, int offset, int origin){
-   if((ofile_lst[desc].attr&S_IFBLK))
+int _vfs_lseek(desc_t desc, off_t offset, int origin){
+   if((ofile_lst[desc].attr&S_IFBLK)){
       if (ofile_lst[desc].pfsop->fdev.fdev_seek) {
          return ofile_lst[desc].pfsop->fdev.fdev_seek(desc,offset,origin);
-      }else{
-         __kernel_set_errno(ENOTSUP);
-         return -1;
       }
+      //
+      __kernel_set_errno(ENOTSUP);
+      return -1;   
+   }
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_seek(desc,offset,origin);
+   }
+   
+   //
    return ofile_lst[desc].pfsop->fs.seek(desc,offset,origin);
 }
 
@@ -781,7 +911,8 @@ int _vfs_ioctl2(desc_t desc, int request, va_list ap){
          return -1;
       //
       __ap = va_arg(_ap, va_list);
-      //
+      //warning: if request I_LINK do nothing in device driver, it must return 0 not -1.
+      // To avoid failure of this operation
       if((ret = ofile_lst[desc].pfsop->fdev.fdev_ioctl(desc,request,__ap))<0) {
          _vfs_unlink_desc(desc);
          return -1;
@@ -832,7 +963,13 @@ int _vfs_ioctl(desc_t desc, int request, ... ){
 | See:
 ---------------------------------------------*/
 int _vfs_ftruncate(desc_t desc,off_t length){
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_truncate(desc,length);
+   }
+   //
    ofile_lst[desc].pfsop->fs.truncate(desc,length);
+   //
    return 0;
 }
 
@@ -889,8 +1026,21 @@ int _vfs_remove(const char *ref){
    //
    if(desc<0)
       return -1;
+   
+   //external file system
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(ofile_lst[desc].pfsop->fs.extern_unlink(filename)<0){
+         _vfs_putdesc(desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      //
+      _vfs_putdesc(desc);
+      //
+      return 0;
+   }
 
-   //
+   //internal file system
    ofile_lst[desc].pfsop->fs.open(desc);
 
    //to do: implement unlink() for S_IFCHR,S_IFBLK,S_IFIFO
@@ -942,6 +1092,7 @@ int _vfs_rm(const char *ref){
    if(!strcmp(ref,__dot) || !strcmp(ref,__dotdot))
       return -1;  //ref="." or ".." cannot be removed
 
+   //
    if(_vfs_lookup(ref,&desc,&filename)<0) {
       _vfs_putdesc(desc);  //file not exist.
       __kernel_set_errno(ENOENT);
@@ -952,10 +1103,23 @@ int _vfs_rm(const char *ref){
    if(desc<0)
       return -1;
 
+   //external file system
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(ofile_lst[desc].pfsop->fs.extern_unlink(filename)<0){
+         _vfs_putdesc(desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      //
+      _vfs_putdesc(desc);
+      //
+      return 0;
+   }
+
+   //internal file system
    ofile_lst[desc].pfsop->fs.open(desc);
 
    //to do: verify if this file is not used by anoter process
-
 
    //
    if(!(ofile_lst[desc].attr&(S_IFREG|S_IFIFO)) ) { //attr is not supported: error
@@ -999,10 +1163,11 @@ int _vfs_rmdir(const char *ref){
    int r;
    int i;
 
+   //
    if(!strcmp(ref,__dot) || !strcmp(ref,__dotdot))
       return -1;  //ref="." or ".." cannot be removed!
 
-
+   //
    if(_vfs_lookup(ref,&desc,&filename)<0) {
       _vfs_putdesc(desc);  //file not exist.
       return -1;
@@ -1012,6 +1177,20 @@ int _vfs_rmdir(const char *ref){
    if(desc<0)
       return -1;
 
+   //external file system
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(ofile_lst[desc].pfsop->fs.extern_unlink(filename)<0){
+         _vfs_putdesc(desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      //
+      _vfs_putdesc(desc);
+      //
+      return 0;
+   }
+
+   //internal file system
    ofile_lst[desc].pfsop->fs.open(desc);
 
    //to do: verify if this file is not used by anoter process
@@ -1274,11 +1453,18 @@ desc_t _vfs_opendir(const char* path){
 | See:
 ---------------------------------------------*/
 int _vfs_closedir(desc_t desc){
-
+   //
    if(!(ofile_lst[desc].attr&S_IFDIR)) {
       __kernel_set_errno(ENOTDIR);
       return -1;
    }
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      ofile_lst[desc].pfsop->fs.extern_closedir(desc);
+   }
+   
+   //
    _vfs_putdesc(desc);
    return 0;
 }
@@ -1298,9 +1484,19 @@ struct dirent* _vfs_readdir(desc_t desc,struct dirent* dirent){
       return (struct dirent*)0;
    }
 
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(ofile_lst[desc].pfsop->fs.extern_readdir(desc,dirent)<0){
+          return (struct dirent*)0;
+      }
+      //
+      return dirent;
+   }
+   
+   //
    if(ofile_lst[desc].pfsop->fs.readdir(desc,dirent)<0)
       return (struct dirent*)0;
-
+   //
    return dirent;
 }
 
@@ -1318,8 +1514,13 @@ void _vfs_rewinddir(desc_t desc){
       __kernel_set_errno(ENOTDIR);
       return;
    }
-
-   ofile_lst[desc].pfsop->fs.seek(desc,0,SEEK_SET);
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      ofile_lst[desc].pfsop->fs.extern_seekdir(desc,0);
+   }else{
+      ofile_lst[desc].pfsop->fs.seek(desc,0,SEEK_SET);
+   }
 }
 
 /*-------------------------------------------
@@ -1335,6 +1536,11 @@ int _vfs_telldir(desc_t desc){
    if(!(ofile_lst[desc].attr&S_IFDIR)) {
       __kernel_set_errno(ENOTDIR);
       return -1;
+   }
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_telldir(desc);  
    }
 
    return ofile_lst[desc].pfsop->fs.telldir(desc);
@@ -1354,7 +1560,12 @@ int _vfs_seekdir(desc_t desc, int loc){
       __kernel_set_errno(ENOTDIR);
       return -1;
    }
-
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      return ofile_lst[desc].pfsop->fs.extern_seekdir(desc,loc);
+   }
+   //
    return ofile_lst[desc].pfsop->fs.seekdir(desc,loc);
 }
 
@@ -1546,6 +1757,19 @@ int _vfs_stat(const char * ref, struct stat * stat){
    //
    if(desc<0)
       return -1;
+   
+   //
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      if(ofile_lst[desc].pfsop->fs.extern_stat(filename,stat)<0) {
+         _vfs_putdesc(desc);  //no exist
+         __kernel_set_errno(ENOENT);
+         return -1;
+      }
+      //
+      _vfs_putdesc(desc);
+      //
+      return 0;
+   }
 
    //
    ofile_lst[desc].pfsop->fs.open(desc);
