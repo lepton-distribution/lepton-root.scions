@@ -1085,14 +1085,16 @@ typedef struct {
  &&((__tauon_cpu_core__ == __tauon_cpu_core_arm_arm7tdmi__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__)\
  || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
- || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__))\
+ || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__)
 
    #include "RTOS.H"
 /*modif for segger version 3.28h */
 //#include "OSKern.H"
    //GD-TODO lm3S: improve? 
    #if   (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__)\
-       &&(__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)
+       &&(__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)\
+       &&(__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM7__)
       #if OS_VERSION_GENERIC != (38607) 
         // #include "OS_Priv.h"
       #endif
@@ -1196,7 +1198,8 @@ typedef struct {
 }
 
 #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
-       || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+       || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)\
+       || (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__)
    #define __inline_swap_signal_handler(__pthread_ptr__,__sig_handler__){ \
       /*modif for 3.06h version*/ \
       /*((OS_REGS OS_STACKPTR *)process_lst[pid]->pthread_ptr->tcb->pStack)->RetAdr4    = OS_MakeIntAdr(sig_handler);*/ \
@@ -1256,7 +1259,8 @@ typedef struct {
 
    //GD all Cortex-M3 and cortex M4 MCUs have the same systick registers
    #if   (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__)\
-       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)\
+       ||(__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__)
       #define __LEPTON_KAL_PIT_BASE    (0xE000E010)
       #define __LEPTON_KAL_PIT_MR      (*(volatile OS_U32*)(__LEPTON_KAL_PIT_BASE + 0x00))
       #define __stop_sched() __LEPTON_KAL_PIT_MR &= ~(1uL << (1));
@@ -1750,9 +1754,9 @@ typedef _pthreadstart_routine_t pthreadstart_routine_t;
       if(__pthread_ptr__)vTaskResume((xTaskHandle)(__pthread_ptr__->tcb))
 
    //stop task switching and software timer.
-   #define __atomic_in() taskENTER_CRITICAL() 
+   #define __atomic_in() vTaskSuspendAll()
    //restart task switching
-   #define __atomic_out() taskEXIT_CRITICAL()
+   #define __atomic_out() xTaskResumeAll()
 
    #if (__tauon_cpu_device__ == __tauon_cpu_device_arm7_at91m55800a__)
       //stop timer (TIMER A0) tick for scheduler.TABSR.0=0;
