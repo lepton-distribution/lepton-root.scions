@@ -303,12 +303,15 @@ int dev_stm32f4xx_uart_x_ioctl(desc_t desc,int request,va_list ap) {
          flush_io+=1;
          //
          if( (flush_io&(TCIFLUSH+1)) ) {
-            if( (ofile_lst[desc].oflag & O_RDONLY) )
+            if( !(ofile_lst[desc].oflag & O_RDONLY) )
                return -1;   //not compatible open mode
-            uart_flush_rx(p_uart_descriptor);
+            //uart_flush_rx(p_uart_descriptor);
+            uint8_t c;
+            int cb;
+            while((cb=uart_read(&c,1,p_uart_descriptor))>0);
          }
          if( (flush_io&(TCOFLUSH+1)) ) {
-            if( (ofile_lst[desc].oflag & O_WRONLY) )
+            if( !(ofile_lst[desc].oflag & O_WRONLY) )
                return -1;   //not compatible open mode
             //
             //nothing to do
