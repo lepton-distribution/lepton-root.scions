@@ -2125,8 +2125,9 @@
           <name>CCDefines</name>
           <state>__SAMV71Q21__</state>
           <state>BOARD_SAMV71_XULT</state>
+          <state>MPU_HAS_NOCACHE_REGION</state>
           <state>sram</state>
-          <state>TRACE_LEVEL=4</state>
+          <state>TRACE_LEVEL=0</state>
           <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
           <state>OS_LIBMODE_SP</state>
           <state>NDEBUG</state>
@@ -2272,6 +2273,11 @@
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\include\samv71</state>
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard</state>
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\include</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\nandflash</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\sdmmc</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\spiflash</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -2989,9 +2995,6 @@
                   </file>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\source\mcid_dma.c</name>
-                    <excluded>
-                      <configuration>samv71-freertos-debug</configuration>
-                    </excluded>
                   </file>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\source\mediaLB.c</name>
@@ -3094,6 +3097,24 @@
                   </file>
                 </group>
               </group>
+              <group>
+                <name>libstoragemedia</name>
+                <group>
+                  <name>source</name>
+                  <group>
+                    <name>sdmmc</name>
+                    <file>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\source\sdmmc\sdmmc.c</name>
+                    </file>
+                  </group>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\source\Media.c</name>
+                  </file>
+                  <file>
+                    <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\source\MEDSdcard.c</name>
+                  </file>
+                </group>
+              </group>
             </group>
           </group>
         </group>
@@ -3101,6 +3122,36 @@
           <name>cortexm</name>
           <group>
             <name>at91samv7x</name>
+            <group>
+              <name>dev_samv7x</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_cpu_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_cpu_x.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_eth.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_hsmci_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_hsmci_x.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_uart_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_uart_x.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_usart_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_usart_x.h</name>
+              </file>
+            </group>
           </group>
         </group>
       </group>

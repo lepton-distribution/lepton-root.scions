@@ -34,7 +34,9 @@
 define symbol __ICFEDIT_intvec_start__     = 0x00400000;
 /*-Memory Regions-*/
 define symbol __ICFEDIT_region_RAM_start__ = 0x20400000;
-define symbol __ICFEDIT_region_RAM_end__   = 0x20460000 -1;
+define symbol __ICFEDIT_region_RAM_end__   = 0x2045f000 -1;
+define symbol __ICFEDIT_region_RAM_NOCACHE_start__ = 0x2045f000;
+define symbol __ICFEDIT_region_RAM_NOCACHE_end__   = 0x20460000 -1;
 define symbol __ICFEDIT_region_ROM_start__ = 0x00400000;
 define symbol __ICFEDIT_region_ROM_end__   = 0x00600000 -1;
 define symbol __ICFEDIT_region_SDRAM_start__ = 0x70000000;
@@ -47,6 +49,7 @@ define symbol __ICFEDIT_size_heap__        = 0x20000;
 
 define memory mem with size = 4G;
 define region RAM_region    = mem:[from __ICFEDIT_region_RAM_start__ to __ICFEDIT_region_RAM_end__];
+define region RAM_NOCACHE_region = mem:[from __ICFEDIT_region_RAM_NOCACHE_start__ to __ICFEDIT_region_RAM_NOCACHE_end__];
 define region ROM_region    = mem:[from __ICFEDIT_region_ROM_start__ to __ICFEDIT_region_ROM_end__];
 define region SDRAM_region  = mem:[from __ICFEDIT_region_SDRAM_start__ to __ICFEDIT_region_SDRAM_end__];
 
@@ -59,4 +62,5 @@ do not initialize  { section .noinit };
 place at address mem:__ICFEDIT_intvec_start__ { readonly section .intvec };
 place in ROM_region                           { readonly };
 place in RAM_region                           { readwrite, block CSTACK, block HEAP };
+place in RAM_NOCACHE_region                   { section .ram_nocache };
 place in SDRAM_region                         { section sdram_region };

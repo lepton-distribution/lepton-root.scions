@@ -187,8 +187,9 @@
           <name>CCDefines</name>
           <state>__SAMV71Q21__</state>
           <state>BOARD_SAMV71_XULT</state>
+          <state>MPU_HAS_NOCACHE_REGION</state>
           <state>sram</state>
-          <state>TRACE_LEVEL=4</state>
+          <state>TRACE_LEVEL=0</state>
           <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
           <state>OS_LIBMODE_SP</state>
           <state>NDEBUG</state>
@@ -324,6 +325,7 @@
           <state>c:/tauon/sys/root/src</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include</state>
+          <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/ports/arm/include</state>
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>

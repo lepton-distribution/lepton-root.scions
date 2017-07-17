@@ -2109,8 +2109,9 @@
           <name>CCDefines</name>
           <state>__SAMV71Q21__</state>
           <state>BOARD_SAMV71_XULT</state>
+          <state>MPU_HAS_NOCACHE_REGION</state>
           <state>sram</state>
-          <state>TRACE_LEVEL=4</state>
+          <state>TRACE_LEVEL=0</state>
           <state>OS_SUPPORT_CLEANUP_ON_TERMINATE</state>
           <state>OS_LIBMODE_SP</state>
           <state>NDEBUG</state>
@@ -2256,6 +2257,11 @@
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\include\samv71</state>
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard</state>
           <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\include</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\nandflash</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\sdmmc</state>
+          <state>c:\tauon\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\libstoragemedia\include\spiflash</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -3030,6 +3036,18 @@
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_board\dev_samv71xplained_ultra_board.h</name>
+            </file>
+          </group>
+          <group>
+            <name>dev_samdv71xplained_ultra_peripherals</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_sdio.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_uart_4.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_usart_1.c</name>
             </file>
           </group>
         </group>

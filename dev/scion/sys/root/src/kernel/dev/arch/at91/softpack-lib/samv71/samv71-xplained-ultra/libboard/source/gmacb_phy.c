@@ -345,7 +345,8 @@ uint8_t GMACB_InitPhy(GMacb *pMacb,
 		PIO_Configure(pResetPins, nbResetPins);
 		TRACE_INFO(" Hard Reset of GMACD Phy\n\r");
 		PIO_Clear(pResetPins);
-		Wait(100);
+      //lepton: remove for lepton: to avoid systick_handler multiple symbol definition at link.
+		//Wait(100);
 		PIO_Set(pResetPins);
 	}
 
@@ -463,7 +464,7 @@ uint8_t GMACB_AutoNegotiate(GMacb *pMacb)
 
 		/* Done successfully */
 		if (value & GMII_AUTONEG_COMP) {
-			printf("AutoNegotiate complete\n\r");
+			//printf("AutoNegotiate complete\n\r");
 			break;
 		}
 

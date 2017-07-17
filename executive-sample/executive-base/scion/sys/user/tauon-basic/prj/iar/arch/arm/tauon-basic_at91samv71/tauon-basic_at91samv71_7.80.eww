@@ -11,7 +11,7 @@
     <path>$WS_DIR$\tauon-basic_at91samv71_7.80.ewp</path>
   </project>
   <project>
-    <path>$WS_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\kernel\scion\sys\root\prj\iar\arch\arm\tauon\tauon_7.80.ewp</path>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon_7.80.ewp</path>
   </project>
   <batchBuild>
     <batchDefinition>

@@ -35,6 +35,8 @@ Includes
 
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/stat.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
@@ -44,7 +46,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/core/ioctl_board.h"
 
-
+#include "board.h"
 
 /*===========================================
 Global Declaration
@@ -92,6 +94,7 @@ Implementation
 static int dev_samv71xplained_ultra_board_load(void){
    /* Initialisation is performed by the Atmel board support package. */
 	//system_init();
+   //
    return 0;
 }
 

@@ -19,7 +19,7 @@ extern unsigned int dev_at91samd20_xplained_pro_board_clock_source_get_hz(void);
 #define __tauon_cpu_device__ __tauon_cpu_device_cortexM7_at91samv71__
 
 //use pipe
-#define __tauon_kernel_profile__ __tauon_kernel_profile_minimal__
+#define __tauon_kernel_profile__ __tauon_kernel_profile_classic__
 //#define __KERNEL_PIPE_SIZE 256
 
 #define __KERNEL_RTFS_NODETBL_SIZE 32
@@ -27,16 +27,17 @@ extern unsigned int dev_at91samd20_xplained_pro_board_clock_source_get_hz(void);
 #define __KERNEL_RTFS_NODE_BLOCK_NB_MAX 10
 
 
-#define __KERNEL_STDIO_PRINTF_BUFSIZ 64
+//#define __KERNEL_STDIO_PRINTF_BUFSIZ 64
 
 //force EFFS for stm32f407 on olimex-stm32-p407 board
 #define __file_system_profile__  __file_system_profile_classic__
 #define __KERNEL_VFS_SUPPORT_EFFS   0
+#define __KERNEL_VFS_SUPPORT_FATFS  1
 
 //ip stack
 //#define USE_UIP 
-//#define USE_LWIP
-//#define USE_IF_ETHERNET
+#define USE_LWIP
+#define USE_IF_ETHERNET
 
 
 /*===========================================
