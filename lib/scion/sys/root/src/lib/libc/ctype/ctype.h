@@ -41,107 +41,107 @@ Declaration
 //
 #ifndef __KERNEL_UCORE_ECOS
    //
-   #ifdef toascii
-      #undef toascii
+   #ifndef toascii
+      #define toascii(__c__) ((__c__) & 0x7F)
    #endif 
-   #define toascii(c) ((c) & 0x7F)
-
-   int __lepton_libc_isdigit   ( int ch );
-   int __lepton_libc_isalnum   ( int ch );
+   
+   //
+   extern int __lepton_libc_isdigit   ( int ch );
+   extern int __lepton_libc_isalnum   ( int ch );
    extern int __lepton_libc_isalpha   ( int ch );
-   int __lepton_libc_isblank   ( int ch );
-   int __lepton_libc_iscntrl   ( int ch );
-   int __lepton_libc_isgraph   ( int ch );
-   int __lepton_libc_islower   ( int ch );
-   int __lepton_libc_isprint   ( int ch );
-   int __lepton_libc_isspace   ( int ch );
-   int __lepton_libc_ispunct   ( int ch );
-   int __lepton_libc_isupper   ( int ch );
-   int __lepton_libc_isxdigit  ( int ch );
-   int __lepton_libc_tolower   ( int ch );
-   int __lepton_libc_toupper   ( int ch );
+   extern int __lepton_libc_isblank   ( int ch );
+   extern int __lepton_libc_iscntrl   ( int ch );
+   extern int __lepton_libc_isgraph   ( int ch );
+   extern int __lepton_libc_islower   ( int ch );
+   extern int __lepton_libc_isprint   ( int ch );
+   extern int __lepton_libc_isspace   ( int ch );
+   extern int __lepton_libc_ispunct   ( int ch );
+   extern int __lepton_libc_isupper   ( int ch );
+   extern int __lepton_libc_isxdigit  ( int ch );
+   extern int __lepton_libc_tolower   ( int ch );
+   extern int __lepton_libc_toupper   ( int ch );
 
    //
    #ifdef isdigit
-      #undef isdigit
+      #define isdigit(__c__)   __lepton_libc_isdigit(__c__)
    #endif
-   #define isdigit   __lepton_libc_isdigit
+   
    //
    #ifdef isalnum
-      #undef isalnum
+      #define isalnum(__c__)   __lepton_libc_isalnum(__c__)
    #endif
-   #define isalnum   __lepton_libc_isalnum
+   
    //
    #ifdef isalpha
-      #undef isalpha
+      #define isalpha((__c__))   __lepton_libc_isalpha((__c__))
    #endif
-   #define isalpha(__ch__)   __lepton_libc_isalpha(__ch__)
+   
    //
    #ifdef isblank
-      #undef isblank
+      #define isblank(__c__)   __lepton_libc_isblank(__c__)
    #endif
-   #define isblank   __lepton_libc_isblank
+   
    //
    #ifdef iscntrl
-      #undef iscntrl
+      #define iscntrl(__c__)   __lepton_libc_iscntrl(__c__)
    #endif
-   #define iscntrl   __lepton_libc_iscntrl
+   
    //
    #ifdef isgraph
-      #undef isgraph
+      #define isgraph(__c__)   __lepton_libc_isgraph(__c__)
    #endif
-   #define isgraph   __lepton_libc_isgraph
+   
    //
    #ifdef islower
-      #undef islower
+      #define islower(__c__)   __lepton_libc_islower(__c__)
    #endif
-   #define islower   __lepton_libc_islower
+   
    //
    #ifdef isprint
-      #undef isprint
+       #define isprint(__c__)   __lepton_libc_isprint(__c__)
    #endif
-   #define isprint   __lepton_libc_isprint
+  
    //
    #ifdef isspace
-      #undef isspace
+      #define isspace(__c__)   __lepton_libc_isspace(__c__)
    #endif
-   #define isspace   __lepton_libc_isspace
+   
    //
    #ifdef ispunct
-      #undef ispunct
+      #define ispunct(__c__)   __lepton_libc_ispunct(__c__)
    #endif
-   #define ispunct   __lepton_libc_ispunct
+   
    //
    #ifdef isupper
-      #undef isupper
+      #define isupper(__c__)   __lepton_libc_isupper(__c__)
    #endif
-   #define isupper   __lepton_libc_isupper
+   
    //
    #ifdef isxdigit
-      #undef isxdigit
+      #define isxdigit(__c__)   __lepton_libc_isxdigit(__c__)
    #endif
-   #define isxdigit   __lepton_libc_isxdigit
+   
    //
    #ifdef tolower
-      #undef tolower
+      #define tolower(__c__)   __lepton_libc_tolower(__c__)
    #endif
-   #define tolower   __lepton_libc_tolower
+   
    //
    #ifdef toupper
-      #undef toupper
+      #define toupper(__c__)   __lepton_libc_toupper(__c__)
    #endif
-   #define toupper   __lepton_libc_toupper
+   
 
 #endif //ifndef __KERNEL_UCORE_ECOS
 
 
 //
-int __lepton_libc_isascii   ( int ch );
+extern int __lepton_libc_isascii   ( int ch );
 
-#ifdef isascii
-   #undef isascii
+#ifndef isascii
+   #define isascii(__c__)   __lepton_libc_isascii(__c__)
 #endif
-#define isascii   __lepton_libc_isascii
+
 
 //
 #endif
