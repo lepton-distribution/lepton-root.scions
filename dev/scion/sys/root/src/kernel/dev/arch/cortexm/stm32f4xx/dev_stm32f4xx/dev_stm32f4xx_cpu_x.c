@@ -87,6 +87,30 @@ dev_map_t dev_stm32f4xx_cpu_x_map={
 Implementation
 =============================================*/
 
+static uint32_t g_multiplier;
+ 
+void TM_Delay_Init(void) {
+    /* While loop takes 4 cycles */
+    /* For 1 us delay, we need to divide with 4M */
+    g_multiplier = HAL_RCC_GetHCLKFreq() / 4000000;
+}
+ 
+void TM_DelayMicros(uint32_t micros) {
+    /* Multiply micros with multipler */
+    /* Substract 10 */
+    micros = micros * g_multiplier - 10;
+    /* 4 cycles for one loop */
+    while (micros--);
+}
+ 
+void TM_DelayMillis(uint32_t millis) {
+    /* Multiply millis with multipler */
+    /* Substract 10 */
+    millis = 1000 * millis * g_multiplier - 10;
+    /* 4 cycles for one loop */
+    while (millis--);
+}
+
 //
 void HAL_Delay(__IO uint32_t Delay)
 {
@@ -134,7 +158,6 @@ void SystemClock_Config(void)
 
 }
 
-
 /*-------------------------------------------
 | Name:dev_stm32f4xx_cpu_x_load
 | Description:
@@ -148,6 +171,8 @@ int dev_stm32f4xx_cpu_x_load(void){
    HAL_Init();
    /* Configure the system clock */
    SystemClock_Config();
+   //
+   TM_Delay_Init();
    //
    return 0;
 }
@@ -277,15 +302,25 @@ int dev_stm32f4xx_cpu_x_ioctl(desc_t desc,int request,va_list ap)
    
     switch(request)
     {
+      //
+      case CPUSRST:{
+         NVIC_SystemReset();
+      }
+      break;
+      
+      //
       case CPUWDGDISABLE :
       {
       }      
+      break;
       
+      //
       case CPUWDGREFRESH:
       {
       }
       break;
 
+      //
       case CPUWDGINIT:
       {
       }

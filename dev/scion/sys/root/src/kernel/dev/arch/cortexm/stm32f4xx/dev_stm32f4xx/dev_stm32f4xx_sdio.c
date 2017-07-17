@@ -33,6 +33,7 @@ either the MPL or the [eCos GPL] License."
 
 #include "kernel/core/kernelconf.h"
 #include "kernel/core/types.h"
+#include "kernel/core/dirent.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/kernel.h"
 #include "kernel/core/system.h"
@@ -123,7 +124,9 @@ int dev_stm32f4xx_sdio_open(desc_t desc, int o_flag, board_stm32f4xx_sdio_info_t
 #endif
 
       /* HAL SD initialization */
+      __disable_interrupt_section_in();
       sdio_info->sd_state = HAL_SD_Init(&sdio_info->hsd, &sdio_info->SDCardInfo);
+      __disable_interrupt_section_out();
       #ifdef BUS_4BITS
          /* Configure SD Bus width */
          if (sdio_info->sd_state == MSD_OK){

@@ -136,7 +136,7 @@
 #elif defined(STM32F415xx)
   #include "stm32f415xx.h"
 #elif defined(STM32F407xx)
-  #include "stm32f407xx.h"
+  #include "kernel/dev/arch/cortexm/stm32f4xx/driverlib/stm32f407xx.h"
 #elif defined(STM32F417xx)
   #include "stm32f417xx.h"
 #elif defined(STM32F427xx)

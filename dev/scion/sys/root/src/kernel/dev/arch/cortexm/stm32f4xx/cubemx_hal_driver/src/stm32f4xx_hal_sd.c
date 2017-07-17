@@ -2479,6 +2479,7 @@ static HAL_SD_ErrorTypedef SD_Select_Deselect(SD_HandleTypeDef *hsd, uint64_t ad
   * @param  hsd: SD handle
   * @retval SD Card error state
   */
+extern void TM_DelayMillis(uint32_t millis);
 static HAL_SD_ErrorTypedef SD_PowerON(SD_HandleTypeDef *hsd)
 {
   SDIO_CmdInitTypeDef sdio_cmdinitstructure; 
@@ -2495,10 +2496,13 @@ static HAL_SD_ErrorTypedef SD_PowerON(SD_HandleTypeDef *hsd)
   
   /* 1ms: required power up waiting time before starting the SD initialization 
      sequence */
-  HAL_Delay(1);
+  //HAL_Delay(1*1000);
+  TM_DelayMillis(2);
   
   /* Enable SDIO Clock */
   __HAL_SD_SDIO_ENABLE();
+  
+  
   
   /* CMD0: GO_IDLE_STATE -----------------------------------------------------*/
   /* No CMD response required */
@@ -2517,6 +2521,10 @@ static HAL_SD_ErrorTypedef SD_PowerON(SD_HandleTypeDef *hsd)
     /* CMD Response Timeout (wait for CMDSENT flag) */
     return errorstate;
   }
+  
+  //lepton work around to avoid SD_CMD_RSP_TIMEOUT on next command. 
+  //Delay to leave time at the sdcard to power on.  
+  //HAL_Delay(1000);
   
   /* CMD8: SEND_IF_COND ------------------------------------------------------*/
   /* Send CMD8 to verify SD card interface operating condition */
