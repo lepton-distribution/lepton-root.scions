@@ -80,7 +80,7 @@ typedef int16_t rtfs_inodenb_t;
 //
 typedef struct {
    unsigned short inode;
-   char name[RTFS_MAX_FILENAME];
+   char name[RTFS_MAX_FILENAME+1];
 }rtfs_block_dir_t;
 
 //
