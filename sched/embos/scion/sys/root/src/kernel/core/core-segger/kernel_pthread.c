@@ -79,7 +79,7 @@ int g_pthread_id=0;
 Implementation
 =============================================*/
 /*--------------------------------------------
-| Name:        new_thread
+| Name: kernel_init_pthread
 | Description:
 | Parameters:  none
 | Return Type: none
@@ -117,7 +117,7 @@ int kernel_init_pthread(kernel_pthread_t* p){
 }
 
 /*--------------------------------------------
-| Name:        kernel_insert_gpthread
+| Name: kernel_insert_gpthread
 | Description:
 | Parameters:  none
 | Return Type: none
@@ -139,7 +139,7 @@ int kernel_insert_gpthread(kernel_pthread_t* p){
 }
 
 /*--------------------------------------------
-| Name:        kernel_remove_gpthread
+| Name: kernel_remove_gpthread
 | Description:
 | Parameters:  none
 | Return Type: none
@@ -161,7 +161,7 @@ int kernel_remove_gpthread(kernel_pthread_t* p){
 }
 
 /*-------------------------------------------
-| Name:get_pthread_id
+| Name: kernel_get_pthread_id
 | Description:
 | Parameters:
 | Return Type:
@@ -180,7 +180,7 @@ int kernel_get_pthread_id(kernel_pthread_t *p){
 }
 
 /*-------------------------------------------
-| Name:put_pthread_id
+| Name: kernel_put_pthread_id
 | Description:
 | Parameters:
 | Return Type:
@@ -193,7 +193,7 @@ int kernel_put_pthread_id(kernel_pthread_t *p){
 }
 
 /*--------------------------------------------
-| Name:        kernel_pthread_alloca
+| Name: kernel_pthread_alloca
 | Description:
 | Parameters:  none
 | Return Type: none
@@ -225,7 +225,7 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
 }
 
 /*-------------------------------------------
-| Name:pthread_routine
+| Name: kernel_pthread_routine
 | Description:
 | Parameters:
 | Return Type:
@@ -239,6 +239,13 @@ __begin_pthread(pthread_routine){
 
    //
    pthread=kernel_pthread_self();
+   
+   //todo: pthread once
+   //__atomic_in()
+
+   //__atomic_out()
+
+   //
    pthread->exit=pthread->start_routine(pthread->arg);
 
    //call kernel. signal thread termination
@@ -252,7 +259,7 @@ __begin_pthread(pthread_routine){
 __end_pthread()
 
 /*-------------------------------------------
-| Name:pthread_create
+| Name: kernel_pthread_create
 | Description:
 | Parameters:
 | Return Type:
@@ -332,21 +339,22 @@ int   kernel_pthread_create(kernel_pthread_t *thread, const pthread_attr_t *attr
 #endif
 
 #if defined(__KERNEL_IO_SEM)
-   kernel_sem_init(&thread->io_sem,0,0);
+   void* p = &thread->io_sem;
+   kernel_sem_init(p,0,0);
 #endif
 
    return 0;
 }
 
 /*-------------------------------------------
-| Name:pthread_kill
+| Name: kernel_pthread_kill
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int   kernel_pthread_kill(kernel_pthread_t* thread, int sig){
+int kernel_pthread_kill(kernel_pthread_t* thread, int sig){
 
    kernel_pthread_t* _thread=thread;
    int _sig=sig;
@@ -357,14 +365,14 @@ int   kernel_pthread_kill(kernel_pthread_t* thread, int sig){
 }
 
 /*-------------------------------------------
-| Name:pthread_cancel
+| Name: kernel_pthread_cancel
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int   kernel_pthread_cancel(kernel_pthread_t* thread){
+int kernel_pthread_cancel(kernel_pthread_t* thread){
 
    desc_t desc=0;
 
@@ -442,7 +450,7 @@ int   kernel_pthread_cancel(kernel_pthread_t* thread){
 
 
 /*-------------------------------------------
-| Name:pthread_self
+| Name: kernel_pthread_self
 | Description:
 | Parameters:
 | Return Type:
@@ -463,6 +471,18 @@ kernel_pthread_t* kernel_pthread_self(void){
 
    __atomic_out();
    return (kernel_pthread_t*)0;
+}
+
+/*-------------------------------------------
+| Name: kernel_pthread_once
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int kernel_pthread_once(void) {
+   return -1;
 }
 
 /** @} */
