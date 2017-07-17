@@ -1,0 +1,2 @@
+net/ifconfig addif 192.168.2.10 192.168.2.2
+bin/net/telnetd&
