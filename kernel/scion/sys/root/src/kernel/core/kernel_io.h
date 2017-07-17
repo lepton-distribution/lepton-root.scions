@@ -39,6 +39,11 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
+#define KERNEL_IO_READWRITE_NOARGS ((uint8_t)(0))
+#define KERNEL_IO_READWRITE_ARGS ((uint8_t)(1))
+//
+extern ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte, uint8_t args_flags, ...);
+extern ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte, uint8_t args_flags, ...);
 
 extern ssize_t kernel_io_read(desc_t desc, void *buf, size_t nbyte);
 extern ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte);

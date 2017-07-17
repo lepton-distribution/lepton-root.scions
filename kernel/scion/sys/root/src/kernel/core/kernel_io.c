@@ -55,6 +55,133 @@ const int STDERR_FILENO = 2;
 Implementation
 =============================================*/
 
+/*-------------------------------------------
+| Name: kernel_io_read_args
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte,uint8_t args_flags,...) {
+   va_list ap;
+   //
+   pid_t pid = -1;
+   kernel_pthread_t* pthread_ptr = (void*)0;
+   //
+   if (desc<0)
+      return -1;
+
+   if (nbyte <= 0)
+      return -1;
+
+   if ((pthread_ptr = kernel_pthread_self())) {
+      pid = pthread_ptr->pid;
+   }
+
+   if (!(ofile_lst[desc].oflag&O_RDONLY))
+      return -1;
+
+   //is not implemented for this device dev?
+   if (!ofile_lst[desc].pfsop->fdev.fdev_read)
+      return -1;
+
+   //
+   __lock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+   //check thread owner
+   __atomic_in();
+   {
+      desc_t _desc = ofile_lst[desc].desc;
+      //
+      if (ofile_lst[_desc].owner_pthread_ptr_read != pthread_ptr) {
+         do {
+            //check
+            if (ofile_lst[_desc].used <= 0) {
+               __atomic_out();
+               __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+               return -1; //error, stream not coherent :(
+            }
+            //
+            //begin of section: protection from io interrupt
+            __disable_interrupt_section_in();
+            //
+            ofile_lst[_desc].owner_pthread_ptr_read = pthread_ptr;
+            ofile_lst[_desc].owner_pid = pid;
+            //end of section: protection from io interrupt
+            __disable_interrupt_section_out();
+            //
+            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
+         } while ((_desc = ofile_lst[_desc].desc_nxt[0]) >= 0);
+      }
+   }
+   __atomic_out();
+
+   //
+   if ((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
+      while (ofile_lst[desc].pfsop->fdev.fdev_isset_read
+         && ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
+         __wait_io_int(pthread_ptr); //wait incomming data
+      }
+      //profiler
+      __io_profiler_start(desc);
+      //
+      if (args_flags) {
+         va_start(ap, args_flags);
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read_args(desc, buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read(desc, buf, nbyte);
+      }
+      //profiler
+      __io_profiler_stop(desc);
+      __io_profiler_add_result(desc, O_RDONLY, nbyte, __io_profiler_get_counter(desc));
+      //
+      __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+      return nbyte;
+   }
+   else if ((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
+      //profiler
+      __io_profiler_start(desc);
+      //
+      if (args_flags) {
+         va_start(ap, args_flags);
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read_args(desc, buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read(desc, buf, nbyte);
+      }
+      __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+      //profiler
+      __io_profiler_stop(desc);
+      __io_profiler_add_result(desc, O_RDONLY, nbyte, __io_profiler_get_counter(desc));
+      //
+      return nbyte;
+   }
+   else if (ofile_lst[desc].attr&S_IFBLK) {
+      //no specific action.
+      //profiler
+      __io_profiler_start(desc);
+      //
+      if (args_flags) {
+         va_start(ap, args_flags);
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read_args(desc, buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         nbyte = ofile_lst[desc].pfsop->fdev.fdev_read(desc, buf, nbyte);
+      }
+      __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+      //profiler
+      __io_profiler_stop(desc);
+      __io_profiler_add_result(desc, O_RDONLY, nbyte, __io_profiler_get_counter(desc));
+      //
+      return nbyte;
+   }
+   __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+   return -1;
+}
 
 /*-------------------------------------------
 | Name: kernel_io_read
@@ -65,104 +192,19 @@ Implementation
 | See:
 ---------------------------------------------*/
 ssize_t kernel_io_read(desc_t desc, void *buf, size_t nbyte){
-   pid_t pid=-1;
-   kernel_pthread_t* pthread_ptr=(void*)0;
-
-   if(desc<0)
-      return -1;
-   
-   if(nbyte<=0)
-      return -1;
-
-   if((pthread_ptr = kernel_pthread_self())){
-      pid = pthread_ptr->pid;
-   }
-
-   if(!(ofile_lst[desc].oflag&O_RDONLY))
-      return -1;
-
-   //is not implemented for this device dev?
-   if(!ofile_lst[desc].pfsop->fdev.fdev_read)
-     return -1;
-
-   //
-   __lock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-   //check thread owner
-   __atomic_in();
-   {
-      desc_t _desc=ofile_lst[desc].desc;
-      //
-      if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr) {
-         do {
-            //check
-            if(ofile_lst[_desc].used<=0) {
-               __atomic_out();
-               __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-               return -1; //error, stream not coherent :(
-            }
-            //
-            //begin of section: protection from io interrupt
-            __disable_interrupt_section_in();
-            //
-            ofile_lst[_desc].owner_pthread_ptr_read=pthread_ptr;
-            ofile_lst[_desc].owner_pid=pid;
-            //end of section: protection from io interrupt
-            __disable_interrupt_section_out();
-            //
-            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         } while((_desc=ofile_lst[_desc].desc_nxt[0])>=0);
-      }
-   }
-   __atomic_out();
-
-   //
-   if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
-      while(ofile_lst[desc].pfsop->fdev.fdev_isset_read
-            && ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
-         __wait_io_int(pthread_ptr); //wait incomming data
-      }
-      nbyte=ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      return nbyte;
-   }else if((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
-      //profiler
-      __io_profiler_start(desc);
-      nbyte=ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      return nbyte;
-   }else if(ofile_lst[desc].attr&S_IFBLK) {
-      //no specific action.
-      //profiler
-      __io_profiler_start(desc);
-      nbyte =  ofile_lst[desc].pfsop->fdev.fdev_read(desc,buf,nbyte);
-      __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-      //profiler
-      __io_profiler_stop(desc);
-      __io_profiler_add_result(desc,O_RDONLY,nbyte,__io_profiler_get_counter(desc));
-      //
-      return nbyte;
-   }
-   __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY);
-   return -1;
+   return kernel_io_read_args(desc, buf, nbyte, KERNEL_IO_READWRITE_NOARGS);
 }
 
 /*-------------------------------------------
-| Name: kernel_io_write
+| Name: kernel_io_write_args
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
+ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t args_flags, ...) {
+   va_list ap;
    pid_t pid=-1;
    kernel_pthread_t* pthread_ptr=(void*)0;
    int cb=-1;
@@ -213,12 +255,22 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
       }
    }
    __atomic_out();
+
    //
    if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK) && !(ofile_lst[desc].oflag&O_NSYNC) ) {
       //profiler
       __io_profiler_start(desc);
       //
-      if((cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte))<0) {
+      if (args_flags) {
+         va_start(ap, args_flags);
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write_args(desc, (void*)buf, nbyte,ap);
+         va_end(ap);
+      }
+      else {
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc, (void*)buf, nbyte);
+      }
+      //
+      if(cb <0) {
          //profiler
          __io_profiler_stop(desc);
          __io_profiler_add_result(desc,O_WRONLY,0,0);
@@ -249,7 +301,16 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
          }
       }
       //
-      if((cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte))<0) {
+      if (args_flags) {
+         va_start(ap, args_flags);
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write_args(desc, (void*)buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc, (void*)buf, nbyte);
+      }
+      //
+      if(cb<0) {
          //profiler
          __io_profiler_stop(desc);
          __io_profiler_add_result(desc,O_WRONLY,0,0);
@@ -267,7 +328,14 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
       //profiler
       __io_profiler_start(desc);
       //
-      nbyte = ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte);
+      if (args_flags) {
+         va_start(ap, args_flags);
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write_args(desc, (void*)buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc, (void*)buf, nbyte);
+      }
       //profiler
       __io_profiler_stop(desc);
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
@@ -276,7 +344,14 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
       //profiler
       __io_profiler_start(desc);
       //
-      cb =  ofile_lst[desc].pfsop->fdev.fdev_write(desc,(void*)buf,nbyte);
+      if (args_flags) {
+         va_start(ap, args_flags);
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write_args(desc, (void*)buf, nbyte, ap);
+         va_end(ap);
+      }
+      else {
+         cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc, (void*)buf, nbyte);
+      }
       //profiler
       __io_profiler_stop(desc);
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
@@ -285,6 +360,18 @@ ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte){
    __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
    //
    return cb;
+}
+
+/*-------------------------------------------
+| Name: kernel_io_write
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+ssize_t kernel_io_write(desc_t desc, const void *buf, size_t nbyte) {
+   return kernel_io_write_args(desc, buf, nbyte, KERNEL_IO_READWRITE_NOARGS);
 }
 
 /*-------------------------------------------
@@ -344,7 +431,7 @@ int kernel_io_ll_lseek(desc_t desc, off_t offset, int origin){
       return -1;
    }
    //
-   return ofile_lst[desc].pfsop->fdev.fdev_seek(desc,offset,origin);;
+   return ofile_lst[desc].pfsop->fdev.fdev_seek(desc,offset,origin);
 }
 
 
