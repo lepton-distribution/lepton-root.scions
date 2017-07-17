@@ -203,7 +203,7 @@ static int dev_stm32f4xx_flash_read(desc_t desc, char* buf,int size){
    //
    memcpy(buf,(void*)flash_base_address,size);
    //
-   ofile_lst[desc].offset+size;
+   ofile_lst[desc].offset = ofile_lst[desc].offset+size;
    //
    return size;
 }
@@ -230,7 +230,7 @@ static int dev_stm32f4xx_flash_write(desc_t desc, const char* buf,int size){
       return -1;
    }
    //
-   ofile_lst[desc].offset+size;
+   ofile_lst[desc].offset = ofile_lst[desc].offset+size;
    //
    return size;
 }
