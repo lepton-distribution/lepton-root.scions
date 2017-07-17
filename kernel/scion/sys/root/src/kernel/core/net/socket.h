@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _SOCKET_H
-#define _SOCKET_H
+#ifndef __KERNEL_CORE_NET_SOCKET_H__
+#define __KERNEL_CORE_NET_SOCKET_H__
 
 
 /*============================================
@@ -35,12 +35,16 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 #if defined (__KERNEL_NET_IPSTACK) && defined(USE_LWIP)
-   #include "kernel/core/net/lwip_core/lwip_socket.h"
+   #include "kernel/net/lwip/include/lwip/sockets.h"
 #elif defined (__KERNEL_NET_IPSTACK) && defined(USE_UIP)
-#include "kernel/core/net/uip_core/uip_socket.h"
+   #include "kernel/core/net/uip_core/uip_socket.h"
+#elif defined (__KERNEL_NET_IPSTACK) && defined(USE_MODEMIP)
+   #include "kernel/core/net/modem_core/modem_socket.h"
 #else
-#include "kernel/core/net/uip_core/uip_socket.h"
+   #include "kernel/core/net/bsd/sys/socket.h"
+   #include "kernel/core/net/bsd/inet/in.h" 
 #endif
+
 
 /*============================================
 | Declaration
