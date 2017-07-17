@@ -357,7 +357,7 @@ static void draw_byte(unsigned char c, uint32_t locX, uint32_t locY){
       break;
       
    case 4:
-     draw_byte_4(font, (uint32_t *)base, rb);
+     draw_byte_4(font, (uint8_t *)base, rb);
      break;
      
    case 1:
