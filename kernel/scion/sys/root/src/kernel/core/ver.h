@@ -32,7 +32,7 @@ Compiler Directive
 Includes
 =============================================*/
 //current version (see tauon/change-log.txt).
-#define __LEPTON_VERSION     "4.9.0.0"
+#define __LEPTON_VERSION     "4.9.0.2"
 #define __LEPTON_VERSION__   __LEPTON_VERSION
 #define __lepton_version__   __LEPTON_VERSION
 
