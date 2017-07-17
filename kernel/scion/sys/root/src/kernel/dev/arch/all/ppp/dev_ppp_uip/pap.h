@@ -48,7 +48,7 @@
  *
  */
 
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 
 /* PAP state machine flags */
 /* client only */

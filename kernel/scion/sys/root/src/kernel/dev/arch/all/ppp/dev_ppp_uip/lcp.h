@@ -47,7 +47,7 @@
  *
  */
 
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 #include "contiki-conf.h"
 
 /* LCP Option Types */

@@ -46,7 +46,7 @@
  *
  */
 
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 
 extern u8_t ahdlc_flags;
 

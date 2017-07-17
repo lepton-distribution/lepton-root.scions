@@ -46,7 +46,7 @@
  * $Id: ipcp.h,v 1.1 2007/05/26 07:14:39 oliverschmidt Exp $
  *
  */
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 #include "contiki-conf.h"
 
 // Config options (move to pppconfig)

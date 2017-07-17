@@ -45,8 +45,8 @@
  * $Id: ppp.h,v 1.1 2007/05/26 07:14:40 oliverschmidt Exp $
  *
  */
-#include "net/uip.h"
-#include "net/uip-fw.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
+#include "kernel/net/uip/core/net/ipv4/uip-fw.h"
 #include "contiki-conf.h"
 #include "ahdlc.h"
 #include "lcp.h"

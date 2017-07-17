@@ -63,7 +63,7 @@
 #define DEBUG DEBUG_NONE //DEBUG_PRINT
 #endif
 
-#include "net/uip-debug.h"
+#include "kernel/net/uip/core/net/ip/uip-debug.h"
 
 #if UIP_LOGGING == 1
 //   #include <stdio.h>

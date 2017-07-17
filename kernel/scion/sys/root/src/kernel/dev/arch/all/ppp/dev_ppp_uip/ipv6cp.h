@@ -34,7 +34,7 @@
 | Declaration  
 ==============================================*/
 
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 #include "contiki-conf.h"
 
 // Config options (move to pppconfig)
