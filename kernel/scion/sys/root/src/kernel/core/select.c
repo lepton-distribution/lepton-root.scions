@@ -43,6 +43,7 @@ Includes
 #include "kernel/core/stat.h"
 #include "kernel/core/fcntl.h"
 #include "kernel/core/kernel_io.h"
+#include "kernel/core/select.h"
 
 
 
@@ -253,9 +254,9 @@ start:
          if(!ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
             isset=1;
             if(readfds)
-               *readfds=(*readfds|((0x01<<b)));
+               *readfds=(*readfds|(( ((fd_set)0x01)<<b )) );
          }else if(readfds) {
-            *readfds=(*readfds&(~(0x01<<b)));
+            *readfds=(*readfds&(~( ((fd_set)0x01) <<b )) );
          }
          //continue;
       }
@@ -265,9 +266,9 @@ start:
          if(!ofile_lst[desc].pfsop->fdev.fdev_isset_write(desc)) {
             isset=1;
             if(writefds)
-               *writefds=(*writefds|((0x01<<b)));
+               *writefds=(*writefds|(( ((fd_set)0x01) <<b )) );
          }else if(writefds) {
-            *writefds=(*writefds&(~(0x01<<b)));
+            *writefds=(*writefds&(~( ((fd_set)0x01) <<b)) );
          }
          //continue;
       }
@@ -361,7 +362,7 @@ void _FD_CLR(int fd, fd_set *fdset){
 int _FD_ISSET(int fd, fd_set *fdset){
    if(fd<0)
       return 0;
-   return ((*fdset) & ((0x01)<<fd));
+   return ((*fdset) & ((((fd_set)0x01))<<fd));
 }
 
 /*-------------------------------------------
@@ -373,7 +374,7 @@ int _FD_ISSET(int fd, fd_set *fdset){
 | See:
 ---------------------------------------------*/
 void _FD_SET(int fd, fd_set *fdset){
-   *fdset=(*fdset|(0x01<<fd));
+   *fdset=(*fdset|(((fd_set)0x01) <<fd));
 }
 
 /*-------------------------------------------
