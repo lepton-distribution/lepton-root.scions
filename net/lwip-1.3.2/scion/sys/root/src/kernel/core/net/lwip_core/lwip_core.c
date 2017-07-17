@@ -26,6 +26,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -35,8 +36,9 @@ either the MPL or the [eCos GPL] License."
 #include "lwip/sys.h"
 #include "lwip/stats.h"
 #include "lwip/tcpip.h"
-#include "netif/loopif.h"
-#include "kernel/net/lwip/netif/ppp/ppp.h"
+#include "lwip/ip4_addr.h"
+//#include "netif/loopif.h"
+//#include "kernel/net/lwip/netif/ppp/ppp.h"
 #include "arch/perf.h"
 
 #include "kernel/core/types.h"
@@ -124,7 +126,7 @@ static lwip_if_t* g_p_lwip_if_list=(lwip_if_t*)0;
 void tcpip_init_done(void * arg)
 {
    sys_sem_t *sem = arg;
-   sys_sem_signal(*sem);
+   sys_sem_signal(sem);
 }
 
 /*--------------------------------------------
@@ -163,10 +165,10 @@ void* lwip_core_routine(void* arg){
 */
 
    /* Start the stack.It will spawn a new dedicated thread */
-   sem = sys_sem_new(0);
+   sys_sem_new(&sem,0);
    tcpip_init(tcpip_init_done,&sem);
-   sys_sem_wait(sem);
-   sys_sem_free(sem);
+   sys_sem_wait(&sem);
+   sys_sem_free(&sem);
 
 
 
@@ -259,7 +261,7 @@ int add_lwip_if(lwip_if_t* p_lwip_if){
 ----------------------------------------------*/
 int config_lwip_if(lwip_if_t* p_lwip_if){
 
-   struct ip_addr if_ipaddr, if_netmask, if_gw;
+   ip4_addr_t if_ipaddr, if_netmask, if_gw;
    int ip_addr_1;
    int ip_addr_2;
    int ip_addr_3;

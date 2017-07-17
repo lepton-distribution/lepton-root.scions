@@ -147,12 +147,14 @@ to be implemented as well:
 /*============================================
 | Includes
 ==============================================*/
+#include <string.h>
+
 #include "lwip/opt.h"
 #include "arch/sys_arch.h"
 #include "lwip/sys.h"
 #include "lwip/def.h"
 
-#include "kernel/core/kernel.h"
+#include "kernel/core/kernel_clock.h"
 #include "kernel/core/kernel_pthread_mutex.h"
 
 /*============================================
@@ -164,20 +166,20 @@ to be implemented as well:
 #define SYS_THREADS     2       /* polling thread and tcpip_thread */
 
 /* List of threads: associate eCos thread info with lwIP timeout info */
-
 struct lwip_thread {
    struct lwip_thread * next;
-   struct sys_timeouts to;
-   //cyg_handle_t th;
+   //struct sys_timeouts to;
    kernel_pthread_t t;
 } *threads;
 
 
 /*
- * Timeout for threads which were not created by sys_thread_new
- * usually "main"
- */
-struct sys_timeouts to;
+* Timeout for threads which were not created by sys_thread_new
+* usually "main"
+*/
+//struct sys_timeouts to;
+
+
 
 static kernel_pthread_mutex_t kernel_mutex_lwip_protect;
 
@@ -185,6 +187,48 @@ static kernel_pthread_mutex_t kernel_mutex_lwip_protect;
 | Implementation
 ==============================================*/
 
+#if 0
+void
+sys_timeout(u16_t msecs, sys_timeout_handler h, void *arg)
+{
+}
+/*
+* Return current thread's timeout info
+*/
+
+struct sys_timeouts *sys_arch_timeouts(void)
+{
+   struct lwip_thread *t;
+   kernel_pthread_t* pthread;
+
+   pthread = kernel_pthread_self();
+
+   //p_task = OS_GetpCurrentTask();
+
+   for (t = threads; t; t = t->next)
+      if (&t->t == pthread)
+         return &(t->to);
+
+   //to.next=(struct sys_timeout *)0;//lwip 1.1.0
+   to.next = (struct sys_timeo *)0; //lwip 1.2.0
+   return &to;
+}
+#endif
+
+/*
+/* Time 
+*/
+u32_t sys_now(void){
+   struct timespec ts;
+   kernel_clock_gettime(CLOCK_MONOTONIC, &ts);
+   return (u32_t)(ts.tv_sec * 1000L + ts.tv_nsec / 1000000L);
+}
+
+u32_t sys_jiffies(void) {
+   struct timespec ts;
+   kernel_clock_gettime(CLOCK_MONOTONIC, &ts);
+   return (u32_t)(ts.tv_sec * 1000000000L + ts.tv_nsec);
+}
 
 /*
  * Set up memory pools and threads
@@ -217,7 +261,7 @@ cyg_mempool_var_create(memvar, sizeof(memvar), &var_mempool_h, &var_mempool);
 
 sys_prot_t sys_arch_protect(void){
    kernel_pthread_mutex_lock(&kernel_mutex_lwip_protect);
-   return &kernel_mutex_lwip_protect;
+   return 0;
 }
 
 /*
@@ -236,61 +280,28 @@ void sys_arch_unprotect(sys_prot_t pval){
 /*
  * Create a new mbox.If no memory is available return NULL
  */
-sys_mbox_t sys_mbox_new(int size){
-   sys_mbox_t p_sys_mbox;
-   //
-   p_sys_mbox = (sys_mbox_t)_sys_malloc(sizeof(sys_mbox_st));
-   /* out of memory? */
-   if(!p_sys_mbox) {
-      return SYS_MBOX_NULL;
-   }
+err_t sys_mbox_new(sys_mbox_t *mbox, int size){
    //
    if(!size)
-      size=100;
+      size= MAX_QUEUE_ENTRIES;
+   //alloc mailbox buffer
+   mbox->p_buf = _sys_malloc(size*sizeof(void*));
+   /* out of memory? */
+   if(!mbox->p_buf)
+      return ERR_MEM;
+   OS_CreateMB(&mbox->os_mailbox,sizeof(void*),size, mbox->p_buf);
    //
-   #if defined(__KERNEL_UCORE_EMBOS)
-      //alloc mailbox buffer
-      p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
-      /* out of memory? */
-      if(!p_sys_mbox->p_buf) {
-         return SYS_MBOX_NULL;
-      }
-      //
-      OS_CreateMB(&p_sys_mbox->os_mailbox,sizeof(void*),size,p_sys_mbox->p_buf);
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      
-      #if (configSUPPORT_STATIC_ALLOCATION==1)
-         //alloc mailbox buffer
-         p_sys_mbox->p_buf = _sys_malloc(size*sizeof(void*));
-         /* out of memory? */
-         if(!p_sys_mbox->p_buf) {
-            return SYS_MBOX_NULL;
-         }
-         //
-         p_sys_mbox->os_mailbox = xQueueCreateStatic( size, sizeof( void * ),p_sys_mbox->p_buf, &p_sys_mbox->queue_static );
-      #else
-         p_sys_mbox->os_mailbox = xQueueCreate( size, sizeof( void * ) );
-      #endif
-   #endif
-   //
-   return p_sys_mbox;
+   mbox->is_valid = 1;
+   return ERR_OK;
 }
 
 /*
  * Destroy the mbox and release the space it took up in the pool
  */
-void sys_mbox_free(sys_mbox_t mbox){
-   #if defined(__KERNEL_UCORE_EMBOS)
-      OS_DeleteMB(&mbox->os_mailbox);
-      //
-      _sys_free(mbox->p_buf);
-      //
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      vQueueDelete(mbox->os_mailbox);
-   #endif 
-   //
-      _sys_free(mbox);
-   //
+void sys_mbox_free(sys_mbox_t* mbox){
+   OS_DeleteMB(&mbox->os_mailbox);
+   _sys_free(mbox->p_buf);
+   mbox->is_valid = 0;
 }
 
 /*
@@ -305,39 +316,31 @@ int dummy_msg = 1;
 /*
  * Post data to a mbox.
  */
-void sys_mbox_post(sys_mbox_t mbox, void *data)
+void sys_mbox_post(sys_mbox_t* mbox, void *data)
 {
    long addr = (long)data;
    if (!data)
       data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
-   #if defined(__KERNEL_UCORE_EMBOS)
-      OS_PutMail(&mbox->os_mailbox,&addr);
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      xQueueSend( mbox->os_mailbox, &addr, portMAX_DELAY);
-   #endif 
+
+   OS_PutMail(&mbox->os_mailbox,&addr);
 }
 
 
 /*
  * Try post data to a mbox. new since lwip 1.3.0
  */
-
-err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
+err_t sys_mbox_trypost(sys_mbox_t* mbox, void *data)
 {
    long addr = (long)data;
    if (!data)
       data = &dummy_msg;
 
    //printf("post mbox:0x%x = 0x%x\r\n",mbox,addr);
-   #if defined(__KERNEL_UCORE_EMBOS)
-      if(OS_PutMailCond(&mbox->os_mailbox,&addr))
-         return ERR_MEM;
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      if( xQueueSend( mbox->os_mailbox, &addr, (portTickType)(0))!=pdTRUE )
-        return ERR_MEM;
-   #endif
+
+   if(OS_PutMailCond(&mbox->os_mailbox,&addr))
+      return ERR_MEM;
 
    return ERR_OK;
 }
@@ -346,104 +349,66 @@ err_t sys_mbox_trypost(sys_mbox_t mbox, void *data)
  * Fetch data from a mbox.Wait for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
  */
-#if defined(__KERNEL_UCORE_EMBOS)
-   u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u32_t timeout)
-   {
-      long addr=0L;
-      u32_t end_time = 0, start_time = 0;
-      int err=0;
-   
-      if (timeout) {
-         start_time = OS_GetTime();
-         if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)) {
+u32_t sys_arch_mbox_fetch(sys_mbox_t* mbox, void **data, u32_t timeout)
+{
+   long addr=0L;
+   u32_t end_time = 0, start_time = 0;
+   int err=0;
+
+   if (timeout) {
+      start_time = OS_GetTime();
+      if(OS_GetMailTimed (&mbox->os_mailbox, &addr,timeout)) {
+         if (data != NULL) {
             *data = NULL;
-            return SYS_ARCH_TIMEOUT;
          }
-         end_time = OS_GetTime();
-   
-      } else {
-         OS_GetMail(&mbox->os_mailbox,&addr);
+         return SYS_ARCH_TIMEOUT;
       }
-      //
-      if(data) {
-         if (addr == (long)&dummy_msg)
-            *data = NULL;
-         else
-            *data=(void*)addr;
-      }else{
-      }
-      //
-      if((end_time - start_time)<0)
-         return 0;
-   
-      return (end_time - start_time);
+      end_time = OS_GetTime();
+
+   } else {
+      OS_GetMail(&mbox->os_mailbox,&addr);
    }
-#elif defined(__KERNEL_UCORE_FREERTOS)
-   u32_t sys_arch_mbox_fetch(sys_mbox_t mbox, void **msg, u32_t timeout){
-      void *dummyptr;
-      portTickType StartTime, EndTime, Elapsed;
-      //
-      StartTime = xTaskGetTickCount();
-      //
-      if( msg == NULL ){
-         msg = &dummyptr;
-      }
-      //
-      if(	timeout != 0 ){
-         if(pdTRUE == xQueueReceive( mbox->os_mailbox, &(*msg), (portTickType)(timeout/portTICK_RATE_MS) ) ){
-            EndTime = xTaskGetTickCount();
-            Elapsed = EndTime - StartTime;
-            if( Elapsed == 0 )
-            {
-               Elapsed = 1;
-            }
-            return ( Elapsed );
-         }
-         else {
-            // timed out blocking for message
-            *msg = NULL;
-            return SYS_ARCH_TIMEOUT;
-         }
-      }else{
-         // block forever for a message.
-         xQueueReceive( mbox->os_mailbox, &(*msg), portMAX_DELAY ); 
-         //
-         EndTime = xTaskGetTickCount();
-         Elapsed = EndTime - StartTime;
-         if( Elapsed == 0 ){
-            Elapsed = 1;
-         }
-         return ( Elapsed ); // return time blocked TBD test
-      }
+
+   if(data != NULL) {
+      if (addr == (long)&dummy_msg)
+         *data = NULL;
+      else
+         *data=(void*)addr;
+
+      //printf("fetch mbox:0x%x = 0x%x\r\n",mbox,*data);
+   }else{
+      //printf("fetch mbox:0x%x\r\n",mbox);
    }
-#endif
+
+   //
+   if((end_time - start_time)<0)
+      return 0;
+   //
+   return (end_time - start_time);
+}
 
 /*
  * Try fetch data from a mbox. new since lwip 1.3.0
  */
-u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
+u32_t sys_arch_mbox_tryfetch(sys_mbox_t* mbox, void **data){
    long addr=0L;
    int err=0;
-
-   #if defined(__KERNEL_UCORE_EMBOS)
-      if(OS_GetMailCond(&mbox->os_mailbox,&addr)) {
-         *data = NULL;
-         return SYS_ARCH_TIMEOUT;/*return SYS_MBOX_EMPTY;*/
-      }
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-       if(pdTRUE != xQueueReceive( mbox->os_mailbox, &addr, (portTickType)(0))  ){
-         *data = NULL;
-         return SYS_ARCH_TIMEOUT;/*return SYS_MBOX_EMPTY;*/
-       }
-   #endif
    //
-   if(data) {
+   if(OS_GetMailCond(&mbox->os_mailbox,&addr)) {
+      if (data != NULL) {
+         *data = NULL;
+      }
+      //return SYS_MBOX_EMPTY;
+      return SYS_ARCH_TIMEOUT;
+   }
+   //
+   if (data != NULL) {
       if (addr == (long)&dummy_msg)
          *data = NULL;
       else
          *data=(void*)addr;
    }
-
+   //
    return 0;
 }
 
@@ -451,66 +416,38 @@ u32_t sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data){
  * Create a new semaphore and initialize it.
  * If no memory is available return NULL
  */
-sys_sem_t sys_sem_new(u8_t count)
+err_t sys_sem_new(sys_sem_t *sem, u8_t count)
 {
+  
+   /* out of memory? */
+   if(!sem)
+      return ERR_MEM;
    //
-   #if defined(__KERNEL_UCORE_EMBOS)
-      OS_CSEMA* p_sem = (OS_CSEMA*)_sys_malloc(sizeof(OS_CSEMA));
-      /* out of memory? */
-      if(!p_sem) {
-         return SYS_SEM_NULL;
-      }
-      //
-      OS_CreateCSema(p_sem,count);
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      sys_sem_static_t* p_sem;
-      //
-      #if (configSUPPORT_STATIC_ALLOCATION==1)
-         p_sem=(sys_sem_static_t*)_sys_malloc(sizeof(sys_sem_static_t));
-         /* out of memory? */
-         if(!p_sem) {
-            return SYS_SEM_NULL;
-         }
-         //
-         p_sem->sem = xSemaphoreCreateCountingStatic( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count,&p_sem->sem_static);
-      #else
-         p_sem = xSemaphoreCreateCounting( (unsigned portBASE_TYPE) (-1), (unsigned portBASE_TYPE) count);
-      #endif
-   #endif
-     
-   return p_sem;
+   OS_CreateCSema(&sem->os_csema,count);
+   //
+   sem->is_valid = 1;
+   //
+   return ERR_OK;
 }
 
-#if 0
-void
-sys_sem_wait(sys_sem_t sem)
-{
-   OS_WaitCSema(sem);
-}
 
-void
-sys_timeout(u16_t msecs, sys_timeout_handler h, void *arg)
-{
-}
-#endif
 /*
  * Wait on a semaphore for at most timeout millisecs
  * Return -1 if timed out otherwise time spent waiting.
  */
-#if defined(__KERNEL_UCORE_EMBOS)
-u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout)
+u32_t sys_arch_sem_wait(sys_sem_t* sem, u32_t timeout)
 {
    u32_t end_time = 0, start_time = 0;
    int err=0;
 
    if (timeout) {
       start_time = OS_GetTime();
-      if(!OS_WaitCSemaTimed(sem, timeout))
+      if(!OS_WaitCSemaTimed(&sem->os_csema, timeout))
          return SYS_ARCH_TIMEOUT;
       end_time = OS_GetTime();
 
    } else {
-      OS_WaitCSema(sem);
+      OS_WaitCSema(&sem->os_csema);
    }
 
    if((end_time - start_time)<0)
@@ -518,71 +455,28 @@ u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout)
 
    return (end_time - start_time);
 }
-#elif defined(__KERNEL_UCORE_FREERTOS)
-u32_t sys_arch_sem_wait(sys_sem_t sem, u32_t timeout) {
-   portTickType StartTime, EndTime, Elapsed;
-   //
-	StartTime = xTaskGetTickCount();
-   //
-	if(	timeout != 0){
-		if( xSemaphoreTake( sem, (portTickType)(timeout/portTICK_RATE_MS) ) == pdTRUE ){
-			EndTime = xTaskGetTickCount();
-			Elapsed = EndTime - StartTime;
-			if( Elapsed == 0 ){
-				Elapsed = 1;
-			}
-			return (Elapsed); // return time blocked TBD test
-		}
-		else{
-			return SYS_ARCH_TIMEOUT;
-		}
-	} else {
-      // must block without a timeout
-		xSemaphoreTake( sem, portMAX_DELAY );
-      //
-		EndTime = xTaskGetTickCount();
-		Elapsed = EndTime - StartTime;
-		if( Elapsed == 0 ){
-			Elapsed = 1;
-		}
-      //
-		return ( Elapsed ); // return time blocked
-	}
-}
-#endif
 
 /*
  * Signal a semaphore
  */
-void sys_sem_signal(sys_sem_t sem)
+void sys_sem_signal(sys_sem_t* sem)
 {
-   #if defined(__KERNEL_UCORE_EMBOS)
-      OS_SignalCSema(sem);
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      xSemaphoreGive(sem);
-   #endif
+   OS_SignalCSema(&sem->os_csema);
 }
 
 /*
  * Destroy the semaphore and release the space it took up in the pool
  */
-void sys_sem_free(sys_sem_t sem)
-{
-   #if defined(__KERNEL_UCORE_EMBOS)
-      OS_DeleteCSema(sem);
-      //
-      _sys_free(sem);
-      //
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-       vSemaphoreDelete(sem);
-   #endif
+void sys_sem_free(sys_sem_t* sem){
+   OS_DeleteCSema(&sem->os_csema);
+   sem->is_valid = 0;
 }
+
 
 /*
  * Create new thread
  */
-sys_thread_t sys_thread_new(char *name, void (*function)(
-                               void *arg), void *arg, int stacksize, int prio)
+sys_thread_t sys_thread_new(const char *name, void (*function)(void *arg), void *arg, int stacksize, int prio)
 {
 
    pthread_attr_t thread_attr;
@@ -590,62 +484,92 @@ sys_thread_t sys_thread_new(char *name, void (*function)(
    //void * stack;
    static int thread_count = 0;
 
-   if(!stacksize)
-      stacksize = 4096;
-
    char * pstack = (char*)_sys_malloc(stacksize);
    if(pstack<=0)
       return (sys_thread_t)0;
-   //nt = (struct lwip_thread *)cyg_mempool_var_alloc(var_mempool_h, sizeof(struct lwip_thread));
+   //
    nt = (struct lwip_thread *)_sys_malloc(sizeof(struct lwip_thread));
-
-
+   //
    nt->next = threads;
-   nt->to.next = NULL;
-
+   //nt->to.next = NULL;
    threads = nt;
-
+   //
    thread_attr.stacksize = stacksize;
    thread_attr.stackaddr = (void*)pstack;
-   #if defined(__KERNEL_UCORE_EMBOS)
-      thread_attr.priority  = 110; //to do: fix prirority value in valid range
-   #elif defined(__KERNEL_UCORE_FREERTOS)
-      thread_attr.priority  = 5;//to do: fix prirority value in valid range
-   #endif
+   thread_attr.priority  = 100;
    thread_attr.timeslice = 1;
 
    if(!name)
       thread_attr.name= "lwip_tread";
    else
-      thread_attr.name= name;
+      thread_attr.name= (char*)name;
 
    kernel_pthread_create(&nt->t,&thread_attr,(start_routine_t)function,(char*)0);
 
    return &nt->t;
 }
 
-/*
- * Return current thread's timeout info
- */
-struct sys_timeouts *sys_arch_timeouts(void)
+err_t sys_mutex_new(sys_mutex_t *mutex)
 {
-   struct lwip_thread *t;
-   kernel_pthread_t* pthread;
-
-   pthread = kernel_pthread_self();
-
-   //p_task = OS_GetpCurrentTask();
-
-   for(t = threads; t; t = t->next)
-      if (&t->t == pthread)
-         return &(t->to);
-
-   //to.next=(struct sys_timeout *)0;//lwip 1.1.0
-   to.next=(struct sys_timeo *)0; //lwip 1.2.0
-   return &to;
+   pthread_mutexattr_t mutex_attr = 0;
+   //
+   if (kernel_pthread_mutex_init(&mutex->kernel_mutex, &mutex_attr) < 0) {
+      return ERR_MEM;
+   }
+   //
+   mutex->is_valid = 1;
+   //
+   return ERR_OK;
 }
 
+void sys_mutex_free(sys_mutex_t *mutex)
+{
+   kernel_pthread_mutex_destroy(&mutex->kernel_mutex);
+   mutex->is_valid = 0;
+}
 
+void sys_mutex_lock(sys_mutex_t *mutex){
+   kernel_pthread_mutex_lock(&mutex->kernel_mutex);
+}
+
+void sys_mutex_unlock(sys_mutex_t *mutex){
+   kernel_pthread_mutex_unlock(&mutex->kernel_mutex);
+}
+
+#if LWIP_NETCONN_SEM_PER_THREAD
+sys_sem_t* sys_arch_netconn_sem_get(void)
+{
+   LPVOID tls_data = TlsGetValue(netconn_sem_tls_index);
+   return (sys_sem_t*)tls_data;
+}
+
+void sys_arch_netconn_sem_alloc(void)
+{
+   sys_sem_t *sem;
+   err_t err;
+   BOOL done;
+
+   sem = (sys_sem_t*)malloc(sizeof(sys_sem_t));
+   LWIP_ASSERT("failed to allocate memory for TLS semaphore", sem != NULL);
+   err = sys_sem_new(sem, 0);
+   LWIP_ASSERT("failed to initialise TLS semaphore", err == ERR_OK);
+   done = TlsSetValue(netconn_sem_tls_index, sem);
+   LWIP_UNUSED_ARG(done);
+   LWIP_ASSERT("failed to initialise TLS semaphore storage", done == TRUE);
+}
+
+void sys_arch_netconn_sem_free(void)
+{
+   LPVOID tls_data = TlsGetValue(netconn_sem_tls_index);
+   if (tls_data != NULL) {
+      BOOL done;
+      free(tls_data);
+      done = TlsSetValue(netconn_sem_tls_index, NULL);
+      LWIP_UNUSED_ARG(done);
+      LWIP_ASSERT("failed to de-init TLS semaphore storage", done == TRUE);
+   }
+}
+#endif /* LWIP_NETCONN_SEM_PER_THREAD */
 /*============================================
 | End of Source  : sys_arch.c
 ==============================================*/

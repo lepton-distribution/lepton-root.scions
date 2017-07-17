@@ -2,7 +2,6 @@
 #define __LWIPOPTS_H__
 
 #define NO_SYS                     0
-#define LWIP_SOCKET                0 //(NO_SYS==0)
 #define LWIP_NETCONN              (NO_SYS==0)
 
 #define LWIP_IGMP                  1
@@ -16,11 +15,15 @@
 #define TCP_LISTEN_BACKLOG         0
 
 #define LWIP_PROVIDE_ERRNO         1 //lepton
-#define LWIP_COMPAT_SOCKETS        1
+#define LWIP_SOCKET                1 
+#define LWIP_COMPAT_SOCKETS        0
 #define LWIP_SO_RCVTIMEO           1
 #define LWIP_SO_RCVBUF             1
 
 #define LWIP_TCPIP_CORE_LOCKING    1
+#define TCPIP_THREAD_PRIO          100
+#define TCPIP_THREAD_STACKSIZE     (16*1024)
+
 
 #define LWIP_NETIF_LINK_CALLBACK   0
 #define LWIP_NETIF_STATUS_CALLBACK 0
@@ -29,14 +32,12 @@
 //#define MEMP_OVERFLOW_CHECK     2
 #define MEM_LIBC_MALLOC 1 //lepton modifs use libc malloc instead   // default 0
 #include <stdint.h>
-#include "kernel/core/types.h"
 #include "kernel/core/malloc.h"
 
-//#define mem_free(__x__) _sys_free(__x__)
-#define mem_free   _sys_free
-#define mem_malloc(__x__) _sys_malloc((int)(__x__))
-#define mem_calloc(__x__,__y__) _sys_calloc((int)(__x__),(int)(__y__))
-#define mem_realloc(__x__,__size__) _sys_realloc(__x__,(int)(__size__))
+
+#define mem_clib_free(__x__) _sys_free(__x__)
+#define mem_clib_malloc(__x__) _sys_malloc((int)(__x__))
+#define mem_clib_calloc(__x__,__y__) _sys_calloc((int)(__x__),(int)(__y__))
 
 
 //#define LWIP_DEBUG
@@ -124,7 +125,7 @@ a lot of data that needs to be copied, this should be set high. */
 
 /* ---------- Pbuf options ---------- */
 /* PBUF_POOL_SIZE: the number of buffers in the pbuf pool. */
-#define PBUF_POOL_SIZE          100 //512 lepton modifs) //default 100
+#define PBUF_POOL_SIZE          512 //512 lepton modifs) //default 100
 
 /* PBUF_POOL_BUFSIZE: the size of each pbuf in the pbuf pool. */
 #define PBUF_POOL_BUFSIZE       128

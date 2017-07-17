@@ -25,6 +25,7 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
 
@@ -86,7 +87,7 @@ struct ethernetif {
 extern const struct eth_addr ethbroadcast;
 
 static int  ethif_core_input(struct netif *netif);
-static err_t ethif_core_output(struct netif *netif, struct pbuf *p,struct ip_addr *ipaddr);
+static err_t ethif_core_output(struct netif *netif, struct pbuf *p, const ip4_addr_t *ipaddr);
 
 //to do: remove this ugly code quickly!
 #if defined(CPU_WIN32) || defined(CPU_GNU32)
@@ -244,7 +245,7 @@ static err_t low_level_output(struct netif *netif, struct pbuf *p){
       ptr+=q->len;
       //
       if(!packet_len) { //all packet is copied in buffer. now send current packet.
-
+         
          /* signal that packet should be sent(); */
          if (ofile_lst[desc].pfsop->fdev.fdev_write(desc,buffer,p->tot_len) < 0) {
             //unlock
@@ -376,7 +377,7 @@ static struct pbuf *low_level_input(struct netif *netif){
 |
 | See:
 ----------------------------------------------*/
-static err_t ethif_core_output(struct netif *netif, struct pbuf *p, struct ip_addr *ipaddr){
+static err_t ethif_core_output(struct netif *netif, struct pbuf *p, const ip4_addr_t *ipaddr){
    if(netif->hwaddr_len) { //only for ethernet interface
       return etharp_output(netif, p,ipaddr);
    }else{ //only for slip interface
@@ -446,6 +447,7 @@ int ethif_core_input(struct netif *netif)
    return r;
 }
 
+#if 0
 int ethif_core_input_1_2_1(struct netif *netif)
 {
    struct eth_hdr *ethhdr;
@@ -500,6 +502,7 @@ int ethif_core_input_1_2_1(struct netif *netif)
 
    return r;
 }
+#endif
 
 /*--------------------------------------------
 | Name:        ethif_core_periodic_input
@@ -545,18 +548,6 @@ int ethif_core_periodic_input(struct lwip_if_st *lwip_if_head){
    return 0;
 }
 
-/*--------------------------------------------
-| Name:        arp_timer
-| Description:
-| Parameters:  none
-| Return Type: none
-| Comments:
-| See:
-----------------------------------------------*/
-static void arp_timer(void *arg){
-   etharp_tmr();
-   sys_timeout(ARP_TMR_INTERVAL, (sys_timeout_handler)arp_timer, NULL);
-}
 
 /*--------------------------------------------
 | Name:        ethif_core__init
@@ -586,19 +577,16 @@ err_t ethif_core_init(struct netif *netif){
       netif->name[1] = '0'+if_pointtopoint_no++;
       //slip connection type
       netif->mtu = 1500;
-      netif->flags = NETIF_FLAG_POINTTOPOINT;
+      netif->flags = NETIF_FLAG_LINK_UP;
       netif->hwaddr_len=0;
    }
    netif->linkoutput = low_level_output;
    netif->output = ethif_core_output;
-
+   //
    p_lwip_if->ethaddr = (struct eth_addr *)&(netif->hwaddr[0]);
-
+   //
    low_level_init(netif);
-   //etharp_init();
-
-   sys_timeout(ARP_TMR_INTERVAL, (sys_timeout_handler)arp_timer, NULL);
-
+   //
    return ERR_OK;
 }
 

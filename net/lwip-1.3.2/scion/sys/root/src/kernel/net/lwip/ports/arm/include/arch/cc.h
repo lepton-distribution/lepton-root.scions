@@ -2,10 +2,9 @@
 #define __ARCH_CC_H__
 
 /* Include some files for defining library routines */
-#include <string.h>
-#include <stdint.h>
-#include <ctype.h>
-#include <limits.h>
+#define LWIP_NO_STDINT_H 1
+#define LWIP_NO_STDDEF_H 1
+#define LWIP_TIMEVAL_PRIVATE 0
 
 /* Define platform endianness */
 #ifndef BYTE_ORDER
@@ -45,6 +44,8 @@ typedef u32_t mem_ptr_t;
 
 //#include <stdio.h>
 //#include <stdlib.h>
+#include "kernel/core/types.h"
+#include "kernel/core/time.h"
 
 /* Plaform specific diagnostic output */
 
@@ -58,7 +59,7 @@ typedef u32_t mem_ptr_t;
 #define LWIP_PLATFORM_DIAG(x)
 #define LWIP_PLATFORM_ASSERT(x)
 
-//#define INT_MAX ((int)(2147483647))
+#define INT_MAX ((int)(2147483647))
 
 
 #endif /* __ARCH_CC_H__ */

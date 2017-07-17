@@ -2,9 +2,9 @@
 #define __ARCH_CC_H__
 
 /* Include some files for defining library routines */
-#include <stdint.h>
-#include <string.h>
-#include <ctype.h>
+#define LWIP_NO_STDINT_H 1
+#define LWIP_NO_STDDEF_H 1
+#define LWIP_TIMEVAL_PRIVATE 0
 
 /* Define platform endianness */
 #ifndef BYTE_ORDER
@@ -41,6 +41,7 @@ typedef u32_t mem_ptr_t;
 
 //#include <stdio.h>
 //#include <stdlib.h>
+#include "kernel/core/time.h"
 
 /* Plaform specific diagnostic output */
 
