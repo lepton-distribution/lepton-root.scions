@@ -172,7 +172,7 @@ Includes
 
 #elif __tauon_cpu_device__ == __tauon_cpu_device_cortexM7_at91samv71__
    #define __KERNEL_CPU_DEVICE_NAME "cortexM7-atmel-samv71"
-   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM4__
+   #define __tauon_cpu_core__ __tauon_cpu_core_arm_cortexM7__
 #endif
 
 
@@ -264,6 +264,9 @@ Declaration
 #elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM4__)
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "cortexm4"
+#elif (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM7__)
+   #define __KERNEL_CPU_ARCH CPU_ARCH_32
+   #define __KERNEL_CPU_NAME "cortexm7"
 #else
    #define __KERNEL_CPU_ARCH CPU_ARCH_32
    #define __KERNEL_CPU_NAME "unknow"
@@ -511,9 +514,13 @@ Declaration
    #define __KERNEL_POSIX_REALTIME_SIGNALS
 #endif
 
-   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__) && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
+   #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM3__)\
+       && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM4__)\
+       && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM7__)\
+       && (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
       #define __KERNEL_USE_FILE_LOCK
    #endif
+          
    //#define __KERNEL_IO_EVENT
    #define __KERNEL_IO_SEM
 //test for assert
@@ -531,12 +538,12 @@ Declaration
 
 //ip stack definition
 #if !defined(USE_UIP_VER)
-   #define USE_UIP_VER 2500 
+   #define USE_UIP_VER 3000 
 #endif
 
 #if defined (__KERNEL_NET_IPSTACK)
 
-   #if !defined(USE_LWIP) && !defined(USE_UIP)
+   #if !defined(USE_LWIP) && !defined(USE_UIP) && !defined(USE_MODEMIP)
       //error no stack defined
    #endif
 
@@ -547,13 +554,13 @@ Declaration
    #if defined(USE_UIP)
       #define USE_UIP_CORE
       //#define USE_IF_ETHERNET
-      #define USE_IF_PPP //GD
+      //#define USE_IF_PPP //GD
    #endif
    
 #endif
 
 #if defined (__KERNEL_NET_IPSTACK)
-   #if !defined(USE_IF_ETHERNET) && !defined(USE_IF_SLIP) && !defined(USE_IF_PPP)
+   #if   !defined(USE_IF_ETHERNET) && !defined(USE_IF_SLIP) && !defined(USE_IF_PPP) && !defined(USE_IF_MODEM)
       #define USE_IF_SLIP
    #endif
 #endif
