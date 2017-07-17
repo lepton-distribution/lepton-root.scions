@@ -81,7 +81,13 @@ void OS_DeleteCSema(OS_CSEMA* pCSema){
 | See:
 ---------------------------------------------*/
 void OS_SignalCSema(OS_CSEMA* pCSema){
-   ReleaseSemaphore(pCSema->hCSem,1,NULL);
+   if (pCSema->hCSem == NULL)
+      return;
+   //
+   if (ReleaseSemaphore(pCSema->hCSem, 1, NULL) == 0) {
+      printf("0x%x->(%d) error=0x%x\r\n", (unsigned long)pCSema, pCSema->count, GetLastError());
+      return;
+   }
    InterlockedIncrement(&pCSema->count);
    //printf("0x%x->(%d)\r\n",(unsigned long)pCSema,pCSema->count);
 }
@@ -96,7 +102,10 @@ void OS_SignalCSema(OS_CSEMA* pCSema){
 ---------------------------------------------*/
 void OS_WaitCSema(OS_CSEMA* pCSema){
    OS_TASK* pOsTask;
-   
+   //
+   if (pCSema->hCSem == NULL)
+      return;
+   //
    GET_CURRENT_OS_TASK(pOsTask);
    
    pOsTask->hCurrentWaitObject = pCSema->hCSem;

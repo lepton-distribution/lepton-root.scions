@@ -35,7 +35,7 @@ Compiler Directive
 /*===========================================
 Includes
 =============================================*/
-#define _WIN32_WINNT 0x0400
+//#define _WIN32_WINNT 0x0400
 //#include "kernel/core/windows.h"
 #include "kernel/core/ucore/embOSW32_100/win32/windows.h"
 #include "kernel/core/ucore/embOSW32_100/segger_intr.h"
@@ -208,10 +208,12 @@ OS_TASK* OS_GetpCurrentTask (void);
 
 
 //Counting Semaphores
+#pragma pack(push, 8)
 typedef struct {
    HANDLE hCSem;
    int count;
 }OS_CSEMA;
+#pragma pack (pop)
 
 int   OS_CreateCSema    (OS_CSEMA* pCSema,unsigned char InitValue);
 void  OS_DeleteCSema    (OS_CSEMA* pCSema);
