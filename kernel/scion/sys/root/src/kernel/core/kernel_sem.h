@@ -52,6 +52,9 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+#ifdef CPU_WIN32
+#pragma pack(push, 8)
+#endif
 
 typedef struct kernel_sem_st {
 #ifdef __KERNEL_UCORE_EMBOS
@@ -66,6 +69,10 @@ typedef struct kernel_sem_st {
    cyg_sem_t sem;
 #endif
 }kernel_sem_t;
+
+#ifdef CPU_WIN32
+#pragma pack(pop)
+#endif
 
 int            kernel_sem_close(kernel_sem_t * );
 int            kernel_sem_destroy(kernel_sem_t *);
