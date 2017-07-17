@@ -105,7 +105,7 @@ int kernel_ring_buffer_read_min(kernel_ring_buffer_t* p_kernel_ring_buffer,void 
    p_ring_buffer =  (uint8_t*) p_kernel_ring_buffer->p_buffer;
 
    //available data
-   if(r<w)
+   if(r<=w)
       available_sz=(w-r);
    else
       available_sz=(sz-r)+w;
@@ -131,7 +131,7 @@ int kernel_ring_buffer_read_min(kernel_ring_buffer_t* p_kernel_ring_buffer,void 
       r = ((r+size)==sz)? 0 : r+size;
    }else{
       memcpy(buffer,p_ring_buffer+r,sz-r);
-      memcpy(buffer,p_ring_buffer+(sz-r),size-(sz-r));
+      memcpy(((uint8_t*)buffer)+(sz-r),p_ring_buffer+(sz-r),size-(sz-r));
       r=size-(sz-r);
    }
    //
@@ -204,6 +204,19 @@ int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const vo
 }
 
 /*--------------------------------------------
+| Name: kernel_ring_buffer_reset
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int kernel_ring_buffer_reset(kernel_ring_buffer_t* p_kernel_ring_buffer){
+    p_kernel_ring_buffer->r = p_kernel_ring_buffer->w;
+    return 0;
+}
+
+/*--------------------------------------------
 | Name: kernel_ring_buffer_get_attr
 | Description:
 | Parameters:  none
@@ -228,7 +241,7 @@ int kernel_ring_buffer_get_attr(kernel_ring_buffer_t* p_kernel_ring_buffer, kern
    sz = p_kernel_ring_buffer->sz;
    
    //available data size
-   if(r<w)
+   if(r<=w)
       available_data_sz=(w-r);
    else
       available_data_sz=(sz-r)+w;
