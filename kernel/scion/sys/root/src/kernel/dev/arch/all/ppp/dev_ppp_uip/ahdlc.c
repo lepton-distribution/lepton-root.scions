@@ -55,14 +55,14 @@
 /*			*/ 
 #include <stdint.h>
 
-#include "net/uip.h"
+#include "kernel/net/uip/core/net/ip/uip.h"
 #include "ppp.h"
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 #define DEBUG DEBUG_NONE //DEBUG_PRINT
 #endif
 
-#include "net/uip-debug.h"
+#include "kernel/net/uip/core/net/ip/uip-debug.h"
 
 #if UIP_LOGGING == 1
 //   #include <stdio.h>
