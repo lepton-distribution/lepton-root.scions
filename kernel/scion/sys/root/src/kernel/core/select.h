@@ -41,6 +41,11 @@ Declaration
 #ifdef __cplusplus
 extern "C" {
 #endif
+#if (__KERNEL_COMPILER_SUPPORT_TYPE>__KERNEL_COMPILER_SUPPORT_32_BITS_TYPE)
+   typedef uint64_t fd_set;
+#else
+   typedef uint32_t fd_set;
+#endif
 
 int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct timeval *timeout);
 void  _FD_CLR(int fd, fd_set *fdset);
@@ -50,9 +55,9 @@ void  _FD_ZERO(fd_set *fdset);
 
 #define FD_ISSET _FD_ISSET
 
-#define  FD_SET(fd,fdset) *(fdset)=(*(fdset)|(0x01<<fd))
-#define  FD_CLR(fd,fdset) *(fdset)=(*(fdset)&(~(0x01<<fd)))
-#define  FD_ZERO(fdsetp) memset(fdsetp,0,sizeof(fd_set))
+#define  FD_SET(__fd__,__fdset__) *(__fdset__)=(*(__fdset__)|(((fd_set)(0x01))<<__fd__))
+#define  FD_CLR(__fd__,__fdset__) *(__fdset__)=(*(__fdset__)&(~(((fd_set)(0x01))<<__fd__)))
+#define  FD_ZERO(__fdset__) memset(__fdset__,0,sizeof(fd_set))
 
 #ifdef __cplusplus
 }
