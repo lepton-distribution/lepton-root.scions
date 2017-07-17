@@ -28,6 +28,8 @@ Includes
 =============================================*/
 #include <stdint.h>
 #include <stdarg.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "kernel/core/errno.h"
 #include "kernel/core/types.h"
@@ -40,8 +42,7 @@ Includes
 
 #include "lib/libc/ctype/ctype.h"
 
-#include <stdlib.h>
-#include <string.h>
+
 
 #ifdef __KERNEL_UCORE_ECOS
    #include <ctype.h>
