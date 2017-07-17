@@ -310,25 +310,33 @@ static int ssd1322_init(desc_t desc_w)
 	data[1] = 0x1c+0x3F;//0x77;//0x5b;
 	ssd1322_write_data(desc_w, &data[0], 2);
    
-   //to remove test: fill all
+   //switch to RAM command
    ssd1322_write_command(desc_w, WRITE_RAM_COMMAND);
+   
+   
+   //to remove test: fill all
    //
-   memset(link_info_oled_ssd1322.p_fbuf,0x11,OLED_DISPLAY_SIZE/2);
-	ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2);
+   //memset(link_info_oled_ssd1322.p_fbuf,0x11,OLED_DISPLAY_SIZE/2);
+	//ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2);
    //
-   __kernel_usleep(1000000); //1s 
+   //__kernel_usleep(1000000); //1s 
    //
+   //clean display 
    memset(link_info_oled_ssd1322.p_fbuf,0x00,OLED_DISPLAY_SIZE/2);
 	ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2);
+   //
+   __kernel_usleep(1000000);
    
    //
+#if 0
    memset(link_info_oled_ssd1322.p_fbuf,0x11,1);
    memset(link_info_oled_ssd1322.p_fbuf+(256/2),0x11,1);
    memset(link_info_oled_ssd1322.p_fbuf+2*(256/2),0x11,1);
    memset(link_info_oled_ssd1322.p_fbuf+3*(256/2),0x11,1);
    memset(link_info_oled_ssd1322.p_fbuf+4*(256/2),0x11,1);
    ssd1322_write_data(desc_w, link_info_oled_ssd1322.p_fbuf, OLED_DISPLAY_SIZE/2); 
-   
+#endif
+
 	return 0;
 }
 
@@ -437,7 +445,7 @@ int dev_oled_ssd1322_read(desc_t desc, char* buf,int size){
 | See:
 ---------------------------------------------*/
 int dev_oled_ssd1322_write(desc_t desc, const char* buf,int size){
-   int cb=0;
+   int cb=size;
    
    //
    if(ofile_lst[desc].offset+size>=(OLED_DISPLAY_SIZE/2))
