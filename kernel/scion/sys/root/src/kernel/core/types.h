@@ -127,11 +127,9 @@ typedef int32_t ssize_t;
 			#endif
    #endif
 #endif
-
+      
+//
 typedef uint32_t jiff_t;
-
-typedef uint64_t fd_set;
-
 typedef uint8_t uid_t;
 typedef uint8_t gid_t;
 typedef uint8_t nlink_t;
