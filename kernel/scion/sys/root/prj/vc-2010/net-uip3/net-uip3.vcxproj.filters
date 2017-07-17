@@ -1,0 +1,467 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{5000a08d-488d-4550-91fd-82eb43bd934f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net">
+      <UniqueIdentifier>{4e6491e7-7e61-4f9b-8d2c-a47bd69c87a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip">
+      <UniqueIdentifier>{9f9c29d9-569b-4259-b577-1925a2dd2b1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core">
+      <UniqueIdentifier>{16c005b5-ff2a-4f9a-910c-640b3600352a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\net">
+      <UniqueIdentifier>{56755d1c-8923-423c-802b-720ca3f25d39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\net\ip">
+      <UniqueIdentifier>{b33ab068-cd40-4892-b223-7205df6af466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\net\ipv4">
+      <UniqueIdentifier>{a997d78d-7e0f-44e1-90e8-6faff528d7a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\net\ipv6">
+      <UniqueIdentifier>{eb9e9e4b-2bb5-4af4-b743-517d437ece2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\net\ipv6\multicast">
+      <UniqueIdentifier>{99087f1e-53ee-43a4-9a28-6d5d3f121104}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\sys">
+      <UniqueIdentifier>{08299ab0-c995-4952-8ca6-514d87ce141e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\net\uip\core\lib">
+      <UniqueIdentifier>{b5aa57d3-0380-49ed-bd69-aada5dce657a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki-default-conf.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki-lib.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki-net.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki-version.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\linkaddr.h">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\nbr-table.h">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\netstack.h">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\packetbuf.h">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\queuebuf.h">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\dhcpc.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\ip64-addr.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\psock.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\resolv.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\simple-udp.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\slipdev.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\tcpip.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\tcp-socket.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\udp-socket.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip_arch.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-debug.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uiplib.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-nameserver.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uipopt.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-packetqueue.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-split.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-udp-packet.h">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\contiki-conf.h">
+      <Filter>kernel\net\uip\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uaodv.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uaodv-def.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uaodv-rt.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip_arp.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-fw.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-fw-drv.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-neighbor.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-over-mesh.h">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\sicslowpan.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6-nbr.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6-route.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-icmp6.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-nd6.h">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\roll-tm.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\smrf.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6-engines.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6-route.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6-stats.h">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\arg.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\autostart.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\cc.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\clock.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\compower.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\ctimer.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\dsc.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\energest.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\etimer.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\lc.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\lc-addrlabels.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\lc-switch.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\loader.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\log.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\mt.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\node-id.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\process.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\procinit.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\pt.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\pt-sem.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\rtimer.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\stimer.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\subprocess.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\sys\timer.h">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\lib\memb.h">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\lib\list.h">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\lib\mmem.h">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\kernel\net\uip\core\lib\random.h">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\linkaddr.c">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\nbr-table.c">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\netstack.c">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\packetbuf.c">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\queuebuf.c">
+      <Filter>kernel\net\uip\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\dhcpc.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\ip64-addr.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\psock.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\resolv.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\simple-udp.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\slipdev.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\tcpip.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\tcp-socket.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\udp-socket.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-debug.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uiplib.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-nameserver.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-packetqueue.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-split.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ip\uip-udp-packet.c">
+      <Filter>kernel\net\uip\core\net\ip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uaodv.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uaodv-rt.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip_arp.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-fw.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-fw-drv.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-neighbor.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv4\uip-over-mesh.c">
+      <Filter>kernel\net\uip\core\net\ipv4</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\sicslowpan.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip6.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6-nbr.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-ds6-route.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-icmp6.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\uip-nd6.c">
+      <Filter>kernel\net\uip\core\net\ipv6</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\roll-tm.c">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\smrf.c">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6-route.c">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\uip-mcast6-stats.c">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\arg.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\autostart.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\compower.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\ctimer.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\energest.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\etimer.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\mt.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\process.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\procinit.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\rtimer.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\stimer.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\timer.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\etimer_lepton.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\timer_ip_lepton.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\lib\memb.c">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\lib\list.c">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\lib\mmem.c">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\lib\random.c">
+      <Filter>kernel\net\uip\core\lib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\kernel\net\uip\core\sys\clock.c">
+      <Filter>kernel\net\uip\core\sys</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\kernel\net\uip\core\net\ipv6\multicast\README.md">
+      <Filter>kernel\net\uip\core\net\ipv6\multicast</Filter>
+    </None>
+  </ItemGroup>
+</Project>
