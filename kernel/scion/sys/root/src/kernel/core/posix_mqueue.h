@@ -41,7 +41,7 @@ either the MPL or the [eCos GPL] License."
 
 typedef struct dev_mq_msg_st {
    unsigned int block_no; //msg number
-   unsigned char priority;      // 0 � 31.
+   unsigned char priority;      // 0 to 31.
    long size;
    struct dev_mq_msg_st * p_msg_next;
 }dev_mq_msg_t;
