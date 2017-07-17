@@ -42,31 +42,30 @@
    #endif /* !MINGW */
    #define      sleep(x)                Sleep((x) * 1000)
 #else
-//#include <sys/wait.h>
-//#include <unistd.h>		/* For pause() */
+   //#include <sys/wait.h>
+   //#include <unistd.h>		/* For pause() */
 
+   #include <stdint.h>
    #include <stdlib.h>
    #include <string.h>
-   
-   #include "kernel/core/kal.h"
+
+   #include "kernel/core/dirent.h"
+   #include "kernel/core/kernel.h"
    #include "kernel/core/system.h"
    #include "kernel/core/signal.h"
    #include "kernel/core/wait.h"
-
    #include "kernel/core/stat.h"
    #include "kernel/core/statvfs.h"
-   #include "kernel/core/dirent.h"
-   #include "kernel/core/time.h"
-   #include "kernel/core/fcntl.h"
-
    #include "kernel/core/libstd.h"
+   #include "kernel/core/time.h"
    #include "kernel/core/select.h"
-   #include "kernel/core/net/socket.h"
+   #include "kernel/core/fcntl.h"
 
    #include "lib/libc/unistd.h"
    #include "lib/libc/stdio/stdio.h"
-   #include "lib/pthread/pthread.h"
    #include "lib/libc/ctype/ctype.h"
+   #include "lib/pthread/pthread.h"
+   #include "lib/libc/net/socket.h"
 
    
 

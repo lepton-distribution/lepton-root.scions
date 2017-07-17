@@ -27,6 +27,11 @@ either the MPL or the [eCos GPL] License."
 /*===========================================
 Includes
 =============================================*/
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
+#include "kernel/core/kernel.h"
 #include "kernel/core/signal.h"
 #include "kernel/core/wait.h"
 #include "kernel/core/stat.h"
@@ -35,7 +40,7 @@ Includes
 
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
-#include "kernel/core/net/socket.h"
+#include "lib/libc/net/socket.h"
 
 /*===========================================
 Global Declaration

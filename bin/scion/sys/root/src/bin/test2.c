@@ -39,14 +39,10 @@ Includes
 #include "lib/libc/unistd.h"
 #include "lib/libc/stdio/stdio.h"
 #include "lib/libc/termios/termios.h"
-
-#include "kernel/core/net/socket.h"
-
+#include "lib/libc/net/socket.h"
 #include "lib/pthread/pthread.h"
 #include "lib/librt/mqueue.h"
 #include "lib/librt/semaphore.h"
-
-
 
 
 

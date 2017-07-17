@@ -25,10 +25,19 @@
 | Includes    
 ==============================================*/
 #include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+
 #include "kernel/core/errno.h"
+#include "kernel/core/fcntl.h"
 #include "kernel/core/libstd.h"
 
+#include "lib/libc/unistd.h"
+#include "lib/libc/ctype/ctype.h"
+#include "lib/libc/termios/termios.h"
 #include "lib/libc/stdio/stdio.h"
+
+
 
 /*============================================
 | Global Declaration 

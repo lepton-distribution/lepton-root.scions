@@ -143,32 +143,29 @@ typedef struct DIR {
    #include "kernel/core/kernelconf.h"
 
    #if defined(__tauon_posix__)
+      #include <stdint.h>
       #include <stdlib.h>
       #include <string.h>
-      
-      #include "kernel/core/kal.h"
+
+      #include "kernel/core/dirent.h"
+      #include "kernel/core/kernel.h"
       #include "kernel/core/system.h"
       #include "kernel/core/signal.h"
       #include "kernel/core/wait.h"
       #include "kernel/core/stat.h"
       #include "kernel/core/statvfs.h"
-      #include "kernel/core/dirent.h"
       #include "kernel/core/libstd.h"
       #include "kernel/core/time.h"
-      #include "kernel/core/fcntl.h"
-
       #include "kernel/core/select.h"
-      #include "kernel/core/net/socket.h"
+      #include "kernel/core/fcntl.h"
 
       #include "lib/libc/unistd.h"
       #include "lib/libc/stdio/stdio.h"
       #include "lib/libc/ctype/ctype.h"
       #include "lib/pthread/pthread.h"
-
-     
+      #include "lib/libc/net/socket.h"
 
       #undef _WIN32
-
 
       #define   O_BINARY                        0
       #define  FILENAME_MAX 512 //8
