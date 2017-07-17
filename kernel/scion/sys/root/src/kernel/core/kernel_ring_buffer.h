@@ -71,6 +71,8 @@ int kernel_ring_buffer_read(kernel_ring_buffer_t* p_kernel_ring_buffer,void *buf
 int kernel_ring_buffer_write(kernel_ring_buffer_t* p_kernel_ring_buffer,const void *buffer,int16_t size);
 int kernel_ring_buffer_get_attr(kernel_ring_buffer_t* p_kernel_ring_buffer, kernel_ring_buffer_attr_t* attr);
 
+int kernel_ring_buffer_reset(kernel_ring_buffer_t* p_kernel_ring_buffer);
+
 #define __kernel_ring_buffer_is_empty(__kernel_ring_buffer__) ((__kernel_ring_buffer__).r==(__kernel_ring_buffer__).w?1:0)
 #define __kernel_ring_buffer_is_not_empty(__kernel_ring_buffer__) ((__kernel_ring_buffer__).r!=(__kernel_ring_buffer__).w?1:0)
 
