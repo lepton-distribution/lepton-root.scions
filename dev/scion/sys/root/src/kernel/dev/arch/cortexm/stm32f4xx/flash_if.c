@@ -191,7 +191,8 @@ uint16_t FLASH_If_GetWriteProtectionStatus(void)
 static uint32_t GetSector(uint32_t Address)
 {
   uint32_t sector = 0;
-  
+//lepton modif: avoid compilation error for stm32f407 ADDR_FLASH_SECTOR_13 to ADDR_FLASH_SECTOR_23 not defined in this model.
+#ifdef STM32F429xx
   if((Address < ADDR_FLASH_SECTOR_1) && (Address >= ADDR_FLASH_SECTOR_0))
   {
     sector = FLASH_SECTOR_0;  
@@ -288,6 +289,7 @@ static uint32_t GetSector(uint32_t Address)
   {
     sector = FLASH_SECTOR_23;  
   }
+#endif
   return sector;
 }
 
