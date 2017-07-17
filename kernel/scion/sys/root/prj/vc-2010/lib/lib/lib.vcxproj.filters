@@ -28,6 +28,12 @@
     <Filter Include="librt">
       <UniqueIdentifier>{d6aa10b9-b658-4860-9aea-49556b275ea6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libc\net">
+      <UniqueIdentifier>{444ef8c4-399c-4850-a0a1-22ace0f4a8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libc\net\inet">
+      <UniqueIdentifier>{d0978616-cc5d-479b-a338-c15bc8669e9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -74,6 +80,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\lib\pthread\pthread.h">
       <Filter>pthread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\socket.h">
+      <Filter>libc\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\src\lib\libc\net\netdb.h">
+      <Filter>libc\net</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +163,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\unistd\io.c">
       <Filter>libc\unistd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\socket.c">
+      <Filter>libc\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\htonl.c">
+      <Filter>libc\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\inet\inet_addr.c">
+      <Filter>libc\net\inet</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

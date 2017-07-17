@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>c:/tauon/sys/root/src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip/core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
@@ -76,12 +76,14 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\socket.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\ctype\ctype.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\libc.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\misc\crc.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\misc\ftoa.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\misc\ltostr.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\misc\prsopt.h" />
+    <ClInclude Include="..\..\..\..\src\lib\libc\net\netdb.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\stdint.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\stdio\stdio.h" />
     <ClInclude Include="..\..\..\..\src\lib\libc\string\string.h" />
@@ -92,6 +94,9 @@
     <ClInclude Include="..\..\..\..\src\lib\pthread\pthread.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\htonl.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\inet\inet_addr.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\net\socket.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\lib\libc\unistd\io.c" />
     <ClCompile Include="..\..\..\..\src\lib\libc\ctype\ctype.c" />
     <ClCompile Include="..\..\..\..\src\lib\libc\libc.c" />

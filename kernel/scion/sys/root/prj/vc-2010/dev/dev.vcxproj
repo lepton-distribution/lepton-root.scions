@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/tools/host/win32;C:/tauon/sys/root/src/kernel/net/uip2.5</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/tools/host/win32;C:/tauon/sys/root/src/kernel/net/uip/core</AdditionalIncludeDirectories>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
       <UndefinePreprocessorDefinitions>
       </UndefinePreprocessorDefinitions>

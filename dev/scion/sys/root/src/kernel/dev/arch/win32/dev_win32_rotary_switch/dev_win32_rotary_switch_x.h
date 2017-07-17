@@ -53,10 +53,15 @@ typedef struct rotary_switch_info_st {
    uint8_t input_r;
    uint8_t input_w;
    //
-   int16_t counter;
+   int32_t counter;
+   int32_t counter_limit_min;
+   int32_t counter_limit_max;
+   int32_t counter_step;
    //
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
    kernel_ring_buffer_t krb_ring_buffer_info;
    uint8_t buffer_read[16];
+#endif
 
 }rotary_switch_info_t;
 

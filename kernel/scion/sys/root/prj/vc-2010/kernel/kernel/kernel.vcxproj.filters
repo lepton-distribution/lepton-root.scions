@@ -35,6 +35,18 @@
       <UniqueIdentifier>{5563a71d-925c-4dc7-bccb-a2edd58172f5}</UniqueIdentifier>
       <ParseFiles>false</ParseFiles>
     </Filter>
+    <Filter Include="kernel\core\net\modem_core">
+      <UniqueIdentifier>{84f9d910-4653-485e-86fc-3e7a33b76574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net\bsd">
+      <UniqueIdentifier>{685debb9-bdf0-401a-a6ff-3ee5cc5176ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net\bsd\inet">
+      <UniqueIdentifier>{8e091f2f-6d22-447f-aa53-a9c897484685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\core\net\bsd\sys">
+      <UniqueIdentifier>{40cdd5a9-c5bb-42a2-b314-d9c1fa11c803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -121,22 +133,13 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.c">
       <Filter>kernel\core\net\uip_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c">
-      <Filter>kernel\core\net\uip_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c">
       <Filter>kernel\core\net\uip_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.c">
       <Filter>kernel\core\net\uip_core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.c">
-      <Filter>kernel\core\net\uip_core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c">
-      <Filter>kernel\core\net\lwip_core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c">
       <Filter>kernel\core\net\lwip_core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c">
@@ -220,6 +223,24 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\kernel_ring_buffer.c">
       <Filter>kernel\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.c">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.c">
+      <Filter>kernel\core\net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_core_socket.c">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.c">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.c">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.c">
+      <Filter>kernel\core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\src\kernel\core\ucore\embOSW32_100\seggerwin32.h">
@@ -252,13 +273,7 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\sys\sysctl.h">
       <Filter>kernel\core\sys</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.h">
-      <Filter>kernel\core\net\uip_core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.h">
-      <Filter>kernel\core\net\uip_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h">
       <Filter>kernel\core\net\uip_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.h">
@@ -266,9 +281,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.h">
       <Filter>kernel\core\net\uip_core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h">
-      <Filter>kernel\core\net\lwip_core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h">
       <Filter>kernel\core\net\lwip_core</Filter>
@@ -471,6 +483,42 @@
     <ClInclude Include="..\..\..\..\src\kernel\core\kernel_printk.h">
       <Filter>kernel\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\ioctl_encoder.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.h">
+      <Filter>kernel\core\net\lwip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.h">
+      <Filter>kernel\core\net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_core_socket.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_socket.h">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\inet\in.h">
+      <Filter>kernel\core\net\bsd\inet</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\sys\socket.h">
+      <Filter>kernel\core\net\bsd\sys</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_socket.h">
+      <Filter>kernel\core\net\uip_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.h">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.h">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\netdb.h">
+      <Filter>kernel\core\net\bsd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\Debug\sbin.lib" />
@@ -478,6 +526,6 @@
     <Library Include="..\Debug\fs.lib" />
     <Library Include="..\Debug\lib.lib" />
     <Library Include="..\Debug\net-lwip.lib" />
-    <Library Include="..\Debug\net-uip.lib" />
+    <Library Include="..\Debug\net-uip3.lib" />
   </ItemGroup>
 </Project>

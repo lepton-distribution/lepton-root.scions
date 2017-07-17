@@ -81,24 +81,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi.sh" />
-    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi2.sh" />
-    <None Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.sh" />
     <None Include="lepton_com.conf" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\test2.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\tst\tsteth.c" />
-    <ClCompile Include="..\..\..\..\..\..\..\..\root\src\bin\udpsrvd.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\bin_mkconf.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_mkconf.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSW32_100\main.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstcgi2.c" />
-    <ClCompile Include="..\..\..\..\..\..\src\bin\net\cgi-bin\tstpost.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\..\root\src\kernel\core\arch\win32\dev_dskimg.h" />
@@ -106,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\..\..\..\..\..\..\..\root\prj\vc-2010\kernel\Debug\kernel.lib" />
+    <Library Include="..\Debug\bin.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

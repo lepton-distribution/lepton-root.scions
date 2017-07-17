@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include;C:/tauon/sys/root/src/kernel/net/uip/core;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -88,6 +88,14 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_core_socket.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\bin.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\core_rttimer.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\core-segger\fork.c" />
@@ -125,12 +133,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\ethif_core.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.c" />
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.c" />
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.c" />
-    <ClCompile Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\pipe.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\posix_mqueue.c" />
     <ClCompile Include="..\..\..\..\src\kernel\core\select.c" />
@@ -157,6 +162,18 @@
     <ClCompile Include="..\..\..\..\src\kernel\core\wait.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\ioctl_encoder.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\inet\in.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\netdb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\sys\socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_core_socket.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\dev_dskimg.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\arch\win32\kernel_mkconf.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\assert.h" />
@@ -208,14 +225,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h" />
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\socks.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_core.h" />
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_slip.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_sock.h" />
-    <ClInclude Include="..\..\..\..\src\kernel\core\net\uip_core\uip_socket.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\pipe.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\posix_mqueue.h" />
     <ClInclude Include="..\..\..\..\src\kernel\core\process.h" />
@@ -247,8 +261,10 @@
     <Library Include="..\Debug\dev.lib" />
     <Library Include="..\Debug\fs.lib" />
     <Library Include="..\Debug\lib.lib" />
-    <Library Include="..\Debug\net-lwip.lib" />
-    <Library Include="..\Debug\net-uip.lib">
+    <Library Include="..\Debug\net-lwip.lib">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </Library>
+    <Library Include="..\Debug\net-uip3.lib">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </Library>
     <Library Include="..\Debug\sbin.lib" />

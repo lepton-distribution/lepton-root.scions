@@ -49,6 +49,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_USE_32BIT_TIME_T;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>c:/tauon/sys/root/src;c:/tauon/sys/root/src/net/lwip;c:/tauon/sys/root/src/kernel/net/lwip/include;c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32;c:/tauon/sys/root/src/kernel/net/lwip/ports/win32/include</AdditionalIncludeDirectories>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
+      <ShowIncludes>false</ShowIncludes>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -73,201 +74,181 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\..\src\kernel\net\lwip\core\ipv6\README">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </None>
-    <None Include="..\..\..\src\kernel\net\lwip\netif\FILES" />
+    <None Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\FILES" />
+    <None Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\netif\FILES" />
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_lib.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\api_msg.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\err.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netbuf.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netdb.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\netifapi.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\sockets.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\api\tcpip.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dhcp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\dns.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\inet6.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\init.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\autoip.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\icmp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\igmp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\inet_chksum.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_addr.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv4\ip_frag.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\icmp6.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\inet6.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\ipv6\ip6_addr.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\mem.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\memp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\netif.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\pbuf.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\raw.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\api_lib.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\api_msg.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\err.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\netbuf.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\netdb.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\netifapi.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\sockets.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\api\tcpip.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\def.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\dns.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\inet_chksum.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\init.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ip.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\autoip.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\dhcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\etharp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\icmp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\igmp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\ip4.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\ip4_addr.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\ipv4\ip4_frag.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\mem.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\memp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\netif.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\pbuf.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\raw.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\stats.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\sys.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\tcp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\tcp_in.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\tcp_out.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\timeouts.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\core\udp.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\netif\ethernet.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\netif\ethernetif.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\netif\lowpan6.c" />
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\netif\slipif.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_dec.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\asn1_enc.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib2.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\mib_structs.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_in.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\core\snmp\msg_out.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\stats.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\sys.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_in.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\tcp_out.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\core\udp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\etharp.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ethernetif.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\loopif.c" />
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp_oe.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\src\kernel\net\lwip\netif\slipif.c" />
     <ClCompile Include="..\..\..\src\kernel\net\lwip\ports\win32\sys_arch.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\autoip.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\icmp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\igmp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\inet_chksum.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_addr.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv4\lwip\ip_frag.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\icmp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\inet.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\ipv6\lwip\ip_addr.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\api_msg.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\arch.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\debug.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\def.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dhcp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\dns.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\err.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\init.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\mem.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\memp_std.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netbuf.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netdb.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netif.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\netifapi.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\opt.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\pbuf.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\raw.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sio.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_asn1.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_msg.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\snmp_structs.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sockets.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\stats.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\sys.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\tcpip.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\lwip\udp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\etharp.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\loopif.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\ppp_oe.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\include\netif\slipif.h" />
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\auth.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chap.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\chpms.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\fsm.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ipcp.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\lcp.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\magic.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\md5.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pap.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\ppp.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\pppdebug.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\randm.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vj.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\kernel\net\lwip\netif\ppp\vjbsdhdr.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\api.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\fs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\httpd.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\httpd_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\lwiperf.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\mdns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\mdns_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\mdns_priv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\mqtt.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\mqtt_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\netbiosns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\netbiosns_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmpv3.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_mib2.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_scalar.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_table.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\snmp_threadsync.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\sntp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\sntp_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\tftp_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\apps\tftp_server.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\arch.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\autoip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\debug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\def.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\dhcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\dhcp6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\dns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\err.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\errno.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\etharp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ethip6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\icmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\icmp6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\igmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\inet.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\inet_chksum.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\init.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip4.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip4_addr.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip4_frag.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip6_addr.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip6_frag.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\ip_addr.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\mem.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\memp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\mld6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\nd6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\netbuf.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\netdb.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\netif.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\netifapi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\opt.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\pbuf.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\api_msg.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\memp_priv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\memp_std.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\nd6_priv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\tcpip_priv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\priv\tcp_priv.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\autoip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\dhcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\dns.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\etharp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\ethernet.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\icmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\icmp6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\igmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\ip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\ip4.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\ip6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\mld6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\nd6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\tcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\prot\udp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\raw.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\sio.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\snmp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\sockets.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\stats.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\sys.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\tcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\tcpip.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\timeouts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\lwip\udp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\etharp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ethernet.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\lowpan6.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\lowpan6_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ccp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\chap-md5.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\chap-new.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\chap_ms.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\eap.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ecp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\eui64.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\fsm.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ipcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ipv6cp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\lcp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\magic.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\mppe.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\polarssl\arc4.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\polarssl\des.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\polarssl\md4.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\polarssl\md5.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\polarssl\sha1.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ppp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppapi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppcrypt.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppdebug.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppoe.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppol2tp.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\pppos.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ppp_impl.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\ppp_opts.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\upap.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\ppp\vj.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\net\lwip\include\netif\slipif.h" />
     <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\bpstruct.h" />
     <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\cc.h" />
     <ClInclude Include="..\..\..\src\kernel\net\lwip\ports\win32\include\arch\epstruct.h" />

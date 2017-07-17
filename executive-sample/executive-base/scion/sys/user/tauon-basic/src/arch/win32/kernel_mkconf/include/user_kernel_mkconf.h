@@ -6,8 +6,10 @@ Compiler Directive
 
 //force ip stack
 #define USE_DEBUG_KAL
-//#define USE_LWIP
-//#define USE_IF_ETHERNET
+#define USE_LWIP
+//#define USE_UIP
+//#define USE_UIP_VER 3000
+#define USE_IF_ETHERNET
 
 /*===========================================
 Includes

@@ -41,6 +41,7 @@ Includes
 #include "kernel/fs/vfs/vfstypes.h"
 
 #include "kernel/core/ioctl.h"
+#include "kernel/core/ioctl_encoder.h"
 #include "kernel/core/kernel_ring_buffer.h"
 
 #include "kernel/dev/arch/win32/dev_win32_rotary_switch/dev_win32_rotary_switch_x.h"
@@ -110,12 +111,36 @@ static void dev_win32_rotary_x_thread(LPVOID lpvParam) {
       if (rotary_switch_info->desc_r == INVALID_DESC) {
          continue;
       }
-
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
       if (__kernel_ring_buffer_is_empty(rotary_switch_info->krb_ring_buffer_info)) {
          bFireInterrupt = TRUE;
       }
       //
       kernel_ring_buffer_write(&rotary_switch_info->krb_ring_buffer_info, (uint8_t*)data, dwBytesRead);
+#else
+      if (rotary_switch_info->input_r == rotary_switch_info->input_w) {
+         rotary_switch_info->input_w++;
+         bFireInterrupt = TRUE;
+      }
+
+      for (DWORD i = 0; i < dwBytesRead; i++) {
+            if (rotary_switch_info->counter_limit_max != rotary_switch_info->counter_limit_min) {
+               if (data[i] > 0 && rotary_switch_info->counter < rotary_switch_info->counter_limit_max) {
+                  rotary_switch_info->counter+=rotary_switch_info->counter_step;
+               }else if (data[i] < 0 && rotary_switch_info->counter > rotary_switch_info->counter_limit_min) {
+                  rotary_switch_info->counter-=rotary_switch_info->counter_step;
+               }
+            }else {
+               if (data[i] > 0) {
+                  rotary_switch_info->counter+=rotary_switch_info->counter_step;
+               }
+               else if (data[i] < 0) {
+                  rotary_switch_info->counter-=rotary_switch_info->counter_step;
+               }
+            }
+            
+      }//end for
+#endif
       //
       if(bFireInterrupt)
          emuFireInterrupt(rotary_switch_info->interrupt_no);//to do: verify interrupt no
@@ -135,10 +160,17 @@ static void dev_win32_rotary_x_thread(LPVOID lpvParam) {
 int dev_rotary_switch_x_interrupt(rotary_switch_info_t* rotary_switch_info) {
    __hw_enter_interrupt();
    //
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
    if ( rotary_switch_info->desc_r != INVALID_DESC 
       && __kernel_ring_buffer_is_not_empty(rotary_switch_info->krb_ring_buffer_info)) {
       __fire_io_int(ofile_lst[rotary_switch_info->desc_r].owner_pthread_ptr_read);
    }
+#else
+   if (rotary_switch_info->desc_r != INVALID_DESC
+      && rotary_switch_info->input_r != rotary_switch_info->input_w) {
+      __fire_io_int(ofile_lst[rotary_switch_info->desc_r].owner_pthread_ptr_read);
+   }
+#endif
    //
    __hw_leave_interrupt();
    return 0;
@@ -163,8 +195,9 @@ int dev_win32_rotary_switch_x_load(rotary_switch_info_t* rotary_switch_info) {
    //
    rotary_switch_info->desc_r = INVALID_DESC;
    //
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
    kernel_ring_buffer_init(&rotary_switch_info->krb_ring_buffer_info, rotary_switch_info->buffer_read, sizeof(rotary_switch_info->buffer_read));
-
+#endif
    //
    strcpy(name, rotary_switch_info->rotary_switch_windows_form_name);
    strcat(name, ".sem");
@@ -240,6 +273,12 @@ int dev_win32_rotary_switch_x_open(desc_t desc, int o_flag, rotary_switch_info_t
       rotary_switch_info->desc_r = desc;
       rotary_switch_info->input_r = 0;
       rotary_switch_info->input_w = 0;
+      //
+      rotary_switch_info->counter = 0;
+      rotary_switch_info->counter_limit_min = 0;
+      rotary_switch_info->counter_limit_max = 0;
+      rotary_switch_info->counter_step = 1;
+
       ofile_lst[desc].p = rotary_switch_info;
    }
 
@@ -290,9 +329,15 @@ int dev_win32_rotary_switch_x_close(desc_t desc) {
 int dev_win32_rotary_switch_x_isset_read(desc_t desc) {
    rotary_switch_info_t* rotary_switch_info = (rotary_switch_info_t*)ofile_lst[desc].p;
    //
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
    if (__kernel_ring_buffer_is_not_empty(rotary_switch_info->krb_ring_buffer_info)) {
       return 0;
    }
+#else
+   if (rotary_switch_info->input_r != rotary_switch_info->input_w) {
+      return 0;
+   }
+#endif
    //
    return -1;
 }
@@ -321,7 +366,23 @@ int dev_win32_rotary_switch_x_read(desc_t desc, char* buf, int size) {
    int cb;
    rotary_switch_info_t* rotary_switch_info = (rotary_switch_info_t*)ofile_lst[desc].p;
    //
+#ifdef USE_ROTARY_ENCODER_KERNEL_RING_BUFFER
    cb = kernel_ring_buffer_read(&rotary_switch_info->krb_ring_buffer_info, (uint8_t*)buf, size);
+#else
+   //
+   int32_t counter = 0;
+   //
+   if (size<sizeof(rotary_switch_info->counter))
+      return -1;
+   //
+   counter = rotary_switch_info->counter;
+   //
+   rotary_switch_info->input_r = rotary_switch_info->input_w;
+   //
+   memcpy(buf, &counter, sizeof(counter));
+   //
+   cb= sizeof(counter);
+#endif
    //
    return cb;
 }
@@ -348,7 +409,7 @@ int dev_win32_rotary_switch_x_write(desc_t desc, const char* buf, int size) {
 | See:
 ----------------------------------------------*/
 int dev_win32_rotary_switch_x_ioctl(desc_t desc, int request, va_list ap) {
-
+   rotary_switch_info_t* rotary_switch_info = (rotary_switch_info_t*)ofile_lst[desc].p;
    switch (request) {
 
       case I_LINK: {
@@ -359,12 +420,40 @@ int dev_win32_rotary_switch_x_ioctl(desc_t desc, int request, va_list ap) {
       case I_UNLINK: {
       }
       break;
-   
+
+                     
+      case ENCODERSETCOUNTER: {
+         int32_t counter = va_arg(ap, int32_t);
+         rotary_switch_info->counter = counter;
+      }
+      break;
+      //
+      case ENCODERGETCOUNTER: {
+         int32_t* p_counter = va_arg(ap, int32_t*);
+         *p_counter = rotary_switch_info->counter;
+      }
+      break;
+      //
+      case ENCODERSETCOUNTERLIMIT: {
+         int32_t counter_limit_min = va_arg(ap, int32_t);
+         int32_t counter_limit_max = va_arg(ap, int32_t);
+         //
+         rotary_switch_info->counter_limit_min = counter_limit_min;
+         rotary_switch_info->counter_limit_max = counter_limit_max;
+      }
+      break;
+
+      case ENCODERSETCOUNTERSTEP: {
+         int32_t counter_step = va_arg(ap, int32_t);
+         //
+         rotary_switch_info->counter_step = counter_step;
+      }
+      break;
+      //
       default:
       return -1;
-
    }
-
+   //
    return 0;
 }
 

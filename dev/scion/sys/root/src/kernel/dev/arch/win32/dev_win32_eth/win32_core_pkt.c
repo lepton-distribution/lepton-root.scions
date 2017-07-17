@@ -74,7 +74,7 @@ typedef struct {
 
 int packet_rd=0;
 int packet_wr=0;
-#define MEM_PACKET_MAX 32
+#define MEM_PACKET_MAX 256
 packet_mem_t packet_mem[MEM_PACKET_MAX]={0};
 
 volatile int adapter_interrupt = 0;
@@ -255,7 +255,7 @@ extern void process_input(void);
 ----------------------------------------------*/
 extern int __win32_eth_input_r;
 extern int __win32_eth_input_w;
-
+static int debug_packet_counter = 0;
 static void process_packets(LPPACKET lpPacket)
 {
    ULONG ulLines, ulBytesReceived;
@@ -286,6 +286,11 @@ static void process_packets(LPPACKET lpPacket)
       cur_packet=base;
       off=Packet_WORDALIGN(off+tlen);
 
+      //
+      //TO REMOVE
+      //adapter_interrupt = 0;
+      //
+      printf("packet rcv %d\r\n", ++debug_packet_counter);
       //
       if(!adapter_interrupt)
          continue;
@@ -405,8 +410,15 @@ int win32_eth_getpkt(char* buf, int len){
 
    int packet_len;
    //save packet
-   if((packet_len = packet_mem[packet_rd].packet_len)>len)
+   if((packet_len = packet_mem[packet_rd].packet_len)>len){
+      //drop packet: too large
+      //get next if it's available
+      if ((++packet_rd) == MEM_PACKET_MAX)
+         packet_rd = 0;
+      //
       return -1;
+   }
+      
 
    if(packet_mem[packet_rd].packet_len<=0)
       return -1;
