@@ -4,6 +4,8 @@ Imports System.IO.MemoryMappedFiles
 Imports System.IO.File
 Imports System.IO.Pipes
 Imports System.Math
+Imports System.Security.Principal
+Imports System.Security.AccessControl
 
 
 Public Class RotarySwitchControl
@@ -44,19 +46,28 @@ Public Class RotarySwitchControl
     Private m_event_stream As MemoryMappedViewStream = Nothing
     Private m_event_stream_writer As BinaryWriter = Nothing
     '
+    Private m_pipe_security As PipeSecurity
+    '
     Private m_event_pipe_stream_server As NamedPipeServerStream
     Private m_event_pipe_stream_writer As StreamWriter
     Private m_thread_pipe_server As Thread
 
     '
     Private Sub ThreadProcPipeServerWaitConnection()
+        '
 
         If (Not m_event_pipe_stream_server.IsConnected()) Then
             m_event_pipe_stream_server.WaitForConnection()
         End If
-
+        '
         m_event_pipe_stream_writer = New StreamWriter(m_event_pipe_stream_server)
         m_event_pipe_stream_writer.AutoFlush = True
+        '
+        'Debug.Print("wait disconnection...")
+        'Dim v As Integer = m_event_pipe_stream_server.ReadByte()
+        ' 
+        'Debug.Print("disconnected")
+        '
     End Sub
     '
     Private Sub CalculateDimension()
@@ -127,6 +138,25 @@ Public Class RotarySwitchControl
             m_event_stream_writer = New BinaryWriter(m_event_stream)
             '
             m_event_pipe_stream_server = New NamedPipeServerStream(Me.Name & ".pipe", PipeDirection.InOut, 1, PipeTransmissionMode.Byte)
+
+            ' Provide full access to the current user so more pipe instances can be created
+#If 0 Then
+            m_pipe_security = m_event_pipe_stream_server.GetAccessControl()
+
+            '
+            m_pipe_security.AddAccessRule(
+                New PipeAccessRule(WindowsIdentity.GetCurrent().User, PipeAccessRights.FullControl, AccessControlType.Allow)
+            )
+
+            '
+            Dim securityIentifier As SecurityIdentifier = New SecurityIdentifier(WellKnownSidType.AuthenticatedUserSid, Nothing)
+            m_pipe_security.AddAccessRule(
+                New PipeAccessRule(securityIentifier, PipeAccessRights.ReadWrite, AccessControlType.Allow)
+            )
+
+            '
+            m_event_pipe_stream_server.SetAccessControl(m_pipe_security)
+#End If
             '
             m_thread_pipe_server = New Thread(New ThreadStart(AddressOf Me.ThreadProcPipeServerWaitConnection))
             '
@@ -250,7 +280,12 @@ Public Class RotarySwitchControl
                 'm_event_pipe_stream_writer.Write(increment)
                 Dim uByte As Byte
                 uByte = CByte(increment And &HFF) ' result: 254
-                m_event_pipe_stream_server.WriteByte(uByte)
+                Try
+                    m_event_pipe_stream_server.WriteByte(uByte)
+                Catch ex As Exception
+                    'do nothing
+                End Try
+
             End If
         ElseIf (Not m_event_pipe_stream_server Is Nothing And m_event_pipe_stream_server.IsConnected()) Then
             If (Not m_thread_pipe_server.IsAlive) Then

@@ -65,7 +65,7 @@ Public Class LcdMatrixControl
 
             Select Case (DEFINE_COLOR_DOT_PIXEL_BPP)
                 Case 4
-                    Dim dot_bpp_value_lsb As Byte = m_frameBuffer(i) And &HF
+                    Dim dot_bpp_value_lsb As Byte = m_frameBuffer(i) And &HF0
                     Dim dot_bpp_value_msb As Byte = m_frameBuffer(i) And &HF
 
                     If (dot_bpp_value_lsb = 0) Then
