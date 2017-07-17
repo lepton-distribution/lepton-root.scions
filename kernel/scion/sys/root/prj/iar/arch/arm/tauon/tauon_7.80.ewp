@@ -1309,7 +1309,7 @@
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
-          <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+          <state>c:/tauon/sys/root/src/kernel/net/uip/core</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -8166,7 +8166,7 @@
           <state>c:/tauon/sys/root/src/kernel/net/lwip/include/ipv4</state>
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core</state>
           <state>c:/tauon/sys/root/src/kernel/fs/yaffs/core/direct</state>
-          <state>c:/tauon/sys/root/src/kernel/net/uip2.5</state>
+          <state>c:/tauon/sys/root/src/kernel/net/uip/core</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -8819,6 +8819,18 @@
     </settings>
   </configuration>
   <group>
+    <name>bin</name>
+    <group>
+      <name>net</name>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\bin\net\httpc\httpc.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\bin\net\telnetd.c</name>
+      </file>
+    </group>
+  </group>
+  <group>
     <name>kernel</name>
     <group>
       <name>core</name>
@@ -8962,6 +8974,24 @@
       <group>
         <name>net</name>
         <group>
+          <name>bsd</name>
+          <group>
+            <name>inet</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\bsd\inet\in.h</name>
+            </file>
+          </group>
+          <group>
+            <name>sys</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\bsd\sys\socket.h</name>
+            </file>
+          </group>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\bsd\netdb.h</name>
+          </file>
+        </group>
+        <group>
           <name>lwip_core</name>
           <excluded>
             <configuration>tauon-kernel-cortex-m3-debug</configuration>
@@ -8976,10 +9006,28 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\lwip_core.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\lwip_core_socket.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\lwip_socket.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\lwip_core\lwip_core_socket.h</name>
+          </file>
+        </group>
+        <group>
+          <name>modem_core</name>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core_socket.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core_socket.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_socket.h</name>
           </file>
         </group>
         <group>
@@ -8991,10 +9039,10 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_core.h</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_core_socket.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_dev_sock.h</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_core_socket.h</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_slip.c</name>
@@ -9008,13 +9056,13 @@
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_sock.h</name>
           </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_socket.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\uip_core\uip_socket.h</name>
-          </file>
         </group>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\kernel_net_core_socket.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\kernel_net_core_socket.h</name>
+        </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\socket.h</name>
         </file>
@@ -10019,48 +10067,6 @@
             <name>source</name>
             <group>
               <name>include</name>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\croutine.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\deprecated_definitions.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\event_groups.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\FreeRTOS.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\list.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\mpu_prototypes.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\mpu_wrappers.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\portable.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\projdefs.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\queue.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\semphr.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\StackMacros.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\task.h</name>
-              </file>
-              <file>
-                <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\include\timers.h</name>
-              </file>
             </group>
             <group>
               <name>portable</name>
@@ -10070,52 +10076,13 @@
                   <name>arm_cm7</name>
                   <group>
                     <name>r0p1</name>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\portable\IAR\ARM_CM7\r0p1\port.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\portable\IAR\ARM_CM7\r0p1\portasm.s</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\portable\IAR\ARM_CM7\r0p1\portmacro.h</name>
-                    </file>
                   </group>
                 </group>
               </group>
               <group>
                 <name>MemMang</name>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\portable\MemMang\heap_2.c</name>
-                  <excluded>
-                    <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-                  </excluded>
-                </file>
-                <file>
-                  <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\portable\MemMang\heap_3.c</name>
-                  <excluded>
-                    <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-                  </excluded>
-                </file>
               </group>
             </group>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\croutine.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\event_groups.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\list.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\queue.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\tasks.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\sched\freertos\scion\sys\root\src\kernel\core\ucore\freeRTOS_9-0-0\source\timers.c</name>
-            </file>
           </group>
         </group>
       </group>
@@ -10205,6 +10172,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_compiler.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_io.c</name>
@@ -10476,6 +10446,12 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_io.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_mqueue.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_mqueue.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_printk.c</name>
       </file>
       <file>
@@ -10483,6 +10459,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_pthread.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_pthread_mutex.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_ring_buffer.c</name>
@@ -10785,6 +10764,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\posix_mqueue.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\posix_mqueue.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\process.h</name>
@@ -12818,6 +12800,12 @@
             </file>
           </group>
           <group>
+            <name>modem</name>
+            <group>
+              <name>simcom</name>
+            </group>
+          </group>
+          <group>
             <name>ppp</name>
             <group>
               <name>dev_ppp_uip</name>
@@ -13077,6 +13065,63 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fat\fatcore_vfat.c</name>
           </file>
         </group>
+      </group>
+      <group>
+        <name>fatfs</name>
+        <group>
+          <name>core</name>
+          <group>
+            <name>drivers</name>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\drivers\sd_diskio.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\drivers\sd_diskio.h</name>
+            </file>
+          </group>
+          <group>
+            <name>option</name>
+          </group>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\diskio.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\diskio.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff_gen_drv.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ff_gen_drv.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ffconf.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\ffconf_template.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\core\integer.h</name>
+          </file>
+        </group>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfs.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfs.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfscore.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\fs\fatfs\fatfscore.h</name>
+        </file>
       </group>
       <group>
         <name>kofs</name>
@@ -13352,6 +13397,9 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\api\netifapi.c</name>
           </file>
           <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\api\sockets.c</name>
+          </file>
+          <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\api\tcpip.c</name>
           </file>
         </group>
@@ -13363,38 +13411,44 @@
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\autoip.c</name>
             </file>
             <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\dhcp.c</name>
+            </file>
+            <file>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\etharp.c</name>
+            </file>
+            <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\icmp.c</name>
             </file>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\igmp.c</name>
             </file>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\inet.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip4.c</name>
             </file>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\inet_chksum.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip4_addr.c</name>
             </file>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip_addr.c</name>
-            </file>
-            <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip_frag.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ipv4\ip4_frag.c</name>
             </file>
           </group>
           <group>
             <name>ipv6</name>
           </group>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\dhcp.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\def.c</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\dns.c</name>
           </file>
           <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\inet_chksum.c</name>
+          </file>
+          <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\init.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\ip.c</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\mem.c</name>
@@ -13427,16 +13481,22 @@
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\tcp_out.c</name>
           </file>
           <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\timeouts.c</name>
+          </file>
+          <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\core\udp.c</name>
           </file>
         </group>
         <group>
           <name>netif</name>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\etharp.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\ethernet.c</name>
           </file>
           <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\loopif.c</name>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\ethernetif.c</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\lowpan6.c</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\lwip\netif\slipif.c</name>
@@ -13475,507 +13535,6 @@
             </file>
           </group>
         </group>
-      </group>
-      <group>
-        <name>uip2.5</name>
-        <excluded>
-          <configuration>lib-debug</configuration>
-          <configuration>tauon-kernel-cortex-m4-debug</configuration>
-          <configuration>tauon-kernel-arm926ejs-debug</configuration>
-          <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-          <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-          <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-          <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-          <configuration>tauon-kernel-cortex-m7-debug</configuration>
-        </excluded>
-        <group>
-          <name>lib</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\list.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\list.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\memb.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\memb.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\random.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\lib\random.h</name>
-          </file>
-        </group>
-        <group>
-          <name>net</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\dhcpc.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\dhcpc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\hc.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\hc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-attr.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-info.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\neighbor-info.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\netstack.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\netstack.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetbuf.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetbuf.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetqueue.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\packetqueue.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\psock.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\psock.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\queuebuf.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\queuebuf.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket-udp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rawpacket.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\resolv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\resolv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\rime.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\sicslowpan.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\sicslowpan.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\simple-udp.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\simple-udp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\slipdev.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\slipdev.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpdump.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpdump.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpip.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\tcpip.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-def.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv-rt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uaodv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-debug.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-debug.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-ds6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-ds6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw-drv.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-fw.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-icmp6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-nd6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-nd6.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-neighbor.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-over-mesh.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-packetqueue.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-split.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-split.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip-udp-packet.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip6.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arch.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arp.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uip_arp.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uiplib.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uiplib.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\net\uipopt.h</name>
-          </file>
-        </group>
-        <group>
-          <name>sys</name>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\cc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\clock.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\clock.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\ctimer.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\ctimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\etimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\etimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc-addrlabels.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc-switch.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\lc.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\process.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\pt.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\rtimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\rtimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\stimer.c</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\stimer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer.c</name>
-            <excluded>
-              <configuration>lib-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-debug</configuration>
-              <configuration>tauon-kernel-cortex-m3-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
-              <configuration>tauon-kernel-arm926ejs-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m0+-freertos-debug</configuration>
-              <configuration>tauon-kernel-cortex-m4m7-freertosv9-debug</configuration>
-              <configuration>tauon-kernel-cortex-m7-debug</configuration>
-            </excluded>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer.h</name>
-          </file>
-          <file>
-            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\sys\timer_ip.c</name>
-          </file>
-        </group>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-conf.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-lib.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-net.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki-version.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\contiki.h</name>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\net\uip2.5\rtimer-arch.h</name>
-        </file>
       </group>
     </group>
   </group>
@@ -14026,6 +13585,27 @@
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\misc\strto_l.c</name>
+        </file>
+      </group>
+      <group>
+        <name>net</name>
+        <group>
+          <name>inet</name>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\net\inet\inet_addr.c</name>
+          </file>
+        </group>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\net\htonl.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\net\netdb.h</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\net\socket.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\lib\libc\net\socket.h</name>
         </file>
       </group>
       <group>
