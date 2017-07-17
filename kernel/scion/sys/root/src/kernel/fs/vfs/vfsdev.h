@@ -84,9 +84,15 @@ typedef DEV_SEEK fdev_seek_t;
 typedef int (*DEV_IOCTL)(desc_t desc,int request,va_list ap);
 typedef DEV_IOCTL fdev_ioctl_t;
 
-
 //extended function for specific operation
 typedef const void* pfdev_ext_t;
+
+//
+typedef int(*DEV_READ_ARGS)(desc_t desc, char* buf, int size, va_list ap);
+typedef DEV_READ_ARGS fdev_read_args_t;
+
+typedef int(*DEV_WRITE_ARGS)(desc_t desc, const char* buf, int size, va_list ap);
+typedef DEV_WRITE_ARGS fdev_write_args_t;
 
 //rtc specific
 typedef int (*DEV_RTC_SETTIME)(desc_t desc,char* buf,int size);
@@ -116,8 +122,11 @@ typedef struct {
    fdev_write_t fdev_write;
    fdev_seek_t fdev_seek;
    fdev_ioctl_t fdev_ioctl;
-
+   //
    pfdev_ext_t pfdev_ext;
+   //
+   fdev_read_args_t fdev_read_args;
+   fdev_write_args_t fdev_write_args;
 }fdev_map_t;
 
 typedef const fdev_map_t dev_map_t;
