@@ -186,42 +186,10 @@ typedef int32_t socklen_t;
 unsigned long  _uip_inet_addr(char *cp);
 char*          _uip_inet_ntoa(char*cp, struct _in_addr in);
 
-//
-int   _sys_sock_socket     (int af,int type,int protocol);
-int   _sys_sock_bind       (int sock, struct _sockaddr *address,int len);
-int   _sys_sock_connect    (int sock, struct _sockaddr *address,int len);
-int   _sys_sock_listen     (int sock, int maxcon);
-int   _sys_sock_accept     (int sock, struct _sockaddr *address,int* len);
-int   _sys_sock_shutdown   (int sock, int how);
-
-int   _sys_sock_recvfrom   (int sock, void *buf, int length, int flags, struct sockaddr *address, socklen_t* address_len);
-int   _sys_sock_sendto     (int sock, const void *buf, int length, int flags, const struct sockaddr *dest_addr, socklen_t dest_len);
-
 /** \brief BSD name for internal _uip_inet_addr() */
 #define inet_addr(cp) _uip_inet_addr(cp)
 /** \brief BSD name for internal _uip_inet_ntoa() */
 #define inet_ntoa(cp,in) _uip_inet_ntoa(cp,in)
-
-/** \brief BSD name for internal _sys_sock_socket() */
-#define socket(af,type,protocol) _sys_sock_socket(af,type,protocol)
-/** \brief BSD name for internal _sys_sock_bind() */
-#define bind(sock,address,len) _sys_sock_bind(sock,address,len)
-/** \brief BSD name for internal _sys_sock_connect() */
-#define connect(sock,address,len) _sys_sock_connect(sock,address,len)
-/** \brief BSD name for internal _sys_sock_listen() */
-#define listen(sock,maxcon) _sys_sock_listen(sock,maxcon)
-/** \brief BSD name for internal _sys_sock_accept() */
-#define accept(sock,address,len) _sys_sock_accept(sock,address,len)
-/** \brief BSD name for internal _sys_sock_shutdown() */
-#define shutdown(sock,how) _sys_sock_shutdown   (sock,how)
-
-#define recv(sock,buf,len,flg) read(sock,buf,len)
-#define send(sock,buf,len,flg) write(sock,buf,len)
-
-/** \brief BSD name for internal _sys_sock_recvfrom() */
-#define recvfrom(sock,buf,length,flags,address,address_len) _sys_sock_recvfrom(sock,buf,length,flags,address,address_len)
-/** \brief BSD name for internal _sys_sock_sendto() */
-#define sendto(sock,buf,length,flags,dest_addr,dest_len)    _sys_sock_sendto(sock,buf,length,flags,dest_addr,dest_len)
 
 
 #endif

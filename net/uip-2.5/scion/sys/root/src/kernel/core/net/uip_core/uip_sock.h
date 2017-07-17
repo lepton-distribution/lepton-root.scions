@@ -41,12 +41,23 @@ Includes
 #include "kernel/net/uip1.0/net/uip_arch.h"
 #endif
 
-#if USE_UIP_VER == 2500 
-#pragma message ("uip 2.5")
-#include "kernel/net/uip2.5/contiki-conf.h"
-#include "kernel/net/uip2.5/net/uip.h"
-#include "kernel/net/uip2.5/net/uip_arch.h"
+#if USE_UIP_VER == 2500 || USE_UIP_VER == 3000
+   #if USE_UIP_VER == 2500
+      #pragma message ("uip 2.5")
+      #include "kernel/net/uip2.5/contiki-conf.h"
+      #include "kernel/net/uip2.5/net/uip.h"
+      #include "kernel/net/uip2.5/net/uip_arch.h"
+   #endif
+
+   #if USE_UIP_VER == 3000
+      #pragma message ("uip 3.0")
+      #include "kernel/net/uip/core/contiki-conf.h"
+      #include "kernel/net/uip/core/net/ip/uipopt.h"
+      #include "kernel/net/uip/core/net/ip/uip.h"
+      #include "kernel/net/uip/core/net/ip/uip_arch.h"
+   #endif
 #endif
+
 #include "kernel/core/net/uip_core/uip_socket.h"
 #include "kernel/fs/vfs/vfs.h"
 
@@ -100,6 +111,7 @@ typedef struct {
    desc_t desc;
    //specific only for listen socket
    hsock_t hsocks;
+
    desc_t accept_desc;//accept socket file descriptor
    int fd; //accept socket process file descriptor
 
@@ -123,6 +135,8 @@ typedef struct {
    struct _sockaddr_in addr_in_to;
    #endif
    struct uip_udp_conn * uip_udp_conn;
+   //kernel net core socket info
+   void* p_uip_core_socket_info;
 }socket_t;
 
 typedef struct socket_recvfrom_header_st{
@@ -158,9 +172,13 @@ extern struct socksconn_state *hs;
 }
 
 #define __CLR_SOCKET_EVENT(hsock)
-
-hsock_t  sock_get(void);
+hsock_t  sock_get(desc_t desc);
 void     sock_put(hsock_t hsock);
+int      sock_get_fd(desc_t desc);
+void     sock_put_fd(int fd);
+hsock_t  sock_fd_to_hsock(int fd);
+int      sock_hsock_to_fd(hsock_t hsock);
+
 int      socksconn_no(desc_t desc);
 int      uip_sock_init(void);
 void     uip_sock(void);

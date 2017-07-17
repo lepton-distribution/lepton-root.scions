@@ -30,10 +30,18 @@ Includes
 #include <stdarg.h>
 
 #include "kernel/core/kernelconf.h"
-#include "kernel/core/kernel.h"
-#include "kernel/core/process.h"
+#include "kernel/core/limits.h"
+#include "kernel/core/dirent.h"
+#include "kernel/core/errno.h"
 #include "kernel/core/system.h"
-//#include <time.h>
+#include "kernel/core/process.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/stat.h"
+
+#include "kernel/fs/vfs/vfstypes.h"
+#include "kernel/fs/vfs/vfskernel.h"
+#include "kernel/fs/vfs/vfs.h"
 
 
 #if USE_UIP_VER == 1000 
@@ -42,13 +50,26 @@ Includes
 #include "kernel/net/uip1.0/net/uip_arch.h"
 #endif
 
-#if USE_UIP_VER == 2500 
-#pragma message ("uip 2.5")
-#include "kernel/net/uip2.5/contiki-conf.h"
-#include "kernel/net/uip2.5/net/uip.h"
-#include "kernel/net/uip2.5/net/uip_arch.h"
-#include "kernel/net/uip2.5/net/uip-ds6.h"
+
+
+#if USE_UIP_VER == 2500 || USE_UIP_VER == 3000
+   #if USE_UIP_VER == 2500 
+   #pragma message ("uip 2.5")
+   #include "kernel/net/uip2.5/contiki-conf.h"
+   #include "kernel/net/uip2.5/net/uip.h"
+   #include "kernel/net/uip2.5/net/uip_arch.h"
+   #include "kernel/net/uip2.5/net/uip-ds6.h"
+   #endif
+
+   #if USE_UIP_VER == 3000
+   #pragma message ("uip 3.0")
+   #include "kernel/net/uip/core/contiki-conf.h"
+   #include "kernel/net/uip/core/net/ip/uip.h"
+   #include "kernel/net/uip/core/net/ip/uip_arch.h"
+   #include "kernel/net/uip/core/net/ipv6/uip-ds6.h"
+   #endif
 #endif
+
 #include "kernel/core/net/uip_core/uip_core.h"
 #include "kernel/core/net/uip_core/uip_sock.h"
 
@@ -104,12 +125,15 @@ int uip_sock_init(void) {
    {
       uip_ip6addr_t ip6addr;
       memcpy(uip_lladdr.addr, "\x00\x0c\x29\x28\x23\x45", 6); // Set in zigbeestack.cpp (UID)    
-      uip_ip6addr(&ip6addr, 0xfe80,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0002);
+      //0xfe80:0000:0000:0000:0000:0000:0000:0002
+      //uip_ip6addr(&ip6addr, 0xfe80,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0002);
+      //2a01:e34:ec3a:1010 : 105a : bb3b : 47f1 : 7957
+      uip_ip6addr(&ip6addr, 0x2a01, 0x0e34, 0xec3a, 0x1010, 0x105a, 0xbb3b, 0x47f1, 0x7957);
       uip_sethostaddr(&ip6addr);
       uip_ipaddr_copy(&uip_hostaddr, &ip6addr);
 
       tcpip_init();  // rpl_init() is called inside tcpip_init()
-      clock_init();
+      //clock_init();
       uip_ds6_addr_add(&ip6addr, 0, ADDR_MANUAL);
    }
    #endif
@@ -127,7 +151,8 @@ int uip_sock_init(void) {
       socketList[i].addr_in.sin_port=0;
       #endif
       socketList[i].socksconn=NULL;
-      socketList[i].desc = -1;
+      socketList[i].desc = INVALID_DESC;
+      socketList[i].fd = -1;
    }
 
    for(i=0; i<UIP_CONNS; i++) {
@@ -144,6 +169,7 @@ int uip_sock_init(void) {
    return 0;
 }
 
+
 /*-------------------------------------------
 | Name:sock_get
 | Description:
@@ -152,29 +178,31 @@ int uip_sock_init(void) {
 | Comments:
 | See:
 ---------------------------------------------*/
-hsock_t sock_get(void){
+hsock_t sock_get(desc_t desc) {
 #if defined (USE_UIP)
-   int i;
+   int fd;
 
-   for(i=0; i<MAX_SOCKET; i++) {
-      #if UIP_CONF_IPV6
-      if(!socketList[i].addr_in.sin6_port){
-         socketList[i].addr_in.sin6_scope_id=0;
-      #else
-      if(!socketList[i].addr_in.sin_port) {
-      #endif
+   for (fd = 0; fd<MAX_SOCKET; fd++) {
+#if UIP_CONF_IPV6
+      if (!socketList[fd].addr_in.sin6_port) {
+         socketList[fd].desc = desc;
+         socketList[fd].fd = fd;
+         socketList[fd].addr_in.sin6_scope_id = 0;
+#else
+      if (!socketList[fd].addr_in.sin_port) {
+#endif
 
-         socketList[i].r=0;
-         socketList[i].w=0;
+         socketList[fd].r = 0;
+         socketList[fd].w = 0;
 
-         socketList[i].socksconn=(hsock_t)0;
-         //printf("alloc socket=%d\n",i);
-         return (hsock_t)&socketList[i];
+         socketList[fd].socksconn = (hsock_t)0;
+         //printf("alloc socket=%d\n",fd);
+         return (hsock_t)&socketList[fd];
       }
-   }
+      }
 #endif
    return (hsock_t)0;
-}
+   }
 
 /*-------------------------------------------
 | Name:sock_put
@@ -184,15 +212,75 @@ hsock_t sock_get(void){
 | Comments:
 | See:
 ---------------------------------------------*/
-void sock_put(hsock_t hsock){
+void sock_put(hsock_t hsock) {
 #if defined (USE_UIP)
-   if(!hsock) return;
-   #if UIP_CONF_IPV6
-   ((socket_t*)hsock)->addr_in.sin6_port=0;
-   #else
-   ((socket_t*)hsock)->addr_in.sin_port=0;
-   #endif
+   if (!hsock) return;
+#if UIP_CONF_IPV6
+   ((socket_t*)hsock)->addr_in.sin6_port = 0;
+#else
+   ((socket_t*)hsock)->addr_in.sin_port = 0;
 #endif
+#endif
+}
+
+/*-------------------------------------------
+| Name:sock_get_fd
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int sock_get_fd(desc_t desc) {
+   return ((socket_t*)sock_get(desc))->fd;
+}
+
+
+/*-------------------------------------------
+| Name:sock_put_fd
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+void sock_put_fd(int fd) {
+   if (fd < 0)
+      return;
+   //
+   hsock_t hsock = (hsock_t)&socketList[fd];
+   //
+   sock_put(hsock);
+}
+
+
+/*-------------------------------------------
+| Name:sock_fd_to_hsock
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+hsock_t sock_fd_to_hsock(int fd) {
+   if (fd < 0)
+      return (hsock_t)0;
+   //
+   hsock_t hsock = (hsock_t)&socketList[fd];
+   //
+   return hsock;
+}
+
+/*-------------------------------------------
+| Name:sock_hsock_to_fd
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int sock_hsock_to_fd(hsock_t hsock) {
+   return((socket_t*)hsock)->fd;
 }
 
 /*-------------------------------------------
@@ -398,59 +486,53 @@ int uip_sock_tcp_callback(void){
             #else
             uip_conn->lport == socketList[i].addr_in.sin_port
             #endif
-            //printf("connection request on port : %d\n",ntohs(uip_conn->lport));
             ){
+
             socksconn->hsocks=(hsock_t)&socketList[i];
-
-
-
-            ((socket_t*)(socksconn->hsocks))->state=STATE_SOCKET_CONNECTED;
+            
+            //
             //post event SOCKS_CONNECTED to application data on listen socket
             //__PUT_SOCKET_EVENT(socksconn->hsocks);
+            //
             {
                hsock_t hsocks_listen = socksconn->hsocks;
-               desc_t desc_listen = ((socket_t*)hsocks_listen)->desc ;
-               desc_t desc;
-
-               //printf("connection accepted on port : %d\n",uip_conn->lport);
-
-               //get new socket from list
-               desc = _vfs_open("/dev/sock",O_RDWR,0);
-
-               if(desc>=0){
-                  ((socket_t*)ofile_lst[desc].p)->accept_desc = desc ;
-                  //set pthread owner with desc of listen sock
-                  socksconn->hsocks = ofile_lst[desc].p;
-                  ofile_lst[desc].owner_pthread_ptr_read=ofile_lst[desc_listen].owner_pthread_ptr_read;
-                  ofile_lst[desc].owner_pthread_ptr_write=ofile_lst[desc_listen].owner_pthread_ptr_write;
-               }else{
+               hsock_t hsock_accepted;
+               //
+               hsock_accepted = sock_get(INVALID_DESC);
+               if (hsock_accepted == (hsock_t)0) {
                   socksconn->hsocks = 0;
                   continue;
                }
-
+               //printf("connection accepted on port : %d\n",uip_conn->lport);
+               //
+               ((socket_t*)(hsocks_listen))->state = STATE_SOCKET_CONNECTED;
+              
+               //attach new hsock on current sock connection
+               socksconn->hsocks = hsock_accepted;
+               ((socket_t*)(hsock_accepted))->state = STATE_SOCKET_WAIT;
                //
                ((socket_t*)(hsocks_listen))->hsocks=socksconn->hsocks;
 
-               ((socket_t*)(socksconn->hsocks))->socksconn = socksconn;
+               ((socket_t*)(hsock_accepted))->socksconn = socksconn;
 
-               ((socket_t*)(socksconn->hsocks))->socksconn->_r=0;
-               ((socket_t*)(socksconn->hsocks))->socksconn->_w=0;
+               ((socket_t*)(hsock_accepted))->socksconn->_r=0;
+               ((socket_t*)(hsock_accepted))->socksconn->_w=0;
 
                //send hsocks
                #if UIP_CONF_IPV6
-               memcpy( &((socket_t*)(socksconn->hsocks))->addr_in.sin6_addr,
-                       &((socket_t*)(hsocks_listen))->addr_in.sin6_addr, sizeof(struct _in6_addr));
-               ((socket_t*)(socksconn->hsocks))->addr_in.sin6_port=uip_conn->rport;
+                  memcpy( &((socket_t*)(hsock_accepted))->addr_in.sin6_addr,
+                          &((socket_t*)(hsocks_listen))->addr_in.sin6_addr, sizeof(struct _in6_addr));
+                  //
+                  ((socket_t*)(hsock_accepted))->addr_in.sin6_port=uip_conn->rport;
                #else
-               ((socket_t*)(socksconn->hsocks))->addr_in.sin_addr.s_addr
-                  =((socket_t*)(hsocks_listen))->addr_in.sin_addr.s_addr;
-
-               //
-               //((socket_t*)(socksconn->hsocks))->addr_in.sin_port=((socket_t*)(hsocks_listen))->addr_in.sin_port;
-               ((socket_t*)(socksconn->hsocks))->addr_in.sin_port=uip_conn->rport;
+                  ((socket_t*)(hsock_accepted))->addr_in.sin_addr.s_addr
+                     =((socket_t*)(hsocks_listen))->addr_in.sin_addr.s_addr;
+                  //
+                  //((socket_t*)(socksconn->hsocks))->addr_in.sin_port=((socket_t*)(hsocks_listen))->addr_in.sin_port;
+                  ((socket_t*)(hsock_accepted))->addr_in.sin_port=uip_conn->rport;
                #endif
 
-               ((socket_t*)(socksconn->hsocks))->state=STATE_SOCKET_WAIT;
+               ((socket_t*)(hsock_accepted))->state=STATE_SOCKET_WAIT;
                //((socket_t*)(hsocks_listen))->state=STATE_SOCKET_LISTEN;//set by accept function
    #if UIP_LOGGING==1
                ANNOTATE("accepted() i=%d desc=%d on port:%d\n",i,

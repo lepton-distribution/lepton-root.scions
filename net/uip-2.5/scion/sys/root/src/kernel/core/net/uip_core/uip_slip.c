@@ -41,11 +41,21 @@ Includes
 #include "kernel/net/uip1.0/net/uip.h"
 #include "kernel/net/uip1.0/net/uip_arch.h"
 #endif
-#if USE_UIP_VER == 2500 
-#pragma message ("uip 2.5")
-#include "kernel/net/uip2.5/contiki-conf.h"
-#include "kernel/net/uip2.5/net/uip.h"
-#include "kernel/net/uip2.5/net/uip_arch.h"
+
+#if USE_UIP_VER == 2500 || USE_UIP_VER == 3000
+   #if USE_UIP_VER == 2500
+   #pragma message ("uip 2.5")
+   #include "kernel/net/uip2.5/contiki-conf.h"
+   #include "kernel/net/uip2.5/net/uip.h"
+   #include "kernel/net/uip2.5/net/uip_arch.h"
+   #endif
+
+   #if USE_UIP_VER == 3000
+   #pragma message ("uip 3.0")
+   #include "kernel/net/uip/core/contiki-conf.h"
+   #include "kernel/net/uip/core/net/ip/uip.h"
+   #include "kernel/net/uip/core/net/ip/uip_arch.h"
+   #endif
 #endif
 
 /*===========================================

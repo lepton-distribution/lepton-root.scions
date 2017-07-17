@@ -146,7 +146,7 @@ typedef unsigned int uip_stats_t;
 
 #define RADIO_RXBUFS                    2   // Set to a number greater than 1 to decrease packet loss probability at high rates (e.g, with fragmented packets)
 
-#define UIP_CONF_IPV6                   0//1
+#define UIP_CONF_IPV6                   1//1
 #define UIP_CONF_IPV6_QUEUE_PKT         0   // This is a very costly feature as it increases the RAM usage by approximately UIP_ND6_MAX_NEIGHBORS * UIP_LINK_MTU bytes.
 #define UIP_CONF_IPV6_CHECKS            1
 #define UIP_CONF_IPV6_REASSEMBLY        0

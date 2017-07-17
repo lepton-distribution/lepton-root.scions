@@ -64,32 +64,45 @@ either the MPL or the [eCos GPL] License."
    #include "kernel/net/uip1.0/net/uip_arch.h"
 #endif
 
-#if USE_UIP_VER == 2500 
-#pragma message ("uip 2.5")
-#include "kernel/net/uip2.5/contiki-conf.h"
-#include "kernel/net/uip2.5/net/uip.h"
-#include "kernel/net/uip2.5/net/uip_arch.h"
+#if USE_UIP_VER == 2500 || USE_UIP_VER == 3000
+   #if USE_UIP_VER == 2500
+      #pragma message ("uip 2.5")
+      #include "kernel/net/uip2.5/contiki-conf.h"
+      #include "kernel/net/uip2.5/net/uip.h"
+      #include "kernel/net/uip2.5/net/uip_arch.h"
+   #endif
+
+   #if USE_UIP_VER == 3000
+      #pragma message ("uip 3.0")
+      #include "kernel/net/uip/core/contiki-conf.h"
+      #include "kernel/net/uip/core/net/ip/uip.h"
+      #include "kernel/net/uip/core/net/ip/uip_arch.h"
+      #include "kernel/net/uip/core/net/ipv4/uip_arp.h"
+   #endif
+
+
 #define __uip_sendpacket(__conn__) do { uip_conn = &uip_conns[__conn__]; \
                                 uip_process(UIP_TIMER); } while (0)
 
 #define __uip_makeconnection(__conn__) do { uip_conn = &uip_conns[__conn__]; \
                                 uip_process(UIP_POLL_REQUEST); } while (0)
-#if UIP_CONF_IPV6
-#define uip_udp_sendpacket(__conn_udp_no__,__dest_addr__) do { \
-      uip_udp_conn = &uip_udp_conns[__conn_udp_no__]; \
-      uip_udp_conn->rport = (__dest_addr__).sin6_port;\
-      uip_ipaddr_copy(&uip_udp_conn->ripaddr, (uip_ipaddr_t*)&(__dest_addr__).sin6_addr.s6_addr );\
-      uip_process(UIP_UDP_TIMER);\
-      uip_udp_conn->rport =0;\
-   } while (0)
+#if UIP_CONF_IPV6 || NETSTACK_CONF_WITH_IPV6
+   #define __uip_udp_sendpacket(__conn_udp_no__,__dest_addr__) do { \
+         uip_udp_conn = &uip_udp_conns[__conn_udp_no__]; \
+         uip_udp_conn->rport = (__dest_addr__).sin6_port;\
+         uip_ipaddr_copy(&uip_udp_conn->ripaddr, (uip_ipaddr_t*)&(__dest_addr__).sin6_addr.s6_addr );\
+         uip_process(UIP_UDP_TIMER);\
+         uip_udp_conn->rport =0;\
+      } while (0)
 #else
-#define __uip_udp_sendpacket(__conn_udp_no__,__dest_addr__) do { \
-      uip_udp_conn = &uip_udp_conns[__conn_udp_no__]; \
-      uip_udp_conn->rport = (__dest_addr__).sin_port;\
-      uip_ipaddr_copy(&uip_udp_conn->ripaddr, (uip_ipaddr_t*)&(__dest_addr__).sin_addr.s_addr );\
-      uip_process(UIP_UDP_TIMER);\
-      uip_udp_conn->rport =0;\
-   } while (0)
+   #define __uip_udp_sendpacket(__conn_udp_no__,__dest_addr__) do { \
+         uip_udp_conn = &uip_udp_conns[__conn_udp_no__]; \
+         uip_udp_conn->rport = (__dest_addr__).sin_port;\
+         uip_ipaddr_copy(&uip_udp_conn->ripaddr, (uip_ipaddr_t*)&(__dest_addr__).sin_addr.s_addr );\
+         uip_process(UIP_UDP_TIMER);\
+         uip_udp_conn->rport =0;\
+      } while (0)
+
 #endif
 
 //
@@ -199,7 +212,7 @@ typedef struct uip_core_if_info_st{
 uip_core_if_info_t uip_core_if_list[IF_LIST_MAX]={
 #if defined(USE_IF_ETHERNET)
   {
-  "eth0",
+  "/dev/eth0",
   0,
   INVALID_DESC,
   INVALID_DESC
@@ -464,30 +477,44 @@ static void _uip_split_output(desc_t desc, char* buf, int size){
 ---------------------------------------------*/
    #define __eth_hdr ((struct uip_eth_hdr *)&uip_buf[0])
 static int _uip_core_recv(desc_t desc_r,desc_t desc_w){
-   if(desc_r<0 || desc_w<0)
+   int cb;
+   if (desc_r < 0 || desc_w < 0) {
       return -1;
-
-   uip_len = g_pf_uip_core_recv_ip_packet(desc_r,uip_buf, sizeof(uip_buf));
+   }
+     
+   //
+   cb = g_pf_uip_core_recv_ip_packet(desc_r,uip_buf, sizeof(uip_buf));
+   if (cb < 0) {
+      return -1;
+   }
+   //
+   uip_len = cb;
+   //
    if(uip_len > 0) {
-   #if defined(USE_IF_ETHERNET)
-      u16_t type = __eth_hdr->type;
-      u16_t _TYPE = UIP_ETHTYPE_ARP;
-         if(__eth_hdr->type == htons(UIP_ETHTYPE_IP)
+      #if defined(USE_IF_ETHERNET)
+         u16_t type = __eth_hdr->type;
+         u16_t _TYPE = UIP_ETHTYPE_ARP;
+         if(
+            #if !UIP_CONF_IPV6
+               __eth_hdr->type == htons(UIP_ETHTYPE_IP)
+            #endif
             #if UIP_CONF_IPV6
-            /*||*/ __eth_hdr->type == htons(UIP_ETHTYPE_IPV6)
+               __eth_hdr->type == htons(UIP_ETHTYPE_IPV6)
             #endif
             ) {
             #if !UIP_CONF_IPV6
-         uip_arp_ipin();
+               uip_arp_ipin();
             #endif
-         uip_process(UIP_DATA);
-         /* If the above function invocation resulted in data that
-         should be sent out on the network, the global variable
-         uip_len is set to a value > 0. */
-         if(uip_len > 0) {
+            uip_process(UIP_DATA);
+            /* If the above function invocation resulted in data that
+            should be sent out on the network, the global variable
+            uip_len is set to a value > 0. */
+            if(uip_len > 0) {
+               //
                #if !UIP_CONF_IPV6
-            uip_arp_out();
+                  uip_arp_out();
                #endif
+               //
                #if UIP_CONF_IPV6
                {
                   unsigned char eth_src_buf[6];
@@ -499,36 +526,45 @@ static int _uip_core_recv(desc_t desc_r,desc_t desc_w){
                }
                __uip_core_send_ip_packet(desc_w,uip_buf,uip_len+UIP_LLH_LEN);//modif phlb uIP2.5 UIP_LLH_LEN must take in charge the link layer
                #else
-            __uip_core_send_ip_packet(desc_w,uip_buf,uip_len);
+                  __uip_core_send_ip_packet(desc_w,uip_buf,uip_len);
                #endif
-            uip_len=0;
-         }
-
-      } else if(__eth_hdr->type == htons(UIP_ETHTYPE_ARP)) {
+               uip_len=0;
+            }
+         }  
+         #if !UIP_CONF_IPV6
+         else if(__eth_hdr->type == htons(UIP_ETHTYPE_ARP)) {
             #if !UIP_CONF_IPV6
-         uip_arp_arpin();
+               uip_arp_arpin();
             #endif
+            /* If the above function invocation resulted in data that
+               should be sent out on the network, the global variable
+               uip_len is set to a value > 0. */
+            if(uip_len > 0) {
+               __uip_core_send_ip_packet(desc_w,uip_buf,uip_len);
+               uip_len=0;
+            }
+         }
+         #elif UIP_CONF_IPV6
+         else{
+            /* is not an IPv6 packet. drop it*/
+            uip_len = 0;
+         } 
+         #endif
+
+      #elif defined(USE_IF_SLIP) || defined(USE_IF_PPP)     
+         uip_process(UIP_DATA);
          /* If the above function invocation resulted in data that
-            should be sent out on the network, the global variable
-            uip_len is set to a value > 0. */
+         should be sent out on the network, the global variable
+         uip_len is set to a value > 0. */
          if(uip_len > 0) {
             __uip_core_send_ip_packet(desc_w,uip_buf,uip_len);
             uip_len=0;
          }
-      }
-      #elif defined(USE_IF_SLIP) || defined(USE_IF_PPP)     
-      uip_process(UIP_DATA);
-      /* If the above function invocation resulted in data that
-      should be sent out on the network, the global variable
-      uip_len is set to a value > 0. */
-      if(uip_len > 0) {
-         __uip_core_send_ip_packet(desc_w,uip_buf,uip_len);
-         uip_len=0;
-      }
-   #endif
+      #endif
 
-   }
-
+   }//(uip_len > 0)
+   //
+   //
    return 0;
 }
 
@@ -715,7 +751,7 @@ int uip_core_queue_put(uint8_t uip_flag, desc_t desc, void* buf, int size){
    }
    uip_core_queue_size-=(uip_core_queue_header.size+sizeof(uip_core_queue_header_t));
    kernel_pthread_mutex_unlock(&uip_core_queue_mutex);
-   __fire_io_int(((kernel_pthread_t*)&uip_core_thread));
+   __fire_io(((kernel_pthread_t*)&uip_core_thread));
    return uip_core_queue_header.size;
 }
 int uip_core_queue_get(uint8_t* uip_flag, desc_t* desc, void* buf, int size){
@@ -930,7 +966,7 @@ void* uip_core_routine(void* arg){
       desc_t desc_r = _vfs_open(uip_core_if_list[0].name,O_RDONLY,0);
       desc_t desc_w = _vfs_open(uip_core_if_list[0].name,O_WRONLY,0);
       if(desc_r<0 || desc_w<0)
-         return (void*0);//uip core panic!!!
+         return (void*)(0);//uip core panic!!!
    #elif defined(USE_IF_PPP)
       desc_t desc_r = _vfs_open(uip_core_if_list[0].name,O_RDONLY,0);
       desc_t desc_w = _vfs_open(uip_core_if_list[0].name,O_WRONLY,0);
