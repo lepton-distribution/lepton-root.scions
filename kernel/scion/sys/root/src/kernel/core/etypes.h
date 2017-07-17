@@ -65,4 +65,7 @@ Declaration
    
 #endif  //__KERNEL_COMPILER_STDINT_INCLUDED__
    
+//  
+typedef float float32_t;
+   
 #endif
