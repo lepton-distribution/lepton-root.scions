@@ -38,6 +38,7 @@ Includes
 
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel.h"
+#include "kernel/core/kernel_compiler.h"
 #include "kernel/core/system.h"
 #include "kernel/core/systime.h"
 #include "kernel/core/stat.h"
@@ -63,9 +64,9 @@ Global Declaration
 =============================================*/
 
 static char g_sd_path[4];  /* SD logical drive path */
-static FATFS g_disk_fattfs;
-
-
+//
+static FATFS g_disk_fatfs;
+//
 typedef union {
    FIL   fil;
    DIR   dir;
@@ -143,8 +144,8 @@ static int fatfscore_statfs(mntdev_t* pmntdev,struct statvfs *statvfs){
    statvfs->f_bsize  = _MAX_SS; /* sector size in byte */
    statvfs->f_frsize = _MAX_SS; /* sector size in byte */
 
-   statvfs->f_blocks = g_disk_fattfs.fsize; /* Sectors per FAT */
-   statvfs->f_bfree  = g_disk_fattfs.free_clust*g_disk_fattfs.csize; /* (Number of free clusters) x Sectors per cluster (1,2,4...128) */
+   statvfs->f_blocks = g_disk_fatfs.fsize; /* Sectors per FAT */
+   statvfs->f_bfree  = g_disk_fatfs.free_clust*g_disk_fatfs.csize; /* (Number of free clusters) x Sectors per cluster (1,2,4...128) */
    statvfs->f_namemax = _MAX_LFN;
 
    return 0;
@@ -161,17 +162,26 @@ static int fatfscore_statfs(mntdev_t* pmntdev,struct statvfs *statvfs){
 int fatfscore_readfs(mntdev_t* pmntdev){
    uint8_t retSD;
    
+   //
+	memset(&g_disk_fatfs, 0, sizeof(FATFS));
+
+   //
+   memset(g_sd_path,0,sizeof(g_sd_path));
+   //
    /*## FatFS: Link the SD driver ###########################*/
    retSD = FATFS_LinkDriver(&SD_Driver, g_sd_path);
+   if(retSD!=FR_OK){
+      return -1;
+   }
 
    /* USER CODE BEGIN Init */
    /* additional user code for init */     
    // mount immediatly option (1)
-   if(f_mount(&g_disk_fattfs, (TCHAR const*)g_sd_path, 1) != FR_OK){
+   if(f_mount(&g_disk_fatfs, (TCHAR const*)g_sd_path, 1) != FR_OK){
       return -1;
    }
    //
-   pmntdev->inodetbl_size = g_disk_fattfs.n_fatent;
+   pmntdev->inodetbl_size = g_disk_fatfs.n_fatent;
    //
    return 0;
 }
