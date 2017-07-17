@@ -98,6 +98,8 @@ tmr_t kernel_tmr;
    #define KERNEL_STACK_SIZE  2048 //CORTEXM3
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM4__))
    #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM7__))
+   #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM7
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__))
    #define KERNEL_STACK_SIZE  2048 //ARM926EJS
 #elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__))
@@ -646,10 +648,11 @@ void _kernel_warmup_dev(void){
 | See:
 ----------------------------------------------*/
 void _kernel_warmup_tty(void){
+#ifdef __KERNEL_DEV_TTY
    desc_t desc_1;
    desc_t desc_2;
    desc_t desc_tty;
-#ifdef __KERNEL_DEV_TTY
+
    if((desc_1 = _vfs_open(__KERNEL_DEV_TTY,O_RDWR,0))<0)
       return;
    //
@@ -1115,10 +1118,10 @@ void _start_kernel(char* arg){
    //
    kernel_pthread_mutex_init(&kernel_mutex,&mutex_attr);
 
-//   rttmr_attr.tm_msec=__KERNEL_ALARM_TIMER;
-//   rttmr_attr.func = _kernel_timer;
-//   rttmr_create(&kernel_tmr,&rttmr_attr);
-//   rttmr_start(&kernel_tmr);
+   rttmr_attr.tm_msec=__KERNEL_ALARM_TIMER;
+   rttmr_attr.func = _kernel_timer;
+   rttmr_create(&kernel_tmr,&rttmr_attr);
+   rttmr_start(&kernel_tmr);
 
    //stdio init(mutex for stdin, stdout, stderr)
    __stdio_init();
