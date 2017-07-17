@@ -104,6 +104,8 @@ tmr_t kernel_tmr;
    #define KERNEL_STACK_SIZE  2048 //CORTEXM3
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM4__))
    #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM4
+#elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM7__))
+   #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM7
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__))
    #define KERNEL_STACK_SIZE  2048 //ARM926EJS
 #elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__))
