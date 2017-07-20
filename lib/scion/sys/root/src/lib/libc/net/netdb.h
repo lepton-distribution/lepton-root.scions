@@ -40,7 +40,7 @@ either the MPL or the [eCos GPL] License."
 #elif defined (__KERNEL_NET_IPSTACK) && defined(USE_MODEMIP)
    #include "kernel/core/net/bsd/netdb.h"
 #else
-
+    #include "kernel/core/net/bsd/netdb.h"
 #endif
 
 /*============================================
@@ -51,9 +51,10 @@ either the MPL or the [eCos GPL] License."
 #if defined (__KERNEL_NET_IPSTACK) && defined(USE_LWIP)
    #define libc_hostent hostent
    struct libc_hostent* libc_gethostbyname(const char *name);
-#endif
-
-#if defined(__KERNEL_NET_IPSTACK) && defined(USE_MODEMIP)
+#elif defined(__KERNEL_NET_IPSTACK) && defined(USE_MODEMIP)
+   #define libc_hostent hostent
+   struct libc_hostent* libc_gethostbyname(const char *name);
+#else
    #define libc_hostent hostent
    struct libc_hostent* libc_gethostbyname(const char *name);
 #endif
