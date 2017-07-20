@@ -8,10 +8,10 @@
     <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\stm32f4xx\dev_stm32f4xx_7.20.ewp</path>
   </project>
   <project>
-    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon_7.20.ewp</path>
+    <path>$WS_DIR$\tauon-basic_stm32f407_discovery_7.20.ewp</path>
   </project>
   <project>
-    <path>$WS_DIR$\tauon-basic_stm32f407_discovery_7.20.ewp</path>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon_7.80.ewp</path>
   </project>
   <batchBuild>
     <batchDefinition>
@@ -25,7 +25,7 @@
         <configuration>Debug</configuration>
       </member>
       <member>
-        <project>tauon_7.20</project>
+        <project>tauon_7.80</project>
         <configuration>tauon-kernel-cortex-m4-debug</configuration>
       </member>
       <member>

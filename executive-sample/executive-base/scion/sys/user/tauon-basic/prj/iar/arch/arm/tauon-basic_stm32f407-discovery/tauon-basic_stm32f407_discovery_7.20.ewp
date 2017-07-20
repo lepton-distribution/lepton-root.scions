@@ -12,7 +12,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -26,11 +26,6 @@
         <option>
           <name>ListPath</name>
           <state>Output\Debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>40</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -59,11 +54,6 @@
           <state>0</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>1</state>
         </option>
@@ -87,7 +77,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.30.1.7765</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -136,13 +126,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>40</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>24</version>
           <state>40</state>
         </option>
         <option>
@@ -156,6 +141,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>24</version>
+          <state>39</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>STM32F407VG	ST STM32F407VG</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>24</version>
+          <state>39</state>
         </option>
       </data>
     </settings>
@@ -601,7 +614,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -628,6 +641,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -647,7 +661,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -919,7 +933,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -930,6 +944,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -970,7 +992,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -984,11 +1006,6 @@
         <option>
           <name>ListPath</name>
           <state>Output\Release\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>38</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1017,11 +1034,6 @@
           <state>0</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>1</state>
         </option>
@@ -1045,7 +1057,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>5.41.0.51757</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -1057,7 +1069,7 @@
         </option>
         <option>
           <name>OGChipSelectEditMenu</name>
-          <state>LM3SxBxx	TexasInstruments LM3SxBxx</state>
+          <state>LM3S9B96	TexasInstruments LM3S9B96</state>
         </option>
         <option>
           <name>GenLowLevelInterface</name>
@@ -1094,13 +1106,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>38</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -1114,6 +1121,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>24</version>
+          <state>38</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>LM3S9B96	TexasInstruments LM3S9B96</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>24</version>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -1542,7 +1577,7 @@
         <debug>0</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -1569,6 +1604,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -1588,7 +1624,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>0</debug>
         <option>
@@ -1860,7 +1896,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -1871,6 +1907,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -1911,7 +1955,7 @@
       <name>General</name>
       <archiveVersion>3</archiveVersion>
       <data>
-        <version>22</version>
+        <version>24</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -1925,11 +1969,6 @@
         <option>
           <name>ListPath</name>
           <state>freertos-debug\List</state>
-        </option>
-        <option>
-          <name>Variant</name>
-          <version>21</version>
-          <state>38</state>
         </option>
         <option>
           <name>GEndianMode</name>
@@ -1958,11 +1997,6 @@
           <state>0</state>
         </option>
         <option>
-          <name>FPU</name>
-          <version>2</version>
-          <state>0</state>
-        </option>
-        <option>
           <name>OGCoreOrChip</name>
           <state>1</state>
         </option>
@@ -1986,7 +2020,7 @@
         </option>
         <option>
           <name>OGLastSavedByProductVersion</name>
-          <state>7.20.1.7306</state>
+          <state>7.80.4.12487</state>
         </option>
         <option>
           <name>GeneralEnableMisra</name>
@@ -2035,13 +2069,8 @@
           <state>$TOOLKIT_DIR$\INC\c\DLib_Config_Normal.h</state>
         </option>
         <option>
-          <name>GFPUCoreSlave</name>
-          <version>21</version>
-          <state>38</state>
-        </option>
-        <option>
           <name>GBECoreSlave</name>
-          <version>21</version>
+          <version>24</version>
           <state>38</state>
         </option>
         <option>
@@ -2055,6 +2084,34 @@
         <option>
           <name>GRuntimeLibThreads</name>
           <state>0</state>
+        </option>
+        <option>
+          <name>CoreVariant</name>
+          <version>24</version>
+          <state>38</state>
+        </option>
+        <option>
+          <name>GFPUDeviceSlave</name>
+          <state>STM32F207ZG	ST STM32F207ZG</state>
+        </option>
+        <option>
+          <name>FPU2</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NrRegs</name>
+          <version>0</version>
+          <state>0</state>
+        </option>
+        <option>
+          <name>NEON</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>GFPUCoreSlave2</name>
+          <version>24</version>
+          <state>38</state>
         </option>
       </data>
     </settings>
@@ -2500,7 +2557,7 @@
         <debug>1</debug>
         <option>
           <name>OOCOutputFormat</name>
-          <version>2</version>
+          <version>3</version>
           <state>0</state>
         </option>
         <option>
@@ -2527,6 +2584,7 @@
       <data>
         <extensions></extensions>
         <cmdline></cmdline>
+        <hasPrio>0</hasPrio>
       </data>
     </settings>
     <settings>
@@ -2546,7 +2604,7 @@
       <name>ILINK</name>
       <archiveVersion>0</archiveVersion>
       <data>
-        <version>16</version>
+        <version>18</version>
         <wantNonLocal>1</wantNonLocal>
         <debug>1</debug>
         <option>
@@ -2818,7 +2876,7 @@
         </option>
         <option>
           <name>CrcAlgorithm</name>
-          <version>0</version>
+          <version>1</version>
           <state>1</state>
         </option>
         <option>
@@ -2829,6 +2887,14 @@
         <option>
           <name>IlinkThreadsSlave</name>
           <state>1</state>
+        </option>
+        <option>
+          <name>IlinkLogCallGraph</name>
+          <state>0</state>
+        </option>
+        <option>
+          <name>IlinkIcfFile_AltDefault</name>
+          <state></state>
         </option>
       </data>
     </settings>
@@ -2876,13 +2942,7 @@
         </excluded>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\tauon\tauon-kernel-cortex-m4f-freertos-debug\Exe\tauon_7.20.a</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\tauon_7.20\tauon-kernel-cortex-m4-debug\Lib\tauon_7.20.a</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\tauon_7.80\tauon-kernel-cortex-m4-debug\Lib\tauon_7.80.a</name>
       </file>
     </group>
     <group>

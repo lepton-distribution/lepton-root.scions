@@ -8101,6 +8101,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_cpu.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_encoder.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_hd.h</name>
       </file>
       <file>
