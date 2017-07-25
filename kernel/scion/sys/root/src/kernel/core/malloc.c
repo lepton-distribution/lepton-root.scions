@@ -71,6 +71,7 @@ void* _sys_malloc(size_t size){
    p=pvPortMalloc(size);
 #else
    p=malloc(size);
+   //p = _aligned_malloc(size,1);
 #endif
    if(!p)
       p=(void*)0;
@@ -177,6 +178,7 @@ void _sys_free (void* p){
 	vPortFree(p);
 #else
    free(p);
+   //_aligned_free(p);
 #endif
 
 #if !defined(__GNUC__)
