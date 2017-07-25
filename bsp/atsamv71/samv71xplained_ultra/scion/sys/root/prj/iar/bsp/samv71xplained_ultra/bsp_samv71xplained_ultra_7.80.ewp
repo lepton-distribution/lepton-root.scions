@@ -294,7 +294,7 @@
         </option>
         <option>
           <name>OutputFile</name>
-          <state></state>
+          <state>$FILE_BNAME$.o</state>
         </option>
         <option>
           <name>CCLibConfigHeader</name>
@@ -955,7 +955,7 @@
         </option>
         <option>
           <name>IarchiveOutput</name>
-          <state>C:\lepton\rootstock-mainline\depots\lepton\root\master\bsp\atsamv71\samv71xplained_ultra\scion\sys\root\prj\iar\bsp\samv71xplained_ultra\Debug\Exe\bsp_samv71xplained_ultra_7.80.a</state>
+          <state>C:\tauon\sys\root\prj\iar\bsp\samv71xplained_ultra\Debug\Exe\bsp_samv71xplained_ultra_7.80.a</state>
         </option>
       </data>
     </settings>
@@ -2935,88 +2935,10 @@
                   <group>
                     <name>source</name>
                     <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\bmp.c</name>
+                      <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\board_lowlevel.c</name>
                     </file>
                     <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\board_lowlevel.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\board_memories.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\cs2100.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\dbg_console.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\gmacb_phy.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ili9488_ebi.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ili9488_ebi_dma.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ili9488_spi.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ili9488_spi_dma.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\image_sensor_inf.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\lcd_draw.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\lcd_font.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\lcd_fontsize.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\lcdd.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\led.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\math.c</name>
-                      <excluded>
-                        <configuration>freertos-debug</configuration>
-                      </excluded>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\mt9v022_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ov2640_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ov2643_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ov5640_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ov7740_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\ov9740_config.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\rtc_calib.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\s25fl1.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\trace.c</name>
-                    </file>
-                    <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\dev\scion\sys\root\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\wm8904.c</name>
+                      <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\samv71-xplained-ultra\libboard\source\gmacb_phy.c</name>
                     </file>
                   </group>
                 </group>
@@ -3041,13 +2963,13 @@
           <group>
             <name>dev_samdv71xplained_ultra_peripherals</name>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_sdio.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_sdio.c</name>
             </file>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_uart_4.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_uart_4.c</name>
             </file>
             <file>
-              <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_usart_1.c</name>
+              <name>$PROJ_DIR$\..\..\..\..\src\kernel\dev\bsp\samv71xplained_ultra\dev_samdv71xplained_ultra_peripherals\dev_samv71xplained_ultra_usart_1.c</name>
             </file>
           </group>
         </group>

@@ -2,10 +2,10 @@
 
 <workspace>
   <project>
-    <path>$WS_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\bsp\atsamv71\samv71xplained_ultra\scion\sys\root\prj\iar\bsp\samv71xplained_ultra\bsp_samv71xplained_ultra_7.80.ewp</path>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\bsp\samv71xplained_ultra\bsp_samv71xplained_ultra_7.80.ewp</path>
   </project>
   <project>
-    <path>$WS_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\dev\scion\sys\root\prj\iar\arch\arm\dev\at91samv7x\dev_at91samv7x_7.80.ewp</path>
+    <path>$WS_DIR$\..\..\..\..\..\..\..\root\prj\iar\arch\arm\dev\at91samv7x\dev_at91samv7x_7.80.ewp</path>
   </project>
   <project>
     <path>$WS_DIR$\tauon-basic_at91samv71_7.80.ewp</path>
