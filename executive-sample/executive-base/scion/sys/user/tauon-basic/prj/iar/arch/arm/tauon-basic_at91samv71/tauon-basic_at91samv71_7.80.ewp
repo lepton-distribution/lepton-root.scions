@@ -2942,13 +2942,7 @@
         </excluded>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\Lib\os7m_tlv_sp.a</name>
-      </file>
-      <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\tauon_7.80\tauon-kernel-cortex-m4m7-freertosv9-debug\Lib\tauon_7.80.a</name>
-        <excluded>
-          <configuration>Debug</configuration>
-        </excluded>
+        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\Lib\os7m_tlv_sp.a</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\building\output\tauon_7.80\tauon-kernel-cortex-m7-debug\Lib\tauon_7.80.a</name>
