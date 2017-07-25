@@ -3023,48 +3023,48 @@
                       <group>
                         <name>samv71</name>
                         <file>
-                          <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\samv71\RTOSInit_SAMV71_CMSIS.c</name>
+                          <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\samv71\RTOSInit_SAMV71_CMSIS.c</name>
                         </file>
                       </group>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\HardFaultHandler.S</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\HardFaultHandler.S</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\JLINKMEM_Process.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\JLINKMEM_Process.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\OS_Error.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\OS_Error.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_HardFaultHandler.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_HardFaultHandler.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT_printf.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT_printf.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT_Syscalls_IAR.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_RTT_Syscalls_IAR.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW_Config_embOS.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW_Config_embOS.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW_embOS.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\SEGGER_SYSVIEW_embOS.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\xmtx.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\xmtx.c</name>
                       </file>
                       <file>
-                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\xmtx2.c</name>
+                        <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\startup\xmtx2.c</name>
                       </file>
                     </group>
                     <file>
-                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\..\..\lepton\rootstock-mainline\depots\lepton\root\master\sched\embos\scion\sys\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\main.c</name>
+                      <name>$PROJ_DIR$\..\..\..\..\..\..\..\root\src\kernel\core\ucore\embOSCXM7_430\arch\cmsis\main.c</name>
                     </file>
                   </group>
                 </group>
