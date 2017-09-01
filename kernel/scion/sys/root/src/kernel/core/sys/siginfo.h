@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _SYS_SIGINFO_H
-#define _SYS_SIGINFO_H
+#ifndef __SYS_SIGINFO_H__
+#define __SYS_SIGINFO_H__
 
 
 /*============================================
