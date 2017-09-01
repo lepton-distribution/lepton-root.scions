@@ -35,6 +35,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 
 #include "kernel/core/sys/pthread.h"
+#include "kernel/core/kernel_pthread_tsd.h"
 
 /*============================================
 | Declaration
@@ -46,7 +47,14 @@ extern "C" {
 int         pthread_create (pthread_t *thread, const pthread_attr_t *attr,void *(*start_routine)(void*), void *arg);
 int         pthread_cancel (pthread_t thread);
 void        pthread_exit   (void *value_ptr);
+int         pthread_join   (pthread_t pthread, void **value_ptr);
+int         pthread_once(pthread_once_t *once_control, void(*init_routine)(void));
 pthread_t   pthread_self   (void);
+
+int pthread_key_create(kernel_pthread_key_t *key, void(*destr_function) (void *));
+int pthread_key_delete(kernel_pthread_key_t key);
+int pthread_setspecific(kernel_pthread_key_t key, const void *pointer);
+void * pthread_getspecific(kernel_pthread_key_t key);
 
 int pthread_mutex_init     (pthread_mutex_t *mutex, const pthread_mutexattr_t *attr);
 int pthread_mutex_destroy  (pthread_mutex_t *mutex);
