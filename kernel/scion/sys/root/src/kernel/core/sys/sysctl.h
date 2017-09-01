@@ -27,8 +27,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _SYS_SYSCTL_H
-#define _SYS_SYSCTL_H
+#ifndef __SYS_SYSCTL_H__
+#define __SYS_SYSCTL_H__
 
 
 /*============================================

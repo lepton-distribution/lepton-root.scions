@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _MQUEUE_H
-#define _MQUEUE_H
+#ifndef __MQUEUE_H__
+#define __MQUEUE_H__
 
 
 /*============================================

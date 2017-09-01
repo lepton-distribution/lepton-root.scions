@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _SEMAPHORE_H
-#define _SEMAPHORE_H
+#ifndef __SEMAPHORE_H__
+#define __SEMAPHORE_H__
 
 
 /*============================================
