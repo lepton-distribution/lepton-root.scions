@@ -350,7 +350,11 @@ int construct_http_request_post_add(char* http_request_buffer, int size, const c
 | Description:
 | Parameters:
 | Return Type:
-| Comments:  http://collector.o10ee.com:36194
+| Comments:  
+|  lepton#2$ httpc  collector.o10ee.com 36194 POST
+|  lepton#2$ httpc  collector.o10ee.com 36194 GET
+|           
+|
 | See:
 ---------------------------------------------*/
 int httpc_main(int argc, char *argv[]){

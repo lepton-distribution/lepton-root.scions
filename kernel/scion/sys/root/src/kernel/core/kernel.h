@@ -86,9 +86,10 @@ extern const char * _kernel_time;
 
 
 #define __KERNEL_ALARM_TIMER 100 //ms
+#define _SYSCALL_INVALID ((syscall_t)(0xff))
 
 enum  _syscall_enum_t {
-   _SYSCALL_WAITPID=0,
+   _SYSCALL_WAITPID = 0,
    _SYSCALL_EXECVE,
    _SYSCALL_EXIT,
    _SYSCALL_KILL,
@@ -153,6 +154,7 @@ enum  _syscall_enum_t {
    _SYSCALL_PTHREAD_CREATE,
    _SYSCALL_PTHREAD_CANCEL,
    _SYSCALL_PTHREAD_EXIT,
+   _SYSCALL_PTHREAD_JOIN,
 #if defined(__KERNEL_UCORE_EMBOS) || defined(__KERNEL_UCORE_FREERTOS)
    _SYSCALL_PTHREAD_KILL,
 #endif
@@ -416,6 +418,7 @@ extern int __g_kernel_static_errno;
    __kernel_profiler_stop(__pthread_ptr__); \
 __profiler_add_result(__pthread_ptr__,__syscall_nb__,__kernel_profiler_get_counter(__pthread_ptr__));\
 }
+
 
 /**
  * gnre un appel systme sans passage de donnes

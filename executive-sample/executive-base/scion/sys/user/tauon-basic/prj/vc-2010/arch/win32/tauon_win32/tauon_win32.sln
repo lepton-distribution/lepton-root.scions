@@ -24,6 +24,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bin", "..\..\..\..\..\..\..
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "net-uip3", "..\..\..\..\..\..\..\root\prj\vc-2010\net-uip3\net-uip3.vcxproj", "{DE6E8772-5A34-40CE-A8EE-A21144E59234}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib-micropython", "..\..\..\..\..\..\..\root\prj\vc-2010\lib-micropython\lib-micropython.vcxproj", "{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -90,6 +92,14 @@ Global
 		{DE6E8772-5A34-40CE-A8EE-A21144E59234}.Release|Win32.Build.0 = Release|Win32
 		{DE6E8772-5A34-40CE-A8EE-A21144E59234}.Release|x64.ActiveCfg = Release|x64
 		{DE6E8772-5A34-40CE-A8EE-A21144E59234}.Release|x64.Build.0 = Release|x64
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Debug|Win32.Build.0 = Debug|Win32
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Debug|x64.ActiveCfg = Debug|x64
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Debug|x64.Build.0 = Debug|x64
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Release|Win32.ActiveCfg = Release|Win32
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Release|Win32.Build.0 = Release|Win32
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Release|x64.ActiveCfg = Release|x64
+		{ACDB9AAB-22D3-421A-B173-C96D3BA181D5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -155,6 +155,11 @@ Continue the process, if it is stopped; otherwise ignore the signal.
 #define SIGXCPU   27 //ii  CPU time limit exceeded.
 #define SIGXFSZ   28 //ii  File size limit exceeded.
 
+/**
+* SIGTHRKLL
+*/
+#define SIGTHRKLL 29 // lepton specific non POSIX: kill thread.
+
 typedef void (*__sa_handler)(int);
 typedef __sa_handler sa_handler_t;
 

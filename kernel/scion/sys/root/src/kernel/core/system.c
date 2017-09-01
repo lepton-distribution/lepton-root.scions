@@ -255,31 +255,63 @@ void _system_exit(int status){
    pid_t pid = pthread_ptr->pid;
    exit_t exit_dt;
 
-#if ATEXIT_MAX>0
-   {
-      atexit_func_t* p_atexit_func;
-      while( *(p_atexit_func = process_lst[pid]->p_atexit_func++) ) {
-         (*p_atexit_func)();
+   // main thread or secondary pthread?
+   if (pthread_ptr == process_lst[pid]->pthread_ptr) {
+      //maint thread
+      //send SIGTHRKLL to all pthread in process except main thread process.
+      pthread_kill_t pthread_kill_dt;
+
+      pthread_kill_dt.kernel_pthread = (kernel_pthread_t*)PTHREAD_ID_BROADCAST;
+      pthread_kill_dt.sig = SIGTHRKLL;
+      pthread_kill_dt.atomic = 1;
+
+      __mk_syscall(_SYSCALL_PTHREAD_KILL, pthread_kill_dt);
+
+      //to do join all secondary thread
+
+      //call at exit function
+      #if ATEXIT_MAX>0
+      {
+         atexit_func_t* p_atexit_func;
+         while (*(p_atexit_func = process_lst[pid]->p_atexit_func++)) {
+            (*p_atexit_func)();
+         }
       }
-   }
-#endif
+      #endif
 
-   //mutex stdio release
-   if(pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) {
-      //to do lonjmp() will must use this method to release semaphore;
-      //release semaphore stdio_sem (instead of use atexit()???;)
+      //mutex stdio release
+      if (pthread_ptr->stat&PTHREAD_STATUS_SIGHANDLER) {
+         //to do lonjmp() will must use this method to release semaphore;
+         //release semaphore stdio_sem (instead of use atexit()???;)
 #if !defined(__KERNEL_LOAD_LIB)
-      kernel_pthread_mutex_destroy(&stdin->mutex);
-      kernel_pthread_mutex_destroy(&stdout->mutex);
-      kernel_pthread_mutex_destroy(&stderr->mutex);
+         kernel_pthread_mutex_destroy(&stdin->mutex);
+         kernel_pthread_mutex_destroy(&stdout->mutex);
+         kernel_pthread_mutex_destroy(&stderr->mutex);
 #endif
+      }
+
+      //
+      exit_dt.pid = pid;
+      exit_dt.status = status;
+      __mk_syscall(_SYSCALL_EXIT, exit_dt);
+
+   }else {
+      //secondary pthread
+      kill_t kill_dt;
+      //
+      kill_dt.pid = pid;
+      kill_dt.sig = SIGKILL;
+      kill_dt.atomic = 1;
+      //
+      __mk_syscall(_SYSCALL_KILL, kill_dt);
+      //loop forever. it will be killed with the main pthread (SIGKILL handler call _system_exit() but in  in main thread context. see just above.
+      for (;;) {
+         __mk_syscall2(_SYSCALL_PAUSE);
+      }
+
    }
-
-
-   exit_dt.pid=pid;
-   exit_dt.status = status;
-
-   __mk_syscall(_SYSCALL_EXIT,exit_dt);
+ 
+   //
    //no return: thread is destroyed
 }
 

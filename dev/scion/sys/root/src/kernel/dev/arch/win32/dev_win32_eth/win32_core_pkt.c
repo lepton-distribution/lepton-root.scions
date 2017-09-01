@@ -290,7 +290,9 @@ static void process_packets(LPPACKET lpPacket)
       //TO REMOVE
       //adapter_interrupt = 0;
       //
+#ifdef __KERNEL_TRACE_WIN32_ETH_PACKET
       printf("packet rcv %d\r\n", ++debug_packet_counter);
+#endif
       //
       if(!adapter_interrupt)
          continue;
@@ -299,7 +301,9 @@ static void process_packets(LPPACKET lpPacket)
       packet_mem[packet_wr].packet_len = cur_length;
       //packet_mem[packet_wr].p_packet   = (char*)malloc(cur_length);
       if(!packet_mem[packet_wr].p_packet) {
+#ifdef __KERNEL_TRACE_WIN32_ETH_PACKET
          printf("error: packet_wr=%d !!!\r\n",packet_wr);
+#endif
          continue;
       }
 
@@ -309,7 +313,9 @@ static void process_packets(LPPACKET lpPacket)
          packet_wr=0;
 
       //fire interrupt to cpu
+#ifdef __KERNEL_TRACE_WIN32_ETH_PACKET
       printf("packet_wr=%d _input_w=%d _input_r=%d\r\n",packet_wr,__win32_eth_input_w,__win32_eth_input_r);
+#endif
       emuFireInterrupt(120);
       //process_input();//remove use signal event
    }
@@ -341,7 +347,10 @@ void update_adapter_thread(void){
 | See:
 ----------------------------------------------*/
 int win32_eth_start(void){
-   init_adapter(0);
+   if (init_adapter(0) < 0) {
+      printf("error: win32 ethernet interface cannot be started!!!\r\n");
+      return -1;
+   }
    return 0;
 }
 

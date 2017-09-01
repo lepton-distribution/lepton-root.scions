@@ -42,6 +42,7 @@ Includes
 =============================================*/
 #include "kernel/core/types.h"
 #include "kernel/core/kernelconf.h"
+#include "kernel/core/limits.h"
 #include "kernel/core/interrupt.h"
 #include "kernel/core/signal.h"
 
@@ -59,6 +60,7 @@ Declaration
 =============================================*/
 
 typedef unsigned char fds_bits_t;
+typedef unsigned char tsd_keys_vector_t;
 
 //descriptor table
 #ifndef OPEN_MAX
@@ -127,6 +129,16 @@ typedef struct {
    int status; /**<*/
 
    process_routine_t process_routine; /**<Pointeur sur la routine principale du processus process_routine().*/
+
+   //thread specific data
+#ifdef __KERNEL_PTHREAD_SPECIFIC_DATA
+   tsd_keys_vector_t thread_specfic_data_keys_vector[PTHREAD_KEYS_MAX / sizeof(tsd_keys_vector_t)];
+   pfn_pthread_specific_data_destructor_t thread_specfic_data_destructor[PTHREAD_KEYS_MAX];
+   kernel_pthread_mutex_t  thread_specfic_data_mutex;
+#endif
+   
+   //thread once 
+   kernel_pthread_mutex_t  thread_once_mutex;
 
    //atexit function pointer
    atexit_func_t* p_atexit_func;

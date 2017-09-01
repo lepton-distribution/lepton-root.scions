@@ -490,9 +490,12 @@ Declaration
    #define USE_FULL_STDIO_PRINTF 1
 #endif
 
+
+
 //realtime posix extension
 #if defined(__KERNEL_UCORE_EMBOS)
    #define ATEXIT_MAX    4
+   #define __KERNEL_PTHREAD_SPECIFIC_DATA
    #define __KERNEL_POSIX_REALTIME_SIGNALS
    #define __KERNEL_LOAD_LIB
    #define __KERNEL_USE_FILE_LOCK
@@ -501,6 +504,7 @@ Declaration
 
 #if defined(__KERNEL_UCORE_FREERTOS)
    #define ATEXIT_MAX    4
+   #define __KERNEL_PTHREAD_SPECIFIC_DATA
    #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
       #define __KERNEL_POSIX_REALTIME_SIGNALS
    #endif
@@ -509,6 +513,7 @@ Declaration
 #endif
 
 #if defined(__GNUC__)
+   #define __KERNEL_PTHREAD_SPECIFIC_DATA
    #define __KERNEL_LOAD_LIB
 #if (__tauon_cpu_core__ != __tauon_cpu_core_arm_cortexM0__)
    #define __KERNEL_POSIX_REALTIME_SIGNALS

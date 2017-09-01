@@ -25,23 +25,28 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-#ifndef __KERNEL_CORE_LIMITS_H__
-#define __KERNEL_CORE_LIMITS_H__
-
-/*===========================================
-Includes
-=============================================*/
 
 
-/*===========================================
-Declaration
-=============================================*/
-//
-#define PATH_MAX     (64)
+/*============================================
+| Compiler Directive
+==============================================*/
+#ifndef __KERNEL_PTHREAD_TSD_H__
+#define __KERNEL_PTHREAD_TSD_H__
 
-//
-#define PTHREAD_STACK_MIN (unsigned int)(1024)
-#define PTHREAD_STACK_MAX (unsigned int)(64*1024)
-#define PTHREAD_KEYS_MAX  (16)  //must be 2^N
+
+/*============================================
+| Includes
+==============================================*/
+
+
+/*============================================
+| Declaration
+==============================================*/
+
+int kernel_pthread_key_create(kernel_pthread_t* kernel_pthread, kernel_pthread_key_t *key, void(*destr_function) (void *));
+int kernel_pthread_key_delete(kernel_pthread_t* kernel_pthread, kernel_pthread_key_t key);
+int kernel_pthread_setspecific(kernel_pthread_t* kernel_pthread, kernel_pthread_key_t key, const void *pointer);
+void * kernel_pthread_getspecific(kernel_pthread_t* kernel_pthread, kernel_pthread_key_t key);
+int kernel_pthread_cleanup_specific(kernel_pthread_t* kernel_pthread);
 
 #endif

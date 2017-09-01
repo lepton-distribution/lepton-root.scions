@@ -1124,6 +1124,69 @@ void test_pthread_cond1(void){
 
 
 /*--------------------------------------------
+| Name:        test_pthread_tsd
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void* my_pthread_tsd_routine(void* arg) {
+   pthread_t pthread = pthread_self();
+   int i=0;
+   for(;;){
+      i++;
+      printf("thread run [%ul].%d\r\n", pthread, i);
+      usleep(1500000);
+      if (i == 25) {
+         pthread_exit(NULL);
+      }
+   }
+  
+}
+
+void test_pthread_tsd(void) {
+   pthread_t my_pthread_list[4];
+   pthread_attr_t thread_attr;
+
+   //
+   thread_attr.stacksize = 2048;
+   thread_attr.stackaddr = NULL;
+   thread_attr.priority = 100;
+   thread_attr.timeslice = 1;
+
+   for (int i = 0; i < (sizeof(my_pthread_list) / sizeof(pthread_t)); i++) {
+      pthread_create(&my_pthread_list[i], &thread_attr, my_pthread_tsd_routine, (void*)0);
+      printf("thread created %d [%ul]\r\n", i, my_pthread_list[i]);
+   }
+
+   for (int i = 0; i < 20; i++) {
+      usleep(1000000);
+      //
+      switch (i) {
+         case 5:
+            printf(" pthread_cancel 3 [%ul]...\r\n", my_pthread_list[3]);
+            pthread_cancel(my_pthread_list[3]);
+            pthread_join(my_pthread_list[3], NULL);
+            printf(" pthread_join 3 [%ul]\r\n",my_pthread_list[3]);
+         break;
+         //
+         case 10:
+            printf(" pthread_cancel 2 [%ul]...\r\n", my_pthread_list[2]);
+            pthread_cancel(my_pthread_list[2]);
+            pthread_join(my_pthread_list[2], NULL);
+            printf(" pthread_join 2 [%ul]\r\n", my_pthread_list[2]);
+         break;
+
+      }
+   }
+
+   pthread_join(my_pthread_list[1], NULL);
+   printf(" pthread_join 1 [%ul]\r\n", my_pthread_list[1]);
+
+}
+
+/*--------------------------------------------
 | Name:        timer_test
 | Description:
 | Parameters:  none
@@ -1571,7 +1634,7 @@ int test2_main(int argc,char* argv[]){
 
    //write(1,"echo ctrl-x to exit\r\n",strlen("echo ctrl-x to exit\r\n"));
 
-   test_rotary();
+   //test_rotary();
    //test_lcd();
    //test_waitpid();
    //basic_test();
@@ -1586,6 +1649,7 @@ int test2_main(int argc,char* argv[]){
    //test_pthread1();
    //test_pthread_mutex1();
    //test_pthread_cond1();
+   test_pthread_tsd();
    //lock_test();
    //test_mqueue();
    //test_stdio();

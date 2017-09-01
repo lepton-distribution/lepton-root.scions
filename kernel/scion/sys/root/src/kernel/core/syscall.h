@@ -75,6 +75,7 @@ int _syscall_getpgrp       (kernel_pthread_t* pthread_ptr, pid_t pid, void* data
 int _syscall_pthread_create (kernel_pthread_t* pthread_ptr, pid_t pid, void* data);
 int _syscall_pthread_cancel (kernel_pthread_t* pthread_ptr, pid_t pid, void* data);
 int _syscall_pthread_exit   (kernel_pthread_t* pthread_ptr, pid_t pid, void* data);
+int _syscall_pthread_join   (kernel_pthread_t* pthread_ptr, pid_t pid, void* data);
 
 int _syscall_pthread_kill   (kernel_pthread_t* pthread_ptr, pid_t pid, void* data);
 
@@ -256,6 +257,12 @@ typedef struct {
    kernel_pthread_t* kernel_pthread; //input parameter
    void* value_ptr; //input parameter
 }pthread_exit_t;
+
+typedef struct {
+   kernel_pthread_t* kernel_pthread; //input parameter
+   void** value_ptr; //input parameter
+   int ret; //return value
+}pthread_join_t;
 
 typedef struct {
    kernel_pthread_t* kernel_pthread; //input parameter

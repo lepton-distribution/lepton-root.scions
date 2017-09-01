@@ -108,8 +108,7 @@ __hw_interrupt(120,dev_win32_eth_rcv_interrupt){
 | See:
 ---------------------------------------------*/
 int dev_win32_eth_load(void){
-   win32_eth_start();
-   return 0;
+   return win32_eth_start();
 }
 
 /*-------------------------------------------
