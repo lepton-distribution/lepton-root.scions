@@ -61,7 +61,7 @@ struct sigaction const sigaction_dfl_lst[NSIGMAX+1]={
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGUSR2   13 //i  User-defined signal 2.
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0}    // SIGCHLD   14 //iii  Child process terminated or stopped.
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
-   ,{(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},  // SIGCONT   15 //v  Continue executing, if stopped.
+  ,{(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGCONT   15 //v  Continue executing, if stopped.
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGSTOP   16 //iv  Stop executing (cannot be caught or ignored).
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTSTP   17 //iv  Terminal stop signal.
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGTTIN   18 //iv  Background process attempting read.
@@ -75,7 +75,7 @@ struct sigaction const sigaction_dfl_lst[NSIGMAX+1]={
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGVTALRM 26 //i  Virtual timer expired.  NOT IMPLEMENTED IN THIS VERSION
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGXCPU   27 //ii  CPU time limit exceeded.
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   // SIGXFSZ   28 //ii  File size limit exceeded.
-   {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           29 //not used
+   {(sa_handler_t)SIG_DFL,{0,0},0,(sa_sigaction_t)0},   // SIGTHRKLL 29 // lepton specific non POSIX: kill thread.
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           30 //not used
    {(sa_handler_t)SIG_IGN,{0,0},0,(sa_sigaction_t)0},   //           31 //not used
 
@@ -130,7 +130,8 @@ struct sigaction const sigaction_dfl_lst[NSIGMAX+1]={
 void sighandler(void){
    kernel_pthread_t* pthread_ptr = kernel_pthread_self();
    int sig;
-
+   //
+   pid_t pid = _sys_getpid();
    sig=pthread_ptr->siginfo.si_signo;
 
    if((unsigned int)(pthread_ptr->sigaction_lst[sig].sa_handler)!=(unsigned int)SIG_DFL) {
@@ -138,13 +139,24 @@ void sighandler(void){
       __mk_syscall2(_SYSCALL_SIGEXIT); //return to main
    }else{ //to do: call default handler
       switch(sig) {
-      case SIGTERM:
-      case SIGALRM:
-      case SIGKILL:
-      case SIGPIPE: {
-         _system_exit(0);   //exit process
-      }
-      break;
+         case SIGTERM:
+         case SIGALRM:
+         case SIGKILL:
+         case SIGPIPE:
+            _system_exit(0);   //exit process
+         break;
+
+         //
+         case SIGTHRKLL:
+            if (pthread_ptr == process_lst[pid]->pthread_ptr) {
+               //main thread
+               _system_exit(0);   //exit process
+            }else {
+               //secondary thread 
+               kernel_pthread_exit_handler();
+            }
+         break;
+
          //to do: support for SIGSTOP(suspend process) and SIGCONT(resume process)
          //       see _sys_kill in process.c
       }

@@ -202,6 +202,7 @@ kernel_syscall_t const kernel_syscall_lst[] = {
    __add_syscall(_syscall_pthread_create),
    __add_syscall(_syscall_pthread_cancel),
    __add_syscall(_syscall_pthread_exit),
+   __add_syscall(_syscall_pthread_join),
    __add_syscall(_syscall_pthread_kill),
    __add_syscall(_syscall_pthread_mutex_init),
    __add_syscall(_syscall_pthread_mutex_destroy),
@@ -253,6 +254,17 @@ int _kernel_syscall(void){
       _g_kernel_syscall_trace._syscall_owner_pthread_ptr = _syscall_owner_pthread_ptr;
       _g_kernel_syscall_trace.kernel_syscall_status = KERNEL_SYSCALL_STATUS_START;
 
+      //chack syscall nb validity
+      if (pthread_ptr->reg.syscall == _SYSCALL_INVALID || pthread_ptr->reg.syscall >= _SYSCALL_TOTAL_NB) {
+         //
+         _syscall_owner_pthread_ptr->_errno = ENOSYS;
+         //
+         _g_kernel_syscall_trace.kernel_syscall_status = KERNEL_SYSCALL_STATUS_ENDERROR;
+         __syscall_unlock();
+         return 0;
+      }
+
+      //
       if((kernel_syscall.p_syscall=kernel_syscall_lst[pthread_ptr->reg.syscall].p_syscall)) {
          //kernel trace for debug
          memcpy(&_g_kernel_syscall_trace._kernel_syscall,&kernel_syscall,sizeof(kernel_syscall_t));

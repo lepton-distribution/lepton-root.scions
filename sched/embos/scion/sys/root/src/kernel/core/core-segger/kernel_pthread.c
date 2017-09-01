@@ -60,6 +60,8 @@ Includes
 #include "kernel/core/errno.h"
 #include "kernel/core/kernel_pthread.h"
 #include "kernel/core/kernel_pthread_mutex.h"
+#include "kernel/core/kernel_pthread_tsd.h"
+
 #include "kernel/core/interrupt.h"
 #include "kernel/core/syscall.h"
    
@@ -225,6 +227,48 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
 }
 
 /*-------------------------------------------
+| Name: kernel_pthread_exit_callback
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+void kernel_pthread_exit_cleanup(kernel_pthread_t* pthread) {
+   //thread specific data
+#ifdef __KERNEL_PTHREAD_SPECIFIC_DATA
+   kernel_pthread_cleanup_specific(pthread);
+#endif
+}
+
+/*-------------------------------------------
+| Name: kernel_pthread_exit_handler
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+void kernel_pthread_exit_handler(void) {
+   kernel_pthread_t* pthread;
+   pthread_exit_t pthread_exit_dt;
+
+   //
+   pthread = kernel_pthread_self();
+   //execute callback at thread exit that must be in user land context. 
+   kernel_pthread_exit_cleanup(pthread);
+
+   //call kernel. signal thread termination
+   //pthread in process container
+   //use syscall
+   pthread_exit_dt.kernel_pthread = pthread;
+   pthread_exit_dt.value_ptr = (void*)0;
+   //
+   //to do check if it's the main thread call exit
+   __mk_syscall(_SYSCALL_PTHREAD_EXIT, pthread_exit_dt);
+}
+
+/*-------------------------------------------
 | Name: kernel_pthread_routine
 | Description:
 | Parameters:
@@ -233,10 +277,7 @@ void* kernel_pthread_alloca(kernel_pthread_t *p, size_t size){
 | See:
 ---------------------------------------------*/
 __begin_pthread(pthread_routine){
-
    kernel_pthread_t* pthread;
-   pthread_exit_t pthread_exit_dt;
-
    //
    pthread=kernel_pthread_self();
    
@@ -247,14 +288,9 @@ __begin_pthread(pthread_routine){
 
    //
    pthread->exit=pthread->start_routine(pthread->arg);
-
-   //call kernel. signal thread termination
-   //pthread in process container
-   //use syscall
-   pthread_exit_dt.kernel_pthread = pthread;
-   pthread_exit_dt.value_ptr = (void*)0;
-   //to do check if it's the main thread call exit
-   __mk_syscall(_SYSCALL_PTHREAD_EXIT,pthread_exit_dt);
+   //
+   kernel_pthread_exit_handler();
+   //
 }
 __end_pthread()
 

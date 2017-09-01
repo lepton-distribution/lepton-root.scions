@@ -41,7 +41,7 @@ Includes
 #include "kernel/core/dirent.h"
 #include "kernel/fs/vfs/vfs.h"
 #include "kernel/fs/vfs/vfskernel.h"
-
+#include "kernel/core/sys/pthread.h"
 /*===========================================
 Global Declaration
 =============================================*/
@@ -169,6 +169,7 @@ int _syscall_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pid_t ppid = process_lst[pid]->ppid;
    exit_t* exit_dt=(exit_t*)data;
 
+   //
    if(process_lst[pid]->pthread_ptr->parent_pthread_ptr && process_lst[pid]->pthread_ptr->parent_pthread_ptr->stat&PTHREAD_STATUS_FORK ){
       kernel_pthread_t* parent_pthread_ptr= process_lst[pid]->pthread_ptr;
       fork_t* fork_dt;
@@ -707,7 +708,7 @@ int _syscall_calloc(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 }
 
 /*-------------------------------------------
-| Name:_syscall_calloc
+| Name:_syscall_realloc
 | Description:
 | Parameters:
 | Return Type:
@@ -912,9 +913,9 @@ int _syscall_sysctl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 int _syscall_setpgid(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    setpgid_t* setpgid_dt = (setpgid_t*)data;
    setpgid_dt->id_grp = _sys_setpgid(setpgid_dt->pid,setpgid_dt->id_grp);
-   __flush_syscall(pthread_ptr);
-   __kernel_ret_int(pthread_ptr);
-   return 0;
+__flush_syscall(pthread_ptr);
+__kernel_ret_int(pthread_ptr);
+return 0;
 }
 
 /*-------------------------------------------
@@ -925,7 +926,7 @@ int _syscall_setpgid(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _syscall_getpgrp(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
+int _syscall_getpgrp(kernel_pthread_t* pthread_ptr, pid_t pid, void* data) {
    getpgrp_t* getpgrp_dt = (getpgrp_t*)data;
    getpgrp_dt->id_grp = _sys_getpgrp(getpgrp_dt->pid);
    __flush_syscall(pthread_ptr);
@@ -941,11 +942,11 @@ int _syscall_getpgrp(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 | Comments:
 | See:
 ----------------------------------------------*/
-int _syscall_pthread_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
+int _syscall_pthread_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data) {
    pthread_create_t* pthread_create_dt = (pthread_create_t*)data;
 
-   pthread_create_dt->ret=_sys_pthread_create(&pthread_create_dt->kernel_pthread,pthread_ptr,pthread_create_dt->attr,
-                       pthread_create_dt->start_routine,pthread_create_dt->arg,pid);
+   pthread_create_dt->ret = _sys_pthread_create(&pthread_create_dt->kernel_pthread, pthread_ptr, pthread_create_dt->attr,
+      pthread_create_dt->start_routine, pthread_create_dt->arg, pid);
 
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);
@@ -957,13 +958,13 @@ int _syscall_pthread_create(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
 | Description:
 | Parameters:  none
 | Return Type: none
-| Comments:
+| Comments: DEPRECATED see pthread_cancel in lib pthread. now use kill()
 | See:
 ----------------------------------------------*/
-int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
+int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data) {
    pthread_cancel_t* pthread_cancel_dt = (pthread_cancel_t*)data;
 
-   if(process_lst[pid]->pthread_ptr!=pthread_cancel_dt->kernel_pthread) {
+   if (process_lst[pid]->pthread_ptr != pthread_cancel_dt->kernel_pthread) {
       //it's a thread annexe
       //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
@@ -971,23 +972,24 @@ int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
       pthread_cancel_dt->kernel_pthread->kernel_sigqueue.destructor(&pthread_cancel_dt->kernel_pthread->kernel_sigqueue);
 #endif
       //
-      pthread_cancel_dt->ret = _sys_pthread_cancel(pthread_cancel_dt->kernel_pthread,pid);
+      pthread_cancel_dt->ret = _sys_pthread_cancel(pthread_cancel_dt->kernel_pthread, pid);
 
       //calling thread kill himself???
-      if(pthread_cancel_dt->kernel_pthread==_syscall_owner_pthread_ptr)
+      if (pthread_cancel_dt->kernel_pthread == _syscall_owner_pthread_ptr)
          return 0;  ///yes it's same than pthread_exit()
       //
       __flush_syscall(pthread_ptr);
       // in the other case retur to callin thread
       __kernel_ret_int(pthread_ptr);
       return 0;
-   }else{
+   }
+   else {
       //it's the main thread
       //all thread must be terminated
       exit_t exit_dt;
       exit_dt.pid = pid;
       exit_dt.status = 0;
-      return _syscall_exit(pthread_ptr,pid,&exit_dt);
+      return _syscall_exit(pthread_ptr, pid, &exit_dt);
    }
 
    return 0;
@@ -1001,21 +1003,57 @@ int _syscall_pthread_cancel(kernel_pthread_t* pthread_ptr, pid_t pid, void* data
 | Comments:
 | See:
 ----------------------------------------------*/
-int _syscall_pthread_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
+int _syscall_pthread_kill(kernel_pthread_t* pthread_ptr, pid_t pid, void* data) {
 
    pthread_kill_t* pthread_kill_dt = (pthread_kill_t*)data;
 
-   pthread_kill_dt->ret=-1;
+   pthread_kill_dt->ret = -1;
 
    __atomic_in();
-
    //send signal to pthread
-   if(pthread_kill_dt->kernel_pthread) {
+   if (pthread_ptr == (kernel_pthread_t*)PTHREAD_ID_BROADCAST 
+    || pthread_ptr == (kernel_pthread_t*)PTHREAD_ID_BROADCAST_EXCEPT){
+      //
+      kernel_pthread_t* _pthread_ptr =process_lst[pid]->pthread_ptr->next;
+      //
       __stop_sched();
-      pthread_kill_dt->ret = _sys_kill(pthread_kill_dt->kernel_pthread,
-                                       pthread_kill_dt->sig,
-                                       pthread_kill_dt->atomic);
+      //
+      while (_pthread_ptr) {
+         kernel_pthread_t* next_pthread_ptr = _pthread_ptr->next;
+         //
+         if(pthread_ptr == (kernel_pthread_t*)PTHREAD_ID_BROADCAST_EXCEPT && _pthread_ptr== pthread_ptr){
+            _pthread_ptr = next_pthread_ptr;
+            continue;
+         }
+         //send signal
+         pthread_kill_dt->ret = _sys_kill(_pthread_ptr,
+            pthread_kill_dt->sig,
+            pthread_kill_dt->atomic);
+         //next
+         _pthread_ptr = next_pthread_ptr;
+      }
+      //
       __restart_sched();
+   }else if(pthread_kill_dt->kernel_pthread) {
+      kernel_pthread_t* _pthread_ptr = process_lst[pid]->pthread_ptr;
+      //phread errno = -ESRCH
+      pthread_kill_dt->ret = -1;
+      //check pthread_ptr validity: check if pthread_ptr is in process pthread list.
+      while (_pthread_ptr) {
+         if (_pthread_ptr == pthread_kill_dt->kernel_pthread) {
+            //ok, found pthread, send signal
+            __stop_sched();
+            pthread_kill_dt->ret = _sys_kill(pthread_kill_dt->kernel_pthread,
+               pthread_kill_dt->sig,
+               pthread_kill_dt->atomic);
+            __restart_sched();
+            //
+            break;
+         }
+         //
+         _pthread_ptr = _pthread_ptr->next;
+      }
+      
    }
 
    //
@@ -1038,18 +1076,65 @@ int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    pthread_exit_t* pthread_exit_dt = (pthread_exit_t*)data;
 
    if(pid>0 && process_lst[pid]->pthread_ptr!=pthread_exit_dt->kernel_pthread) {
+      //it's a secondary thread
+      kernel_pthread_t* _pthread_ptr = process_lst[pid]->pthread_ptr;
+      pthread_join_t* pthread_join_dt;
+      int pthread_counter = 0;
       //pthread sigqueue
 #ifdef __KERNEL_POSIX_REALTIME_SIGNALS
       //remove sigqueue objects explicitly only for annexe thread in other case "put all object" is used in process exit scenario.
       pthread_exit_dt->kernel_pthread->kernel_sigqueue.destructor(&pthread_exit_dt->kernel_pthread->kernel_sigqueue);
 #endif
-      //it's a thread annexe
+      //it's joinable thread
+      //find which pthread, in current process, is waiting end of this pthread 
+      while (_pthread_ptr) {
+         //skip current callin pthread
+         if (_pthread_ptr == pthread_ptr) {
+            _pthread_ptr = _pthread_ptr->next;
+            continue;
+         }
+         //
+         pthread_counter++;
+         //
+         if (_pthread_ptr->reg.syscall != _SYSCALL_PTHREAD_JOIN || !(_pthread_ptr->stat&PTHREAD_STATUS_STOP)) {
+            _pthread_ptr = _pthread_ptr->next;
+            continue;
+         }
+         //
+         pthread_join_dt = (pthread_join_t*)(_pthread_ptr->reg.data);
+         //
+         if (pthread_join_dt->kernel_pthread== pthread_ptr) {
+            //yes a _pthread_ptr wait end of this pthread_ptr
+            _pthread_ptr->stat &= (~PTHREAD_STATUS_STOP);
+            __kernel_ret_int(_pthread_ptr);
+         }
+         //
+         _pthread_ptr = _pthread_ptr->next;
+      }
+      //
       _sys_pthread_cancel(pthread_exit_dt->kernel_pthread,pid);
+      //
+      if (pthread_counter > 1) {
+         return 0;
+      }
+      //just one pthread, the main thread. all secondary pthread are terminated
+      //check if main thread wait all secondary phtread termination
+      if (process_lst[pid]->pthread_ptr->reg.syscall != _SYSCALL_PTHREAD_JOIN || !(process_lst[pid]->pthread_ptr->stat&PTHREAD_STATUS_STOP)) {
+         return 0;
+      }
+      //
+      pthread_join_dt = (pthread_join_t*)(process_lst[pid]->pthread_ptr->reg.data);
+      if ((pthread_t)pthread_join_dt->kernel_pthread != PTHREAD_ID_UNDEFINED) {
+         return 0;
+      }
+      //
+      process_lst[pid]->pthread_ptr->stat &= (~PTHREAD_STATUS_STOP);
+      __kernel_ret_int(process_lst[pid]->pthread_ptr);
       //__flush_syscall(pthread_ptr);
       return 0;
    }else if(pid>0){
-      //it's the main thread
-      //all thread must be terminated
+      //it's the main thread, in a normal case, never go in this branch, see _system_exit() and pthread_exit().
+      //all thread must be terminated before.
       exit_t exit_dt;
       exit_dt.pid = pid;
       exit_dt.status = 0;
@@ -1059,6 +1144,50 @@ int _syscall_pthread_exit(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
       _sys_pthread_cancel(pthread_exit_dt->kernel_pthread,pid);
    }
 
+   return 0;
+}
+
+/*--------------------------------------------
+| Name:        _syscall_pthread_join
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int _syscall_pthread_join(kernel_pthread_t* pthread_ptr, pid_t pid, void* data) {
+   pthread_join_t* pthread_join_dt = (pthread_join_t*)data;
+
+   kernel_pthread_t* _pthread_ptr = process_lst[pid]->pthread_ptr->next;
+
+   //main thread not joinable. if main thread exit all thread will be exited before.
+   //or cannot join on himself.
+   if (process_lst[pid]->pthread_ptr == pthread_join_dt->kernel_pthread
+      || pthread_ptr == pthread_join_dt->kernel_pthread) {
+      pthread_join_dt->ret = -1;
+      //
+      __flush_syscall(pthread_ptr);
+      __kernel_ret_int(pthread_ptr);
+      return 0;
+   }
+
+   //check pthread_ptr validity: check if pthread_ptr is in process pthread list.
+   while (_pthread_ptr) {
+      if (_pthread_ptr == pthread_join_dt->kernel_pthread) {
+         pthread_join_dt->ret = 0;
+         pthread_ptr->stat |= PTHREAD_STATUS_STOP;
+         __flush_syscall(pthread_ptr);
+         // pthread exit check if is joinable and if yes call on this pthread_ptr __kernel_ret_int(pthread_ptr);
+         return 0;
+      }
+      //
+      _pthread_ptr = _pthread_ptr->next;
+   }
+   //phread errno = -ESRCH
+   pthread_join_dt->ret = -1;
+   //
+   __flush_syscall(pthread_ptr);
+   __kernel_ret_int(pthread_ptr);
    return 0;
 }
 
