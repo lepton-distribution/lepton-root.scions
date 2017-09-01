@@ -22,12 +22,11 @@ If you do not delete the provisions above, a recipient may use your version of t
 either the MPL or the [eCos GPL] License."
 */
 
-
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef __MODEM_CORE_SOCKET_H__
-#define __MODEM_CORE_SOCKET_H__
+#ifndef __MODEM_CORE_API_H__
+#define __MODEM_CORE_API_H__
 
 
 /*============================================
@@ -37,9 +36,27 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+int modem_core_api_socket(desc_t desc,int domain, int type, int protocol);
+int modem_core_api_bind(int modem_core_connexion_index, struct sockaddr *name, socklen_t namelen);
+int modem_core_api_accept(int modem_core_connexion_index, struct sockaddr *addr, socklen_t *addrlen);
+int modem_core_api_accepted(desc_t desc,int modem_core_connexion_index);
+int modem_core_api_connect(int modem_core_connexion_index, struct sockaddr *name, socklen_t namelen);
+int modem_core_api_listen(int modem_core_connexion_index, int backlog);
+int modem_core_api_shutdown(int modem_core_connexion_index, int how);
+int modem_core_api_close(int modem_core_connexion_index);
+int modem_core_api_getpeername(int modem_core_connexion_index, struct sockaddr *name, socklen_t *namelen);
+int modem_core_api_getsockname(int modem_core_connexion_index, struct sockaddr *name, socklen_t *namelen);
+int modem_core_api_getsockopt(int modem_core_connexion_index, int level, int optname, void *optval, socklen_t *optlen);
+int modem_core_api_setsockopt(int modem_core_connexion_index, int level, int optname, const void *optval, socklen_t optlen);
+int modem_core_api_ioctl(int modem_core_connexion_index, long cmd, void *argp);
+struct hostent* modem_core_api_gethostbyname(struct hostent* host, const char *name);
+
+int modem_core_api_isset_read(int modem_core_connexion_index);
+int modem_core_api_isset_write(int modem_core_connexion_index);
+int modem_core_api_read(int modem_core_connexion_index,char* buf, int size);
+int modem_core_api_write(int modem_core_connexion_index,char* buf, int len);
+
+
 
 
 #endif
-
-
-

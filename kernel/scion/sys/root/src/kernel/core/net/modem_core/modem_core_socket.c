@@ -47,7 +47,7 @@ either the MPL or the [eCos GPL] License."
 #include "kernel/core/net/modem_core/modem_socket.h"
 
 #include "kernel/core/net/kernel_net_core_socket.h"
-#include "kernel/core/net/modem_core/modem_core.h"
+#include "kernel/core/net/modem_core/modem_core_api.h"
 
 #include "kernel/core/net/bsd/netdb.h"
 

@@ -9,8 +9,8 @@ specific language governing rights and limitations under the License.
 
 The Original Code is Lepton.
 
-The Initial Developer of the Original Code is Chauvin-Arnoux.
-Portions created by Chauvin-Arnoux are Copyright (C) 2011. All Rights Reserved.
+The Initial Developer of the Original Code is Philippe Le Boulanger.
+Portions created by Philippe Le Boulanger are Copyright (C) 2017. All Rights Reserved.
 
 Alternatively, the contents of this file may be used under the terms of the eCos GPL license
 (the  [eCos GPL] License), in which case the provisions of [eCos GPL] License are applicable
@@ -21,7 +21,6 @@ them with the notice and other provisions required by the [eCos GPL] License.
 If you do not delete the provisions above, a recipient may use your version of this file under
 either the MPL or the [eCos GPL] License."
 */
-
 
 /*============================================
 | Compiler Directive
