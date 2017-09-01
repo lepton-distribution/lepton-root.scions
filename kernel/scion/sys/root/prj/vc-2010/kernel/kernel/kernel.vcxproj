@@ -88,6 +88,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\core-generic\kernel_pthread_tsd.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.c" />
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.c" />
@@ -164,12 +165,15 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\ioctl_encoder.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_pthread_tsd.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\limits.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\inet\in.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\netdb.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\sys\socket.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\lwip_core\lwip_core_socket.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\kernel_net_core_socket.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_api.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_socket.h" />
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_core_socket.h" />

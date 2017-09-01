@@ -47,6 +47,9 @@
     <Filter Include="kernel\core\net\bsd\sys">
       <UniqueIdentifier>{40cdd5a9-c5bb-42a2-b314-d9c1fa11c803}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kernel\core\core-generic">
+      <UniqueIdentifier>{c5cc6159-545d-4e6a-85da-dd5be66d4053}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -240,6 +243,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_mqueue.c">
       <Filter>kernel\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\core-generic\kernel_pthread_tsd.c">
+      <Filter>kernel\core\core-generic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -507,9 +513,6 @@
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\uip_core\uip_socket.h">
       <Filter>kernel\core\net\uip_core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.h">
-      <Filter>kernel\core\net\modem_core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_socket.h">
       <Filter>kernel\core\net\modem_core</Filter>
     </ClInclude>
@@ -518,6 +521,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\bsd\netdb.h">
       <Filter>kernel\core\net\bsd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\limits.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\kernel_pthread_tsd.h">
+      <Filter>kernel\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core_api.h">
+      <Filter>kernel\core\net\modem_core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\core\net\modem_core\modem_core.h">
+      <Filter>kernel\core\net\modem_core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
