@@ -109,6 +109,15 @@
     <Filter Include="kernel\dev\arch\win32\dev_win32_rotary_switch">
       <UniqueIdentifier>{5cf66cb5-68f4-4827-98b8-604c26315138}</UniqueIdentifier>
     </Filter>
+    <Filter Include="kernel\dev\arch\all\modem">
+      <UniqueIdentifier>{b1ea295c-3ca7-43e9-ad6f-02a9c837c65d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\modem\simcom">
+      <UniqueIdentifier>{514b5e77-d067-4d00-9786-5a428512a5e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\dev\arch\all\modem\ublox">
+      <UniqueIdentifier>{44b26555-04d4-4c2a-a8b1-90101ba64854}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -346,6 +355,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\src\kernel\dev\arch\win32\dev_win32_rotary_switch\dev_win32_rotary_switch_x.c">
       <Filter>kernel\dev\arch\win32\dev_win32_rotary_switch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\all\modem\simcom\dev_modem_simcom.c">
+      <Filter>kernel\dev\arch\all\modem\simcom</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\..\..\..\..\..\..\tauon\sys\root\src\kernel\dev\arch\all\modem\ublox\dev_modem_ublox_sarag3.c">
+      <Filter>kernel\dev\arch\all\modem\ublox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
