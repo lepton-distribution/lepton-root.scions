@@ -45,6 +45,7 @@ Includes
 =============================================*/
 
 #include "kernel/core/kal.h"
+#include "kernel/core/limits.h"
 #include "kernel/core/kernel_sem.h"
 #include "kernel/core/kernel_sigqueue.h"
 #include "kernel/core/signal.h"
@@ -110,6 +111,16 @@ typedef struct {
    //
    void*       data;
 }syscall_reg_t;
+
+//
+typedef unsigned char kernel_pthread_key_t;
+
+typedef void(*pfn_pthread_specific_data_destructor_t)(void*);
+//
+typedef struct pthread_specific_data_st {
+   //
+   void*       data;
+}pthread_specific_data_st;
 
 //
 /**
@@ -210,6 +221,10 @@ typedef struct kernel_pthread_st {
    struct kernel_sigqueue_st kernel_sigqueue;
 #endif
 
+#ifdef __KERNEL_PTHREAD_SPECIFIC_DATA
+   pthread_specific_data_st* specific_data_array[PTHREAD_KEYS_MAX];
+#endif
+
    //kernel interrupt for syscall
    irq_nb_t irq_nb;          /**<numero d'interuption noyau voir les appels systme*/
    irq_prior_t irq_prior;       /**<*/
@@ -237,6 +252,7 @@ typedef struct kernel_pthread_st {
 
 extern kernel_pthread_t* g_pthread_lst;
 extern int g_pthread_id;
+
 //
 int kernel_get_pthread_id(kernel_pthread_t *p);
 int kernel_put_pthread_id(kernel_pthread_t *p);
@@ -250,6 +266,8 @@ kernel_pthread_t* kernel_pthread_self(void);
 extern "C" kernel_pthread_t* kernel_pthread_self(void);
 #endif
 
+void kernel_pthread_exit_cleanup(kernel_pthread_t* pthread);
+void kernel_pthread_exit_handler(void);
 void  kernel_pthread_exit(void *value_ptr); //not yet implemented
 int   kernel_pthread_kill(kernel_pthread_t* thread, int sig); //not yet implemented
 #define  __pthread_exit(value_ptr){}
