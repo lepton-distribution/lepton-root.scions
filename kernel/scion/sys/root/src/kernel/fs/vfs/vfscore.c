@@ -643,39 +643,41 @@ int _vfs_unlink_desc(desc_t desc){
 | Comments:
 | See:
 ---------------------------------------------*/
-int _vfs_lookup(const char* ref,desc_t* desc,char** filename){
+int _vfs_lookup(const char* ref, desc_t* desc, char** filename) {
 
-   inodenb_t _inodenb       = VFS_INODENB_ROOT;
-   int ref_index=1;
+   inodenb_t _inodenb = VFS_INODENB_ROOT;
+   int ref_index = 1;
    desc_t _desc;
    desc_t __desc;
 
-   const char sep[]="/";
+   const char sep[] = "/";
    char* token;
 
    pid_t pid = __get_syscall_owner_pid();
 
    //
-   *desc=INVALID_DESC;
+   *desc = INVALID_DESC;
 
    //
-   if(ref[0]=='\0') {
+   if (ref[0] == '\0') {
       __kernel_set_errno(EINVAL);
       return -1;
    }
 
    //get current dir for current process
-   if(ref[0]!='/' && pid){
+   if (ref[0] != '/' && pid) {
       _inodenb = process_lst[__get_syscall_owner_pid()]->inode_curdir;
-      ref_index=0;
+      ref_index = 0;
    }
    //
-   if((_desc = _vfs_getdesc(_inodenb,INVALID_DESC))<0)
+   if ((_desc = _vfs_getdesc(_inodenb, INVALID_DESC)) < 0)
       return -1;
-   
+
    //
-   token = _vfs_token(ref,sep);
-   ref_index+=strlen(token);
+   token = _vfs_token(ref, sep);
+   if (token != NULL) {
+      ref_index += strlen(token);
+   }
    //
    while( token !=NULL) {
 
