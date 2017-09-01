@@ -8907,6 +8907,12 @@
         </file>
       </group>
       <group>
+        <name>core-generic</name>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\core-generic\kernel_pthread_tsd.c</name>
+        </file>
+      </group>
+      <group>
         <name>core-segger</name>
         <excluded>
           <configuration>tauon-kernel-cortex-m4f-freertos-debug</configuration>
@@ -9019,6 +9025,9 @@
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core.h</name>
+          </file>
+          <file>
+            <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core_api.h</name>
           </file>
           <file>
             <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\net\modem_core\modem_core_socket.c</name>
@@ -10462,6 +10471,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_pthread_mutex.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_pthread_tsd.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_ring_buffer.c</name>
@@ -12803,6 +12815,15 @@
             <name>modem</name>
             <group>
               <name>simcom</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\modem\simcom\dev_modem_simcom.c</name>
+              </file>
+            </group>
+            <group>
+              <name>ublox</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\modem\ublox\dev_modem_ublox_sarag3.c</name>
+              </file>
             </group>
           </group>
           <group>
