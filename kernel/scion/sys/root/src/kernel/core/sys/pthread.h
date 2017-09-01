@@ -26,8 +26,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef _SYS_PTHREAD_H
-#define _SYS_PTHREAD_H
+#ifndef __SYS_PTHREAD_H__
+#define __SYS_PTHREAD_H__
 
 
 /*============================================
@@ -38,6 +38,17 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+//RESERVED FOR INTERNAL MECHANSIM, NOT PORTABLE. all thread except main thread. 
+#define PTHREAD_ID_UNDEFINED ((unsigned long)(0xFFFFFFFF))
+
+//RESERVED FOR INTERNAL MECHANSIM, NOT PORTABLE. Send signal to all secondary pthreads in current process except main thread. 
+#define PTHREAD_ID_BROADCAST ((unsigned long)(0xFFFFFFFF))
+//RESERVED FOR INTERNAL MECHANSIM, NOT PORTABLE. Send signal to all secondary pthreads in current process except main thread and calling pthread.
+#define PTHREAD_ID_BROADCAST_EXCEPT ((unsigned long)(0x00000000))
+
+//pthread once
+typedef unsigned char pthread_once_t;
+#define PTHREAD_ONCE_INIT ((pthread_once_t)(1))
 
 //pthread_mutex
 typedef struct {
