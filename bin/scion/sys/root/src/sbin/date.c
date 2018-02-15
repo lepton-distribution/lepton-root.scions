@@ -163,7 +163,8 @@ static struct tm *date_conv_ftime(struct tm *tm_time, const char *t_string)
 | Description:
 | Parameters:
 | Return Type:
-| Comments:
+| Comments: date -s YYYY.MM.DD-HH:MIN
+|     ex:   date -s 2017.09.18-10:02
 | See:
 ---------------------------------------------*/
 int date_main(int argc, char* argv[]){
@@ -269,6 +270,10 @@ int date_main(int argc, char* argv[]){
             printf("cannot set date\r\n");
             return -1;
          }
+         //check time after setting
+         time(&tm);
+         //
+         memcpy(&tm_time, localtime(&tm), sizeof(tm_time));
       }
    }
 
