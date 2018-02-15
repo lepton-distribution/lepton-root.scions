@@ -62,8 +62,9 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
-#define CMD_MAX 64
-#define ARG_MAX 20
+
+#define CMD_MAX (BUFSIZ)
+#define ARG_MAX (20)
 
 #define GET_CMD      0
 #define GET_STDIN    1
