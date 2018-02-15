@@ -48,8 +48,10 @@ either the MPL or the [eCos GPL] License."
 
 #define IFADD        0x0001 //add  pseudo device interface
 #define IFDEL        0x0002 //delete pseudo device interface
-#define IFSETCFG     0x0003
-#define IFGETCFG     0x0004
+#define IFUP         0x0003 //up pseudo device interface
+#define IFDOWN       0x0004 //down pseudo device interface
+#define IFSETCFG     0x0005
+#define IFGETCFG     0x0006
 
 typedef struct if_config_st {
    char if_ip_addr[32];

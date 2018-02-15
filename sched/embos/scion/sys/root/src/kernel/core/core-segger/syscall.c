@@ -848,6 +848,7 @@ int _syscall_ioctl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    switch(ioctl_dt->request) {
    //I_LINK
    case I_LINK: {
+      va_list _ap;
       int fd_link;
       desc_t desc_link;
 
@@ -867,7 +868,7 @@ int _syscall_ioctl(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
       //retrieve original ap position in stack
       __va_list_copy(ap, ioctl_dt->ap);
       //vfs ioctl use only kernel open file descriptor
-      ioctl_dt->ret = _vfs_ioctl(desc,ioctl_dt->request,desc_link,ap);
+      ioctl_dt->ret = _vfs_ioctl(ofile_lst[desc].desc,ioctl_dt->request,ofile_lst[desc_link].desc,ap);
    }
    break;
 
@@ -1358,15 +1359,100 @@ int _syscall_timer_delete(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 ----------------------------------------------*/
 int _syscall_sem_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
    sem_init_t* sem_init_dt = (sem_init_t*)data;
-   kernel_object_t* kernel_object;
+   kernel_object_t* kernel_object=(kernel_object_t*)0;
    //
    sem_init_dt->ret = 0;
    //
-   if(!sem_init_dt->name) { //anonymous semaphore
+   if(!sem_init_dt->name) { //anonymous semaphore sem_init()
       if(!(kernel_object=kernel_object_manager_get(&process_lst[pid]->kernel_object_head, KERNEL_OBJECT_SEM, KERNEL_OBJECT_SRC_EXTERN,
-                                        sem_init_dt->psem,
-                                        sem_init_dt->value)))
+                                        sem_init_dt->psem, // extern pointer source
+                                        sem_init_dt->name,//constructor arg
+                                        sem_init_dt->oflag,//constructor arg
+                                        sem_init_dt->value)//constructor arg
+      )){
          sem_init_dt->ret = -1;
+      }
+   }else if( sem_init_dt->name && (sem_init_dt->oflag&O_CREAT) ){ // named semaphore: sem_open(...,O_CREAT,...)
+      
+      //check if name already exist
+      sem_init_dt->psem = (kernel_object_t*)0;
+      kernel_object_iterator_t kernel_object_iterator;
+      //
+      kernel_object_manager_iterator_init(&kernel_object_iterator,&g_kernel_object_pool_head);
+      //
+      while((kernel_object =  kernel_object_manager_iterator(&kernel_object_iterator))){
+         if(kernel_object->type!=KERNEL_OBJECT_SEM)
+            continue;
+         if(!kernel_object->object.kernel_object_sem.name)
+            continue;
+         if(!strcmp(kernel_object->object.kernel_object_sem.name,sem_init_dt->name))
+            break;
+      }
+      //
+      if((sem_init_dt->oflag&O_EXCL) && kernel_object){
+         sem_init_dt->ret = -1;
+         //
+         __flush_syscall(pthread_ptr);
+         __kernel_ret_int(pthread_ptr);
+         //
+         return 0;
+      }
+      //
+      if(kernel_object){
+         sem_init_dt->psem=kernel_object;
+         //
+         kernel_object->object.kernel_object_sem.ref_count++;
+         //
+         sem_init_dt->ret = 0;
+         //
+         __flush_syscall(pthread_ptr);
+         __kernel_ret_int(pthread_ptr);
+         //
+         return 0;
+      }
+      //
+      if(!(kernel_object=kernel_object_manager_get(&g_kernel_object_pool_head, KERNEL_OBJECT_SEM, KERNEL_OBJECT_SRC_POOL,
+                                        sem_init_dt->name, //constructor arg
+                                        sem_init_dt->oflag, //constructor arg
+                                        sem_init_dt->value) //constructor arg
+      )){
+         sem_init_dt->ret = -1;
+      }
+      //
+      sem_init_dt->psem=kernel_object;
+      //
+      kernel_object->object.kernel_object_sem.ref_count++;
+      //
+      sem_init_dt->ret = 0;
+      //
+   }else if( sem_init_dt->name && !(sem_init_dt->oflag&O_CREAT) ){ // named semaphore: sem_open(...,0,...)
+      sem_init_dt->psem = (kernel_object_t*)0;
+      kernel_object_iterator_t kernel_object_iterator;
+      //
+      kernel_object_manager_iterator_init(&kernel_object_iterator,&g_kernel_object_pool_head);
+      //
+      while((kernel_object =  kernel_object_manager_iterator(&kernel_object_iterator))){
+         if(kernel_object->type!=KERNEL_OBJECT_SEM)
+            continue;
+         if(!kernel_object->object.kernel_object_sem.name)
+            continue;
+         if(!strcmp(kernel_object->object.kernel_object_sem.name,sem_init_dt->name))
+            break;
+      }
+      //
+      sem_init_dt->psem=kernel_object;
+      //
+      if(!kernel_object){
+          sem_init_dt->ret=-1;
+          //
+         __flush_syscall(pthread_ptr);
+         __kernel_ret_int(pthread_ptr);
+      }
+      //
+      kernel_object->object.kernel_object_sem.ref_count++;
+      //
+   }else{
+      sem_init_dt->ret = -1;
    }
    //
    __flush_syscall(pthread_ptr);
@@ -1383,13 +1469,44 @@ int _syscall_sem_init(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
 | See:
 ----------------------------------------------*/
 int _syscall_sem_destroy(kernel_pthread_t* pthread_ptr, pid_t pid, void* data){
+   kernel_object_t* kernel_object=(kernel_object_t*)0;
    sem_destroy_t* sem_destroy_dt = (sem_destroy_t*)data;
 
-   kernel_object_t* kernel_object=sem_destroy_dt->psem;
-
-   kernel_object_manager_put(&process_lst[pid]->kernel_object_head, kernel_object);
-
-   sem_destroy_dt->ret = 0;
+   if(sem_destroy_dt->name){ //named semaphore 
+      kernel_object_iterator_t kernel_object_iterator;
+      //
+      kernel_object_manager_iterator_init(&kernel_object_iterator,&g_kernel_object_pool_head);
+      //
+      while((kernel_object =  kernel_object_manager_iterator(&kernel_object_iterator))){
+         if(kernel_object->type!=KERNEL_OBJECT_SEM)
+            continue;
+         if(!kernel_object->object.kernel_object_sem.name)
+            continue;
+         if(!strcmp(kernel_object->object.kernel_object_sem.name,sem_destroy_dt->name))
+            break;
+      }
+      //
+      if(!kernel_object){
+          sem_destroy_dt->ret=-1;
+          //
+         __flush_syscall(pthread_ptr);
+         __kernel_ret_int(pthread_ptr);
+      }
+      //
+      if(--kernel_object->object.kernel_object_sem.ref_count){
+         kernel_object_manager_put(&g_kernel_object_pool_head, kernel_object);
+      }
+      //
+      sem_destroy_dt->ret=0;
+   }else{ // anonymous semaphore
+      //
+      kernel_object=sem_destroy_dt->psem;
+      //
+      kernel_object_manager_put(&process_lst[pid]->kernel_object_head, kernel_object);
+      //
+      sem_destroy_dt->ret = 0;
+   }
+   
    //
    __flush_syscall(pthread_ptr);
    __kernel_ret_int(pthread_ptr);

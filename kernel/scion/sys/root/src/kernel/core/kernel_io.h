@@ -39,8 +39,20 @@ Includes
 /*===========================================
 Declaration
 =============================================*/
+
+//
 #define KERNEL_IO_READWRITE_NOARGS ((uint8_t)(0))
 #define KERNEL_IO_READWRITE_ARGS ((uint8_t)(1))
+
+//
+#define __kernel_io_read_set_timeout(__desc__,__s__,__ns__)\
+ofile_lst[__desc__].read_timeout.tv_sec   = __s__; ofile_lst[__desc__].read_timeout.tv_nsec   = __ns__;\
+ofile_lst[__desc__].p_read_timeout = &ofile_lst[__desc__].read_timeout
+
+#define __kernel_io_read_unset_timeout(__desc__) ofile_lst[__desc__].p_read_timeout = (void*)0
+
+#define __kernel_io_read_get_timeout(__desc__,__s__,__ns__) __s__ = ofile_lst[__desc__].read_timeout.tv_sec; __ns__=ofile_lst[__desc__].read_timeout.tv_nsec
+
 //
 extern ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte, uint8_t args_flags, ...);
 extern ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte, uint8_t args_flags, ...);

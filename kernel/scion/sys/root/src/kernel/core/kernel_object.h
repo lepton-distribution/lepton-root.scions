@@ -47,7 +47,10 @@ typedef struct kernel_object_pthread_mutex_st {
 
 typedef struct kernel_object_sem_st {
    kernel_sem_t kernel_sem;
+   char *name;
    int init_count;
+   //
+   int ref_count;
 }kernel_object_sem_t;
 
 typedef struct kernel_object_timer_st {
@@ -90,9 +93,22 @@ typedef struct kernel_object_st {
 }kernel_object_t;
 
 //
+typedef struct kernel_object_iterator_st{
+   kernel_object_t** pp_kernel_object_head;
+   struct kernel_object_st*  p_current_kernel_object;
+}kernel_object_iterator_t;
+
+//
+//global kernel object pool head (for inter process kernel object ex:named semaphore) 
+extern kernel_object_t*  g_kernel_object_pool_head;
+
+//
 int kernel_object_manager_pool(int kernel_object_no);
 kernel_object_t* kernel_object_manager_get(kernel_object_t** pp_kernel_object_head, kernel_object_type_t type, kernel_object_src_t src,...);
 kernel_object_t* kernel_object_manager_put(kernel_object_t** pp_kernel_object_head,kernel_object_t* p);
 kernel_object_t* kernel_object_manager_put_all(kernel_object_t** pp_kernel_object_head);
+
+void kernel_object_manager_iterator_init(kernel_object_iterator_t* p_kernel_object_iterator,kernel_object_t** pp_kernel_object_head);
+kernel_object_t* kernel_object_manager_iterator(kernel_object_iterator_t* p_kernel_object_iterator);
 
 #endif

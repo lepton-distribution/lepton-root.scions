@@ -649,5 +649,5 @@ _str: while (*src  &&  p < dst+max)                              /* append strin
 
 
 /*===========================================
-End of Sourcestatvfs.c
+End of Source time.c
 =============================================*/

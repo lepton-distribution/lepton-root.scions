@@ -421,6 +421,10 @@ desc_t _vfs_getdesc(inodenb_t inodenb,desc_t ancestor_desc){
          ofile_lst[desc].pfsop        = _vfs_mntdev2fsop(ofile_lst[desc].pmntdev);
          ofile_lst[desc].oflag        = 0;
          ofile_lst[desc].attr         = 0;
+         //default case null pointer: no timeout in kernel_io_read_args() with __wait_io_int2()
+         ofile_lst[desc].p_read_timeout = (struct timespec*)0; 
+         ofile_lst[desc].read_timeout.tv_sec   = 0;
+         ofile_lst[desc].read_timeout.tv_nsec   = 0;
 
          //printf("get desc[%d]\n",_desc);
          return desc;

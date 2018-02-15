@@ -144,6 +144,7 @@ int dev_samv71x_uart_x_open(desc_t desc, int o_flag, samv71x_uart_info_t* uart_i
       uint32_t mode = 0
 		| UART_MR_PAR_NO
 		| UART_MR_BRSRCCK_PERIPH_CLK
+      //|UART_MR_CHMODE_REMOTE_LOOPBACK;
       | UART_MR_CHMODE_NORMAL;
 		//| UART_MR_CHMODE_LOCAL_LOOPBACK;
       //
@@ -230,6 +231,28 @@ int dev_samv71x_uart_x_open(desc_t desc, int o_flag, samv71x_uart_info_t* uart_i
 | See:
 ---------------------------------------------*/
 int dev_samv71x_uart_x_close(desc_t desc){
+   
+   samv71x_uart_info_t* uart_info = (samv71x_uart_info_t*)ofile_lst[desc].p;
+   
+   //
+   if(ofile_lst[desc].oflag& O_RDONLY){
+      if(ofile_lst[desc].nb_reader==0){
+         UARTD_DisableRxChannels(&uart_info->Uartd, &uart_info->UartRx);
+         //
+         //
+         uart_info->desc_r = INVALID_DESC;
+      }
+   }
+   
+   //
+   if(ofile_lst[desc].oflag& O_WRONLY){
+      if(ofile_lst[desc].nb_writer==0){
+         UARTD_DisableTxChannels(&uart_info->Uartd, &uart_info->UartTx);
+         //
+         uart_info->desc_w = INVALID_DESC;
+      }
+   }
+   
    return 0;
 }
 
@@ -293,6 +316,11 @@ int dev_samv71x_uart_x_read(desc_t desc, char* buf,int size){
    sz =  uart_info->RxDmaBufferSize;
    
    p_ring_buffer =  uart_info->pRxDmaBuffer;
+   
+   //empty or overrun
+   if(r==w){
+      return 0;
+   }
 
    //available data
    if(r<w)
@@ -344,8 +372,11 @@ int dev_samv71x_uart_x_write(desc_t desc, const char* buf,int size){
       size = uart_info->TxDmaBufferSize;
    }
    //
+   SCB_CleanInvalidateDCache();
+   //
    memcpy(uart_info->pTxDmaBuffer,buf,size);
    //
+   SCB_InvalidateDCache_by_Addr((uint32_t*)uart_info->pTxDmaBuffer, size);
    //
    XDMAC_SetSourceAddr(pUartd->pXdmad->pXdmacs, pUartdCh->ChNum,(uint32_t)uart_info->pTxDmaBuffer);
    XDMAC_SetMicroblockControl(pUartd->pXdmad->pXdmacs, pUartdCh->ChNum,size);

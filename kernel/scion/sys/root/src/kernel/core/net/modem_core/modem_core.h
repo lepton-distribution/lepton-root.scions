@@ -36,11 +36,24 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
+
+#ifndef __KERNEL_PRINTK
+   #define __KERNEL_MODEM_CORE_SILENT_MODE (1)
+#else
+   #ifndef __KERNEL_MODEM_CORE_SILENT_MODE
+       #define __KERNEL_MODEM_CORE_SILENT_MODE (1)
+   #endif
+#endif
+
 //
 #ifndef MODEM_CONNECTION_MAX
    #define MODEM_CONNECTION_MAX 1
 #endif
 
+//
+#define MODEM_CORE_STATUS_STALLED  ((int8_t)(-1))
+#define MODEM_CORE_STATUS_STOPPED  ((int8_t)(0))
+#define MODEM_CORE_STATUS_STARTED  ((int8_t)(1))
 //
 #define MODEM_CORE_OPERATION_UNDEFINED_REQUEST           ((uint8_t)(0))
 #define MODEM_CORE_OPERATION_SOCKET_CREATE_REQUEST       ((uint8_t)(1))
@@ -52,6 +65,9 @@ either the MPL or the [eCos GPL] License."
 #define MODEM_CORE_OPERATION_EVENT_PACKET             ((uint8_t)(6))
 
 #define MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST    ((uint8_t)(7))
+
+#define  MODEM_CORE_OPERATION_IFUP_REQUEST            ((uint8_t)(8))
+#define  MODEM_CORE_OPERATION_IFDOWN_REQUEST          ((uint8_t)(9))
 
 #define MODEM_CORE_OPERATION_INPROCESS                ((uint8_t)(0x0F))
 #define MODEM_CORE_OPERATION_DONE                     ((uint8_t)(0x1F))
@@ -66,7 +82,10 @@ either the MPL or the [eCos GPL] License."
 
 #define NO_CME_ERROR_CODE (-1)
 
-
+#define MODEM_CORE_REQUEST_TIMEOUT_INFINITE (-1)
+#define MODEM_CORE_REQUEST_TIMEOUT (30) //30 seconds
+//#define MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST_TIMEOUT (60) //60 seconds
+#define MODEM_CORE_DEV_READ_TIMEOUT (15) //15 seconds
 //
 typedef struct modem_core_message_st {
    uint8_t operation_request_code; //connect, send, recv, close.
@@ -101,7 +120,7 @@ typedef struct modem_core_connection_info_st {
    int modem_core_connexion_index;
    //
    desc_t socket_desc; //lepton bsd socket descriptor 
-                       //
+   //
    int domain;
    int type;
    int protocol;
@@ -110,15 +129,18 @@ typedef struct modem_core_connection_info_st {
    struct sockaddr_in sockaddr_in_connect;
    //
    int status; //open,connected,shutdown, close;
-               //
+   //
    kernel_mqueue_t kernel_mqueue;
    kernel_pthread_mutex_t kernel_mutex;
-
+   //
+   struct timespec request_timeout;
    //
    modem_core_send_packet_parameters_t  snd_packet;
    //
    modem_core_recv_packet_parameters_t* rcv_packet_head;
    modem_core_recv_packet_parameters_t* rcv_packet_last;
+   //
+   void* pv_modem_specific_info;
 }modem_core_connection_info_t;
 
 extern modem_core_connection_info_t g_modem_core_connection_info_list[MODEM_CONNECTION_MAX];
@@ -140,6 +162,7 @@ typedef int(*pfn_at_command_noconnection_t)(void* pv_modem_core_info, void* data
 
 typedef  pfn_at_command_noconnection_t pfn_at_command_modem_reset_t;
 typedef  pfn_at_command_noconnection_t pfn_at_command_modem_init_t;
+typedef  pfn_at_command_noconnection_t pfn_at_command_modem_stop_t;
 typedef  pfn_at_command_connection_t   pfn_at_command_socket_create_t;
 typedef  pfn_at_command_connection_t   pfn_at_command_socket_connect_t;
 typedef  pfn_at_command_connection_t   pfn_at_command_socket_close_t;
@@ -156,7 +179,7 @@ typedef  pfn_at_command_noconnection_t pfn_at_command_gethostbyname_t;
 
 //
 typedef struct modem_at_parser_context_st {
-   uint8_t state;
+   int8_t state;
    //
    int   response_buffer_size;
    char* response_buffer;
@@ -174,6 +197,7 @@ typedef struct modem_at_parser_context_st {
 typedef struct modem_at_command_op_st {
    pfn_at_command_modem_reset_t     at_command_modem_reset;
    pfn_at_command_modem_init_t      at_command_modem_init;
+   pfn_at_command_modem_stop_t      at_command_modem_stop;
    pfn_at_command_socket_create_t   at_command_socket_create;
    pfn_at_command_socket_connect_t  at_command_socket_connect;
    pfn_at_command_socket_close_t    at_command_socket_close;
@@ -193,6 +217,9 @@ typedef struct modem_core_info_st {
    desc_t  modem_ttys_desc_r;
    desc_t  modem_ttys_desc_w;
    //
+   uint8_t status;
+   uint8_t if_status; //IFF_UP, IFF_DOWN
+   //
    modem_at_command_op_t      modem_at_command_op;
    modem_at_parser_context_t  modem_at_parser_context;
 
@@ -200,10 +227,12 @@ typedef struct modem_core_info_st {
    modem_core_message_t modem_core_message;
 
    //
+   kernel_pthread_mutex_t  kernel_mqueue_mutex; //only for unconnected request
    kernel_mqueue_t kernel_mqueue_request;
    kernel_mqueue_t kernel_mqueue_response;
    //
    kernel_pthread_t kernel_thread;
+   
    //
    int last_cme_error_code;
 
@@ -232,12 +261,14 @@ extern uint8_t g_at_send_buffer[MODEM_CORE_AT_COMMAND_PARSER_SND_BUFFER_SIZE];
 //
 int modem_core_mq_post_unconnected_request(void* data, uint8_t operation_request_code);
 int modem_core_mq_post_unconnected_response(void* data, uint8_t operation_request_code, uint8_t operation_response_code);
-int modem_core_mq_wait_unconnected_response(void** data, uint8_t* operation_response_code);
+int modem_core_mq_wait_unconnected_response(void** data, uint8_t* operation_response_code,const struct timespec* request_timeout);
 
 
 int modem_core_parser_set_callback_list(struct modem_core_info_st* p_modem_core_info, modem_at_parser_response_callback_t* at_response_callback_list, int at_response_callback_list_size);
 int modem_core_parser_send_at_command(struct modem_core_info_st* p_modem_core_info, const char* command, int silent_mode);
+int modem_core_parser_recv_at_response_ex(struct modem_core_info_st* p_modem_core_info,const char* expected_response,int nonblock_mode,int silent_mode,int timeout);
 int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_info, const char* expected_response, int nonblock_mode, int silent_mode);
+int modem_core_parser_send_recv_at_command_ex(struct modem_core_info_st* p_modem_core_info,const char* command,const char* expected_response,int silent_mode,int timeout);
 int modem_core_parser_send_recv_at_command(struct modem_core_info_st* p_modem_core_info, const char* command, const char* expected_response, int silent_mode);
 
 int modem_core_parser_get_last_cme_error(struct modem_core_info_st* p_modem_core_info);

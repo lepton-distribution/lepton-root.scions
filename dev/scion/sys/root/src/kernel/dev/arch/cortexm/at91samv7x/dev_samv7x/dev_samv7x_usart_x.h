@@ -52,6 +52,8 @@ typedef struct samv71x_usart_info_st {
    int desc_w;
    //
    unsigned long baudrate;
+   //
+   uint32_t mode;
    
    //Dma Buffer
    uint16_t RxDmaBufferSize;
@@ -67,8 +69,8 @@ typedef struct samv71x_usart_info_st {
    UsartChannel UsartRx;
    UsartChannel UsartTx; 
    //
-   uint8_t  rx_dma_buf_w;
-   uint8_t  rx_dma_buf_r;
+   uint16_t  rx_dma_buf_w;
+   uint16_t  rx_dma_buf_r;
      //
 #if USE_SAMV7_USART_USER_KERNEL_RING_BUFFER
    //

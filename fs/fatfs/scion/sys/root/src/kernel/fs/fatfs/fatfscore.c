@@ -62,17 +62,68 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
+#define COMPILER_PRAGMA(arg)            _Pragma(#arg)
+
+
+#if defined   (__CC_ARM)
+	#define COMPILER_SECTION(a)    __attribute__((__section__(a)))
+#elif defined (__ICCARM__)
+	#define COMPILER_SECTION(a)    COMPILER_PRAGMA(location = a)
+#elif defined (__GNUC__)
+	#define COMPILER_SECTION(a)    __attribute__((__section__(a)))
+#endif
+
+#if defined   (__CC_ARM)
+	#define COMPILER_ALIGNED(a)    __attribute__((__aligned__(a)))
+#elif defined (__ICCARM__)
+	#define COMPILER_ALIGNED(a)    COMPILER_PRAGMA(data_alignment = a)
+#elif defined (__GNUC__)
+	#define COMPILER_ALIGNED(a)    __attribute__((__aligned__(a)))
+#endif
+
 
 static char g_sd_path[4];  /* SD logical drive path */
-//
-static FATFS g_disk_fatfs;
+
 //
 typedef union {
+   uint8_t padding[16];
    FIL   fil;
    DIR   dir;
 }fatfscore_u;
 
-static fatfscore_u fatfs_list[MAX_OPEN_FILE];
+#define USE_ALIGNED_FATFS
+
+#ifdef USE_ALIGNED_FATFS
+   //
+   typedef struct _ALIGN_FATFS {
+      uint8_t padding[16];
+      FATFS fs;
+   } ALIGN_FATFS;
+   //COMPILER_SECTION(".ram_nocache")
+   COMPILER_ALIGNED(32) ALIGN_FATFS aligned_fs;
+   //
+   #define g_disk_fatfs aligned_fs.fs
+   
+   typedef struct _ALIGN_FATFS_LIST {
+      uint8_t padding[16];
+      fatfscore_u fatfs_list_aligned[MAX_OPEN_FILE];
+   } ALIGN_FATFS_LIST;
+   //COMPILER_SECTION(".ram_nocache")
+   COMPILER_ALIGNED(32) ALIGN_FATFS_LIST aligned_fat_fs;
+   //
+   #define fatfs_list aligned_fat_fs.fatfs_list_aligned
+#else
+   static fatfscore_u fatfs_list[MAX_OPEN_FILE];
+   static FATFS g_disk_fatfs;
+#endif
+
+
+
+
+
+
+
+
 
 /*===========================================
 Implementation
@@ -128,7 +179,6 @@ WCHAR ff_wtoupper (WCHAR wch) {
    /* I don't support unicode it is too big! */ 
    return 0; 
 } 
-
 
 /*-------------------------------------------
 | Name:fatfscore_statfs

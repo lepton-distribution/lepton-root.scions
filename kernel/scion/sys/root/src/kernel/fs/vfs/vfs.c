@@ -911,7 +911,7 @@ int _vfs_ioctl2(desc_t desc, int request, va_list ap){
          return -1;
       //
       __ap = va_arg(_ap, va_list);
-      //warning: if request I_LINK do nothing in device driver, it must return 0 not -1.
+      //warning: if request I_LINK /do nothing in device driver, it must return 0 not -1.
       // To avoid failure of this operation
       if((ret = ofile_lst[desc].pfsop->fdev.fdev_ioctl(desc,request,__ap))<0) {
          _vfs_unlink_desc(desc);
@@ -1273,6 +1273,50 @@ int _vfs_rename(const char *old_name, const char *new_name ){
       return -1; //ref="." or ".." cannot be renamed
    }
 
+   //new name
+   //check if new name already exist
+   if(_vfs_lookup(new_name,&desc,&new_filename)>=0) {
+      _vfs_putdesc(desc);  //file already exist.
+      __kernel_set_errno(EEXIST);
+      return -1;
+   }
+   //
+   if(desc<0)
+      return -1;  //kernel panic!!! (desc not available)
+
+   
+   //external file system?
+   if(ofile_lst[desc].pfsop->fs.vfstype == VFS_TYPE_EXTERNAL_FS){
+      desc_t _desc;
+      //
+      if(_vfs_lookup(old_name,&_desc,&old_filename)<0) {
+         _vfs_putdesc(desc);
+         _vfs_putdesc(_desc);  //file not exist.
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      //not same path
+      if(ofile_lst[desc].pfsop->fs.vfstype != VFS_TYPE_EXTERNAL_FS){
+         _vfs_putdesc(desc);
+         _vfs_putdesc(_desc);  //file not exist.
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+    
+      
+      if(ofile_lst[_desc].pfsop->fs.extern_rename(old_filename,new_filename)<0){
+         _vfs_putdesc(_desc);
+         _vfs_putdesc(desc);
+         __kernel_set_errno(ENFILE);
+         return -1;
+      }
+      //
+      _vfs_putdesc(_desc);
+      _vfs_putdesc(desc);
+      //
+      return 0;
+   }
+   
    //
    for(i=strlen(new_name); i>0; --i) {
       if(new_name[i]=='/') break;
@@ -1283,18 +1327,7 @@ int _vfs_rename(const char *old_name, const char *new_name ){
       if(old_name[i]=='/') break;
       old_filename=(char*)&old_name[i];
    }
-
-   //new name
-   //check if new name already exist
-   if(_vfs_lookup(new_name,&desc,(void*)0)>=0) {
-      _vfs_putdesc(desc);  //file already exist.
-      __kernel_set_errno(EEXIST);
-      return -1;
-   }
-   //
-   if(desc<0)
-      return -1;  //kernel panic!!! (desc not available)
-
+   
    //
    ofile_lst[desc].pfsop->fs.open(desc);
    //

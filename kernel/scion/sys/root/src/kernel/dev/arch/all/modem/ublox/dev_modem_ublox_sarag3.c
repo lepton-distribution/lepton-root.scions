@@ -73,8 +73,7 @@ CLOSE OK
 
 #include "kernel/core/ioctl.h"
 #include "kernel/core/ioctl_board.h"
-#include "kernel/core/ioctl_eth.h"
-#include "kernel/core/ioctl_if.h"
+#include "kernel/core/ioctl_modem.h"
 
 #include "kernel/fs/vfs/vfstypes.h"
 #include "kernel/fs/vfs/vfskernel.h"
@@ -92,10 +91,13 @@ CLOSE OK
 #include "lib/libc/termios/termios.h"
 #include "lib/libc/misc/ltostr.h"
 
+#include "kernel/dev/arch/all/modem/ublox/dev_modem_ublox_sarag3.h"
+
 /*============================================
 | Global Declaration
 ==============================================*/
 
+// to do:  see +UNFM for test.
 //
 static modem_at_command_t const modem_at_command_list[] = {
    { .command = "ATV1",.response = (const char*)0 },
@@ -111,7 +113,13 @@ static modem_at_command_t const modem_at_command_list[] = {
    { .command = "AT+UPSD=0,3,\"sora\"",.response = (const char*)0 }, //set password
    { .command = "AT+UPSDA=0,3",.response = (const char*)0 }, //set Internal PDP context activation
    { .command = "AT+UPSND=0,0",.response = (const char*)0 },  //get IP address
-   { .command = "AT+UDCONF=1,1",.response = (const char*)0 }  //set HEX mode for socket read and write operation
+   { .command = "AT+UDCONF=1,1",.response = (const char*)0 },  //set HEX mode for socket read and write operation
+   { .command = "AT+ULOC=2,2,2,240,1,1",.response = (const char*)0 }  //GSM localisation
+};
+
+
+static modem_at_command_t const stop_modem_at_command_list[] = {
+   { .command = "AT+CPWROFF",.response = (const char*)0 }
 };
 
 //
@@ -158,6 +166,8 @@ static int ublox_sarag3_at_response_callback_receive(void* pv_modem_core_info, c
 
 static int ublox_sarag3_at_response_callback_gethostbyname(void* pv_modem_core_info, char* at_response);
 
+static int ublox_sarag3_at_response_callback_localisation(void* pv_modem_core_info, char* at_response);
+
 //
 static const modem_at_parser_response_callback_t modem_ublox_sarag3_at_parser_response_callback_list[] = {
    { .at_response = "+USOCR:",.at_response_callback = ublox_sarag3_at_response_callback_create },
@@ -167,7 +177,8 @@ static const modem_at_parser_response_callback_t modem_ublox_sarag3_at_parser_re
    { .at_response = "+UUSORD:",.at_response_callback = ublox_sarag3_at_response_callback_async_receive },
    { .at_response = "+USORD:",.at_response_callback = ublox_sarag3_at_response_callback_receive },
    
-   { .at_response = "+UDNSRN:",.at_response_callback = ublox_sarag3_at_response_callback_gethostbyname }
+   { .at_response = "+UDNSRN:",.at_response_callback = ublox_sarag3_at_response_callback_gethostbyname },
+   { .at_response = "+UULOC:",.at_response_callback = ublox_sarag3_at_response_callback_localisation }
    
    //to "+UUPSDD: 0" close all socket connection
 };
@@ -175,6 +186,7 @@ static const modem_at_parser_response_callback_t modem_ublox_sarag3_at_parser_re
 //
 static int ublox_sarag3_at_command_modem_reset(void* pv_modem_core_info, void * data);
 static int ublox_sarag3_at_command_modem_init(void* pv_modem_core_info, void * data);
+static int ublox_sarag3_at_command_modem_stop(void* pv_modem_core_info, void * data);
 static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info, modem_core_connection_info_t* p_modem_core_connection_info);
 static int ublox_sarag3_at_command_socket_close(void* pv_modem_core_info, modem_core_connection_info_t* p_modem_core_connection_info);
 static int ublox_sarag3_at_command_socket_send(void* pv_modem_core_info, modem_core_connection_info_t* p_modem_core_connection_info);
@@ -188,6 +200,7 @@ static dev_modem_info_t dev_modem_ublox_sarag3_info = {
    .at_response_callback_list =( modem_at_parser_response_callback_t*) modem_ublox_sarag3_at_parser_response_callback_list,
    .modem_at_command_op.at_command_modem_reset     = ublox_sarag3_at_command_modem_reset,
    .modem_at_command_op.at_command_modem_init      = ublox_sarag3_at_command_modem_init,
+   .modem_at_command_op.at_command_modem_stop      = ublox_sarag3_at_command_modem_stop,
    .modem_at_command_op.at_command_socket_create   = __pfn_at_command_not_implemented,
    .modem_at_command_op.at_command_socket_connect  = ublox_sarag3_at_command_socket_connect,
    .modem_at_command_op.at_command_socket_close    = ublox_sarag3_at_command_socket_close,
@@ -197,14 +210,27 @@ static dev_modem_info_t dev_modem_ublox_sarag3_info = {
 };
 
 //
-#define UBLOX_SOCKET_DATA_LENGTH_MAX 250
+#define UBLOX_SOCKET_DATA_LENGTH_MAX 250 //64 //250
 #define UBLOX_SOCKET_DATA_HEXASCII_LENGTH_MAX (UBLOX_SOCKET_DATA_LENGTH_MAX*2)
-#define UBLOX_SOCKET_MAX 6
-static modem_core_connection_info_t* g_ublox_sarag3_socket_list[UBLOX_SOCKET_MAX] = { 0 };
+#ifndef UBLOX_SOCKET_MAX
+   #define UBLOX_SOCKET_MAX 6
+#endif
+
+typedef struct ublox_socket_info_st{
+   int  ublox_socket_connexion_index;
+   modem_core_connection_info_t* p_modem_core_connection_info;
+}ublox_socket_info_t;
+
+static ublox_socket_info_t g_ublox_sarag3_socket_list[UBLOX_SOCKET_MAX] = { 0 };
+
+//
 static uint8_t ublox_hexascii_buffer_send[UBLOX_SOCKET_DATA_HEXASCII_LENGTH_MAX];
 static uint8_t ublox_hexascii_buffer_recv[UBLOX_SOCKET_DATA_HEXASCII_LENGTH_MAX];
 //
 static const uint8_t * hex_conversion_array = "0123456789ABCDEF";
+
+//
+static modem_ublox_sarag3_info_t g_modem_ublox_sarag3_info;
 
 /*============================================
 | Implementation
@@ -218,21 +244,32 @@ static const uint8_t * hex_conversion_array = "0123456789ABCDEF";
 | Comments:
 | See:
 ----------------------------------------------*/
-static int ublox_sarag3_get_ublox_socket_connexion_index(modem_core_connection_info_t* p_modem_core_connection_info) {
-   for (int ublox_socket_connexion_index=0; ublox_socket_connexion_index < UBLOX_SOCKET_MAX; ublox_socket_connexion_index++) {
-      if (g_ublox_sarag3_socket_list[ublox_socket_connexion_index] == (void*)0)
-         continue;
-      if (g_ublox_sarag3_socket_list[ublox_socket_connexion_index]->modem_core_connexion_index != p_modem_core_connection_info->modem_core_connexion_index)
-         continue;
-      /*if (g_ublox_sarag3_socket_list[ublox_socket_connexion_index]->status == CONNECTION_STATUS_SHUTDOWN)
-         continue;*/
-      if (g_ublox_sarag3_socket_list[ublox_socket_connexion_index]->status == CONNECTION_STATUS_CLOSE)
-         continue;
-      //
-      return ublox_socket_connexion_index;
+static int ublox_sarag3_get_ublox_socket_connexion_init(void){
+   for(int ublox_socket_connexion_index=0;
+       ublox_socket_connexion_index<UBLOX_SOCKET_MAX;
+       ublox_socket_connexion_index++){
+      g_ublox_sarag3_socket_list[ublox_socket_connexion_index].ublox_socket_connexion_index=ublox_socket_connexion_index;
+      g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info= (modem_core_connection_info_t*)0;
    }
    //
-   return -1;
+   return 0;
+}
+
+/*--------------------------------------------
+| Name:        ublox_sarag3_get_ublox_socket_connexion_index
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+static int ublox_sarag3_get_ublox_socket_connexion_index(modem_core_connection_info_t* p_modem_core_connection_info) {
+   ublox_socket_info_t* p_ublox_socket_info = (ublox_socket_info_t*)p_modem_core_connection_info->pv_modem_specific_info;
+   if(p_ublox_socket_info==(ublox_socket_info_t*)0){
+      return -1;
+   }
+   //
+   return p_ublox_socket_info->ublox_socket_connexion_index;
 }
 
 /*--------------------------------------------
@@ -280,7 +317,9 @@ static int ublox_sarag3_at_response_callback_create(void* pv_modem_core_info, ch
    ublox_socket_connexion_index = atoi(at_response);
    
    //
-   g_ublox_sarag3_socket_list[ublox_socket_connexion_index] = p_modem_core_connection_info;
+   g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info = p_modem_core_connection_info;
+   //attach modem core connection with ublox connection info
+   p_modem_core_connection_info->pv_modem_specific_info=&g_ublox_sarag3_socket_list[ublox_socket_connexion_index];
    
    return 0;
 }
@@ -321,18 +360,22 @@ static int ublox_sarag3_at_response_callback_close(void* pv_modem_core_info, cha
    //
    ublox_socket_connexion_index = atoi(at_response);
    //
-   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index];
+   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info;
    //
    if (p_modem_core_connection_info == (void*)0) {
       return -1;
    }
+   //check coherence: zombie connection
+   if(ublox_socket_connexion_index != ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info)){
+      return -1; //zombie connection socket close, but ublox was still alive, now is realy close in the both side: modem_core side and ublox side.
+   }
    
    //
-   if(p_modem_core_connection_info->status == CONNECTION_STATUS_CLOSE){
+   if(p_modem_core_connection_info->status == CONNECTION_STATUS_SHUTDOWN || p_modem_core_connection_info->status == CONNECTION_STATUS_CLOSE){
       return -1;
    }
    
-    // set status to shutdown.
+   // set status to shutdown.
    p_modem_core_connection_info->status = CONNECTION_STATUS_SHUTDOWN;
    //
 
@@ -405,10 +448,14 @@ static int ublox_sarag3_at_response_callback_send(void* pv_modem_core_info,char*
    data_sent_length= atoi(at_response);
    
    //
-   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index];
+   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info;
    //
    if (p_modem_core_connection_info == (void*)0) {
       return -1;
+   }
+   //check coherence: zombie connection
+   if(ublox_socket_connexion_index != ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info)){
+      return -1; //zombie connection socket close, but ublox was still alive
    }
 
    //
@@ -480,10 +527,14 @@ static int ublox_sarag3_at_response_callback_async_receive(void* pv_modem_core_i
    
 
    //
-   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index];
+   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info;
    //
    if (p_modem_core_connection_info == (void*)0) {
       return -1;
+   }
+   //check coherence: zombie connection
+   if(ublox_socket_connexion_index != ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info)){
+      return -1; //zombie connection socket close, but ublox was still alive.
    }
 
    //
@@ -512,11 +563,12 @@ static int ublox_sarag3_at_response_callback_async_receive(void* pv_modem_core_i
    //
    strcat(g_at_send_buffer, ltostr(ltostr_buffer, sizeof(ltostr_buffer), data_received_length, 10, 0));
    //
-   modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, 0);
+   modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, __KERNEL_MODEM_CORE_SILENT_MODE);
    
    //
    return 0;
 }
+
 /*--------------------------------------------
 | Name:        ublox_sarag3_at_response_callback_receive
 | Description:
@@ -591,10 +643,14 @@ static int ublox_sarag3_at_response_callback_receive(void* pv_modem_core_info, c
    pbuf++;
 
    //
-   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index];
+   p_modem_core_connection_info = g_ublox_sarag3_socket_list[ublox_socket_connexion_index].p_modem_core_connection_info;
    //
    if (p_modem_core_connection_info == (void*)0) {
       return -1;
+   }
+   //check coherence: zombie connection
+   if(ublox_socket_connexion_index != ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info)){
+      return -1; //zombie connection socket close, but ublox was still alive
    }
 
    //
@@ -714,7 +770,7 @@ static int ublox_sarag3_at_response_callback_gethostbyname(void* pv_modem_core_i
    //
    str_ip_address = at_response;
 
-  
+   
    /* fill hostent */
    static struct hostent hostent;
    static char *s_aliases;
@@ -735,6 +791,130 @@ static int ublox_sarag3_at_response_callback_gethostbyname(void* pv_modem_core_i
    hostent.h_addr_list = (char**)&s_phostent_addr;
    //
    modem_core_mq_post_unconnected_response(&hostent, MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST, MODEM_CORE_OPERATION_DONE);
+   //
+   return 0;
+}
+
+/*--------------------------------------------
+| Name:        ublox_sarag3_at_response_callback_localisation
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:  
+|     GSM localisation
+|     AT+ULOC=2,2,2,240,1,1
+|     attention: URC: +UULOC: 1,1,0,21/11/2017,17:04:16.000,46.0000000,2.0000000,0,1084000
+|     If <response_type>=2, <sensor_used> = 2 and <num_hypothesis>=N:
+|     +UULOC: <sol>,<num>,<sensor_ used>,<date>,<time>,<lat>,<long>, <alt>,<lat50>,<long50>,<major50 >,<minor50>,<orientation50>, <confidence50>[,<lat95>,<long95>, <major95>,<minor95>,<orientation95>, <confidence95>]
+|
+| See:
+----------------------------------------------*/
+static int ublox_sarag3_at_response_callback_localisation(void* pv_modem_core_info, char* at_response){
+   char* pbuf = at_response;
+   char* s_sol;
+   char* s_num;
+   char* s_sensor_used;
+   char* s_date;
+   char* s_time;
+   char* s_lat;
+   char* s_long;
+  
+   //get sol
+   s_sol = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get num
+   s_num = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get sensor_used
+   s_sensor_used = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get date
+   s_date = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get time
+   s_time = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get lat
+   s_lat = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+
+   //get long
+   s_long = pbuf;
+   while (*pbuf != ',' && *pbuf != '\0') {
+      pbuf++;
+   }
+   //
+   if (*pbuf == '\0') {
+      return -1;
+   }
+   *pbuf = '\0';
+   //
+   pbuf++;
+   //
+   if(strlen(s_lat)>0 && strlen(s_long)){
+      g_modem_ublox_sarag3_info.loc_validity = LOC_VALID;
+      g_modem_ublox_sarag3_info.loc_lat=atof(s_lat);
+      g_modem_ublox_sarag3_info.loc_lng=atof(s_long);
+   }
    //
    return 0;
 }
@@ -829,6 +1009,8 @@ int ublox_sarag3_at_command_modem_init(void* pv_modem_core_info,void * data) {
    desc_t desc_r = p_modem_core_info->modem_ttys_desc_r;
    desc_t desc_w = p_modem_core_info->modem_ttys_desc_w;
    //
+   ublox_sarag3_get_ublox_socket_connexion_init();
+   //
    for (int i = 0; i<(sizeof(modem_at_command_list) / sizeof(modem_at_command_t)); i++) {
       //
       kernel_io_ll_ioctl(desc_r, TCFLSH, TCIFLUSH);
@@ -836,6 +1018,37 @@ int ublox_sarag3_at_command_modem_init(void* pv_modem_core_info,void * data) {
       kernel_printk("trace: %s\r\n", modem_at_command_list[i].command);
       //
       if (modem_core_parser_send_recv_at_command(p_modem_core_info, modem_at_command_list[i].command, modem_at_command_list[i].response, 0)<0)
+         return -1;
+      //
+      __kernel_usleep(1000000);
+      //
+   }
+   //
+   return 0;
+}
+
+/*--------------------------------------------
+| Name: ublox_sarag3_at_command_modem_stop
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int ublox_sarag3_at_command_modem_stop(void* pv_modem_core_info,void * data) {
+   struct modem_core_info_st* p_modem_core_info = (struct modem_core_info_st*)pv_modem_core_info;
+   desc_t desc_r = p_modem_core_info->modem_ttys_desc_r;
+   desc_t desc_w = p_modem_core_info->modem_ttys_desc_w;
+   //
+   ublox_sarag3_get_ublox_socket_connexion_init();
+   //
+   for (int i = 0; i<(sizeof(stop_modem_at_command_list) / sizeof(stop_modem_at_command_list)); i++) {
+      //
+      kernel_io_ll_ioctl(desc_r, TCFLSH, TCIFLUSH);
+      //
+      kernel_printk("trace: %s\r\n", stop_modem_at_command_list[i].command);
+      //
+      if (modem_core_parser_send_recv_at_command(p_modem_core_info, stop_modem_at_command_list[i].command, stop_modem_at_command_list[i].response, 0)<0)
          return -1;
       //
       __kernel_usleep(1000000);
@@ -883,7 +1096,7 @@ static int ublox_sarag3_at_command_socket_create(void* pv_modem_core_info, modem
    }
 
    //
-   if (modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, 0)<0)
+   if (modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    return 0;
@@ -899,9 +1112,12 @@ static int ublox_sarag3_at_command_socket_create(void* pv_modem_core_info, modem
 | Notes: asynchronous argument not supported in SARA-G3 model (see notes for this command in the documentation).
 | See:
 ----------------------------------------------*/
+char trap_lion_flag=0;
 static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info,modem_core_connection_info_t* p_modem_core_connection_info) {
    struct modem_core_info_st* p_modem_core_info = (struct modem_core_info_st*)pv_modem_core_info;
    char ltostr_buffer[4];
+   
+   trap_lion_flag= 11;
    //
    if (p_modem_core_connection_info == (void*)0) {
       return -1;
@@ -914,7 +1130,8 @@ static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info,modem
    if (p_modem_core_connection_info->status == CONNECTION_STATUS_CONNECTED) {
       return -1;
    }
-
+   
+   trap_lion_flag= 12;
    
    //TO DO send command with mqueue and signal thread p_modem_core_info->kernel_thread_connection2modem.sem_io 
    // wait result in socket mqueue
@@ -935,13 +1152,23 @@ static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info,modem
    }
 
    //
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", 0)<0)
+   trap_lion_flag= 13;
+   //
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "+USOCR:", __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
 
+   //wait OK after +USOCR:
+   if (modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, __KERNEL_MODEM_CORE_SILENT_MODE)<0)
+      return -1;
+   //
+   trap_lion_flag= 20;
+   
    //
    int ublox_socket_connexion_index = ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info);
    if (ublox_socket_connexion_index < 0)
       return -1;
+   
+   trap_lion_flag= 30;
 
    //only for TCP socket
    //
@@ -968,13 +1195,15 @@ static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info,modem
    //asynchronous argument not supported in SARA-G3 model (see notes for this command in the documentation).
    //strcat(g_at_send_buffer, ",1");
 
+   trap_lion_flag= 31;
    //OK or ERROR follow with UCR +UUSOCL response: 
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", 0) < 0) {
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", __KERNEL_MODEM_CORE_SILENT_MODE) < 0) {
       //wait +UUSOCL: after ERROR
-      modem_core_parser_recv_at_response(p_modem_core_info, "+UUSOCL:", 0, 0);
+      modem_core_parser_recv_at_response(p_modem_core_info, "+UUSOCL:", 0, __KERNEL_MODEM_CORE_SILENT_MODE);
       return -1;
    }
-      
+   //
+   trap_lion_flag= 32;
    //
    p_modem_core_connection_info->status = CONNECTION_STATUS_CONNECTED;
 
@@ -986,7 +1215,8 @@ static int ublox_sarag3_at_command_socket_connect(void* pv_modem_core_info,modem
    modem_core_message.p_modem_core_connection_info = p_modem_core_connection_info;
    //
    kernel_mqueue_put(&p_modem_core_connection_info->kernel_mqueue, &modem_core_message, sizeof(modem_core_message));
-
+   //
+   trap_lion_flag= 0;
    //
    return 0;
 }
@@ -1008,7 +1238,7 @@ static int ublox_sarag3_at_command_socket_close(void* pv_modem_core_info,modem_c
       return -1;
    }
    //
-   if (p_modem_core_connection_info->status != CONNECTION_STATUS_CONNECTED) {
+   if (p_modem_core_connection_info->status == CONNECTION_STATUS_CLOSE) {
       return -1;
    }
    
@@ -1024,9 +1254,9 @@ static int ublox_sarag3_at_command_socket_close(void* pv_modem_core_info,modem_c
    //connection number
    strcat(g_at_send_buffer, ltostr(ltostr_buffer, sizeof(ltostr_buffer), ublox_socket_connexion_index, 10, 0));
    //
-   strcat(g_at_send_buffer, ",0");
+   //strcat(g_at_send_buffer, ",0");
    //
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", 0)<0)
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    p_modem_core_connection_info->status = CONNECTION_STATUS_SHUTDOWN;
@@ -1066,14 +1296,35 @@ static int ublox_sarag3_at_command_socket_send(void* pv_modem_core_info,modem_co
    if (p_modem_core_connection_info->status != CONNECTION_STATUS_CONNECTED) {
       return -1;
    }
+   //if length of packet is too large, trunc at UBLOX_SOCKET_DATA_LENGTH_MAX
    if (p_modem_core_connection_info->snd_packet.len > UBLOX_SOCKET_DATA_LENGTH_MAX) {
-      return -1;
+      p_modem_core_connection_info->snd_packet.len = UBLOX_SOCKET_DATA_LENGTH_MAX;
    }
 
    //
    int ublox_socket_connexion_index = ublox_sarag3_get_ublox_socket_connexion_index(p_modem_core_connection_info);
    if (ublox_socket_connexion_index < 0)
       return -1;
+   
+    //__kernel_usleep(100000);
+#if 0
+   //
+   __kernel_usleep(500000);
+   //at command
+   strcpy(g_at_send_buffer, "AT+USOCTL=");
+   //connection number
+   strcat(g_at_send_buffer, ltostr(ltostr_buffer, sizeof(ltostr_buffer), ublox_socket_connexion_index, 10, 0));
+   //
+   strcat(g_at_send_buffer, ",11");
+   
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "+USOCTL:", __KERNEL_MODEM_CORE_SILENT_MODE)<0){
+      return -1;
+   }
+   //wait OK after +USOCTL:
+   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, __KERNEL_MODEM_CORE_SILENT_MODE);
+   //
+   __kernel_usleep(500000);
+#endif  
 
    //prepare hex ascii data
    snd_packet_len = p_modem_core_connection_info->snd_packet.len;
@@ -1114,16 +1365,34 @@ static int ublox_sarag3_at_command_socket_send(void* pv_modem_core_info,modem_co
       len += cb;
    }
    //
-   if (modem_core_parser_send_at_command(p_modem_core_info, "\"", 0) < 0) {
+   if (modem_core_parser_send_at_command(p_modem_core_info, "\"", __KERNEL_MODEM_CORE_SILENT_MODE) < 0) {
       return -1;
    }
   
    //wait +USOWR:
-   if (modem_core_parser_recv_at_response(p_modem_core_info, "+USOWR:",0, 0) < 0) {
+   if (modem_core_parser_recv_at_response(p_modem_core_info, "+USOWR:",0, __KERNEL_MODEM_CORE_SILENT_MODE) < 0) {
       return -1;
    }
    //wait OK after +USOWR:
-   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, 0);
+   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, __KERNEL_MODEM_CORE_SILENT_MODE);
+
+#if 0
+   //
+   __kernel_usleep(500000);
+   //
+   //at command
+   strcpy(g_at_send_buffer, "AT+USOCTL=");
+   //connection number
+   strcat(g_at_send_buffer, ltostr(ltostr_buffer, sizeof(ltostr_buffer), ublox_socket_connexion_index, 10, 0));
+   //
+   strcat(g_at_send_buffer, ",11");
+   
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "+USOCTL:", __KERNEL_MODEM_CORE_SILENT_MODE)<0){
+      return -1;
+   }
+   //wait OK after +USOCTL:
+   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, __KERNEL_MODEM_CORE_SILENT_MODE);
+#endif   
 
    //
    modem_core_message_t modem_core_message;
@@ -1178,11 +1447,11 @@ static int ublox_sarag3_at_command_gethostbyname(void* pv_modem_core_info, void*
    strcat(g_at_send_buffer, "\"");
 
    //
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "+UDNSRN:", 0) < 0) {
+   if (modem_core_parser_send_recv_at_command_ex(p_modem_core_info, g_at_send_buffer, "+UDNSRN:", __KERNEL_MODEM_CORE_SILENT_MODE,MODEM_CORE_REQUEST_TIMEOUT_INFINITE) < 0) {
       return -1;
    }
    //wait OK after +UDNSRN:
-   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, 0);
+   modem_core_parser_recv_at_response(p_modem_core_info, "OK", 0, __KERNEL_MODEM_CORE_SILENT_MODE);
    //
    return 0;
 }
@@ -1196,6 +1465,9 @@ static int ublox_sarag3_at_command_gethostbyname(void* pv_modem_core_info, void*
 | See:
 ---------------------------------------------*/
 static int dev_modem_ublox_sarag3_load(void) {
+   //
+   memset(&g_modem_ublox_sarag3_info,0,sizeof(g_modem_ublox_sarag3_info));
+   g_modem_ublox_sarag3_info.loc_validity = LOC_INVALID;
    //
    return 0;
 }
@@ -1362,6 +1634,17 @@ static  int dev_modem_ublox_sarag3_ioctl(desc_t desc, int request, va_list ap) {
             return -1;
          }
          //nothing to do
+      }
+      break;
+      
+      case IOCTL_UBLOX_SARAG3_GET_INFO: {
+         modem_ublox_sarag3_info_t* p_modem_ublox_sarag3_info=va_arg(ap, modem_ublox_sarag3_info_t*);
+         if(!p_modem_ublox_sarag3_info)
+            return -1;
+         //
+         memcpy(p_modem_ublox_sarag3_info,&g_modem_ublox_sarag3_info,sizeof(g_modem_ublox_sarag3_info));
+         //
+         return 0;
       }
       break;
 

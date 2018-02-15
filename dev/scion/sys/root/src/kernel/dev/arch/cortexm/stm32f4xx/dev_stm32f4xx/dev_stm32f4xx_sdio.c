@@ -54,6 +54,11 @@ either the MPL or the [eCos GPL] License."
 
 #define BUS_4BITS 1
 
+//for compatibility with old version of hal cube ms
+#ifndef SD_OK 
+#define SD_OK  HAL_SD_ERROR_NONE
+#endif
+
 
 int dev_stm32f4xx_sdio_load(board_stm32f4xx_sdio_info_t * spi_info);
 int dev_stm32f4xx_sdio_open(desc_t desc, int o_flag,board_stm32f4xx_sdio_info_t * sdio_info);
@@ -123,6 +128,7 @@ int dev_stm32f4xx_sdio_open(desc_t desc, int o_flag, board_stm32f4xx_sdio_info_t
       }
 #endif
 
+#if 0 //to do: migration in progress to hal cube mx 1.16
       /* HAL SD initialization */
       __disable_interrupt_section_in();
       sdio_info->sd_state = HAL_SD_Init(&sdio_info->hsd, &sdio_info->SDCardInfo);
@@ -143,6 +149,8 @@ int dev_stm32f4xx_sdio_open(desc_t desc, int o_flag, board_stm32f4xx_sdio_info_t
              return -1;
          }
       #endif
+         
+#endif //migration in progress
    }
 
    //
@@ -166,7 +174,7 @@ int dev_stm32f4xx_sdio_open(desc_t desc, int o_flag, board_stm32f4xx_sdio_info_t
    if(ofile_lst[desc].p==(void*)0){
       ofile_lst[desc].p = sdio_info;
       //
-      HAL_SD_Get_CardInfo(&sdio_info->hsd, &sdio_info->SDCardInfo);
+      HAL_SD_GetCardInfo(&sdio_info->hsd, &sdio_info->SDCardInfo);
    }
 
    //
@@ -238,7 +246,7 @@ int dev_stm32f4xx_sdio_read(desc_t desc, char* buf,int size){
    }
    
    //
-   if(HAL_SD_ReadBlocks(&sdio_info->hsd, (uint32_t*)buf, ofile_lst[desc].offset, sdio_info->BlockSize, size/sdio_info->BlockSize) != SD_OK){
+   if(HAL_SD_ReadBlocks(&sdio_info->hsd, (uint8_t*)buf, ofile_lst[desc].offset, sdio_info->BlockSize, size/sdio_info->BlockSize) != SD_OK){
       sdio_info->sd_state = MSD_ERROR;
       return -1;
    }  
@@ -277,7 +285,7 @@ int dev_stm32f4xx_sdio_write(desc_t desc, const char* buf,int size){
    }
    
    //
-   if(HAL_SD_WriteBlocks(&sdio_info->hsd, (uint32_t*)buf, ofile_lst[desc].offset, sdio_info->BlockSize, size/sdio_info->BlockSize) != SD_OK){
+   if(HAL_SD_WriteBlocks(&sdio_info->hsd, (uint8_t*)buf, ofile_lst[desc].offset, sdio_info->BlockSize, size/sdio_info->BlockSize) != SD_OK){
       sdio_info->sd_state = MSD_ERROR;
       return -1;
    }
@@ -343,9 +351,11 @@ int dev_stm32f4xx_sdio_ioctl(desc_t desc,int request,va_list ap){
          if(!hdsz_p)
             return -1;
          /* Get SD card Information */
-         HAL_SD_Get_CardInfo(&sdio_info->hsd, &sdio_info->SDCardInfo);
+         //HAL_SD_Get_CardInfo(&sdio_info->hsd, &sdio_info->SDCardInfo);
+         HAL_SD_GetCardInfo(&sdio_info->hsd, &sdio_info->SDCardInfo);
          //
-         *hdsz_p= sdio_info->SDCardInfo.CardCapacity;
+         //*hdsz_p= sdio_info->SDCardInfo.CardCapacity;
+         *hdsz_p= sdio_info->SDCardInfo.BlockNbr*sdio_info->SDCardInfo.BlockSize;
       }
       break;
       
@@ -364,7 +374,7 @@ int dev_stm32f4xx_sdio_ioctl(desc_t desc,int request,va_list ap){
       //
       case HDCLRDSK: {
          unsigned long StartAddr= va_arg( ap, unsigned long);
-         unsigned long EndAddr =  ((sdio_info->SDCardInfo.CardCapacity/sdio_info->BlockSize)-1)*sdio_info->BlockSize;
+         unsigned long EndAddr =  ( ( (sdio_info->SDCardInfo.BlockNbr*sdio_info->SDCardInfo.BlockSize)/sdio_info->BlockSize) - 1 )*sdio_info->BlockSize;
          
          if(HAL_SD_Erase(&sdio_info->hsd, StartAddr, EndAddr) != SD_OK){
             sdio_info->sd_state = MSD_ERROR;

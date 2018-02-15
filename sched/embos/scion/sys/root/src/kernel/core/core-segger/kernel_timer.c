@@ -82,19 +82,19 @@ void kernel_timer_generic_callback(void){
       return;
 #endif
    p_kernel_timer->interval=!p_kernel_timer->interval;
-   if(p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
+   if(p_kernel_timer->interval && (p_kernel_timer->itimerspec.it_interval.tv_sec || p_kernel_timer->itimerspec.it_interval.tv_nsec)) {
       //rcv KERNEL_TIMER_VALUE_PERIOD  and set KERNEL_TIMER_INTERVAL_PERIOD
 #ifdef __KERNEL_UCORE_EMBOS
       OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_interval.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_interval.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
-   }else if(!p_kernel_timer->interval && p_kernel_timer->itimerspec.it_interval.tv_nsec) {
+   }else if(!p_kernel_timer->interval && (p_kernel_timer->itimerspec.it_interval.tv_sec || p_kernel_timer->itimerspec.it_interval.tv_nsec)) {
       //rcv KERNEL_TIMER_INTERVAL_PERIOD  and set KERNEL_TIMER_VALUE_PERIOD
 #ifdef __KERNEL_UCORE_EMBOS
       OS_SetTimerPeriod((OS_TIMER*)p_kernel_timer,(__timer_s_to_ms(p_kernel_timer->itimerspec.it_value.tv_sec)+__timer_ns_to_ms(p_kernel_timer->itimerspec.it_value.tv_nsec)));
       OS_RetriggerTimer((OS_TIMER*)p_kernel_timer);
 #endif
-      //don't send signal
+      //in this case don't send signal
       return;
    }
 

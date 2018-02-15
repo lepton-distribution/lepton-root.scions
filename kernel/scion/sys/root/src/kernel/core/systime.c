@@ -144,8 +144,10 @@ int _sys_settimeofday(struct __timeval *tv, register struct timezone *tz)
 
    //specific rtt
    //set kernel time to rtt
-   if((desc = _vfs_open("/dev/rtt0",O_WRONLY,0))<0)
-      return -1;
+   if ((desc = _vfs_open("/dev/rtt0", O_WRONLY, 0)) < 0) {
+      return 0;
+   }
+    
    if(desc>=0) {
       time_t time=tv->tv_sec;
       _vfs_write(desc,(char*)&time,sizeof(time_t));
@@ -428,5 +430,5 @@ DONE:
 
 
 /*===========================================
-End of Sourcesystime.c
+End of Source systime.c
 =============================================*/

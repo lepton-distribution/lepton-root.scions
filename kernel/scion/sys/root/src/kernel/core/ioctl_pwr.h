@@ -45,7 +45,9 @@ either the MPL or the [eCos GPL] License."
 #define PWRGETVOLT         0x0002 //get pack voltage mV
 #define PWRGETTEMP         0x0003 //get internal temperature (°C)
 #define PWRGETCAPACITY     0x0004 //get capacity mAh
+#define PWRGETSOC          0x0005 //State Of Charge (%)
 
+#define IOCTL_CMD_PWR_OFFSET  0x0100 // specific command offset
 
 
 #endif

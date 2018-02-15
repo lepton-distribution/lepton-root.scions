@@ -47,6 +47,66 @@ either the MPL or the [eCos GPL] License."
 | Implementation
 ==============================================*/
 /*--------------------------------------------
+| Name:        sem_open
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+sem_t * sem_open(const char* name,int oflag,...){
+   va_list ap;
+   sem_init_t sem_init_dt;
+   int mode=0;
+   int value=0;
+   //
+   va_start(ap, oflag);
+   //
+   if((oflag&O_CREAT)){
+       mode = va_arg( ap, int);//not used just for compatibility
+       value = va_arg( ap, int);
+   }
+   //
+   va_end(ap);
+   //    
+   sem_init_dt.name=(char*)name;
+   sem_init_dt.oflag=oflag;
+   sem_init_dt.psem=(sem_t*)0;
+   sem_init_dt.pshared=1;//shared by process (default)
+   sem_init_dt.value=value;
+   
+   //
+   __mk_syscall(_SYSCALL_SEM_INIT,sem_init_dt);
+   //
+   if(sem_init_dt.ret<0)
+      return (sem_t *)0;
+   //
+   return sem_init_dt.psem;
+}
+   
+/*--------------------------------------------
+| Name:        sem_close
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int sem_close(const char* name){
+   sem_destroy_t sem_destroy_dt;
+   //
+   sem_destroy_dt.name = (char*)name;
+   //
+   __mk_syscall(_SYSCALL_SEM_DESTROY,sem_destroy_dt);
+   //
+   if(sem_destroy_dt.ret<0)
+      return -1;
+
+   return 0;
+}
+
+
+/*--------------------------------------------
 | Name:        sem_init
 | Description:
 | Parameters:  none
@@ -61,6 +121,7 @@ int sem_init(sem_t *sem, int pshared, unsigned int value){
       return -1;
    //
    sem_init_dt.name=(char*)0;
+   sem_init_dt.oflag=0; //not used, anonymous semaphore
    sem_init_dt.psem=sem;
    sem_init_dt.pshared=pshared;
    sem_init_dt.value=value;

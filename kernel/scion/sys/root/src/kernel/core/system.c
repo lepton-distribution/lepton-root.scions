@@ -64,8 +64,7 @@ pid_t execl(const char* path, const char* arg,...){
    va_list ptr;
 
    va_start(ptr, arg);
-
-   //argv[0]= (char*)path;
+   //
    if(arg) {
       argv[argc++] = (char*)arg;
       for(; argc<ARG_MAX; argc++) {
@@ -77,7 +76,7 @@ pid_t execl(const char* path, const char* arg,...){
 
    //
    execve_dt.path=path;
-   execve_dt.argv=(const char **)argv;
+   execve_dt.argv=(const char **)&argv[0];
    execve_dt.envp=0;
    execve_dt.ppid=_sys_getppid();
 

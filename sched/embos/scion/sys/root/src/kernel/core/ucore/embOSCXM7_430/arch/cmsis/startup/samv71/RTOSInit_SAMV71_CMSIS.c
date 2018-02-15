@@ -278,10 +278,19 @@ void OS_InitHW(void) {
 *       to be preserved. However, a simple program loop can be programmed
 *       (like toggling an output or incrementing a counter)
 */
+extern uint8_t dev_samv7x_cpu_x_low_wfi_enable; //see dev_samv7x_cpu_x.c
 void OS_Idle(void) {     // Idle loop: No task is ready to execute
   while (1) {
+    //
     #if ((OS_VIEW_IFSELECT != OS_VIEW_IF_JLINK) && (OS_DEBUG == 0))     // Enter CPU halt mode when not in DEBUG build and J-Link communication not used
       __WFI();
+    #else
+      //lepton
+      if(dev_samv7x_cpu_x_low_wfi_enable){
+         __DSB();
+         __WFI();
+         __ISB();
+      }
     #endif
   }
 }

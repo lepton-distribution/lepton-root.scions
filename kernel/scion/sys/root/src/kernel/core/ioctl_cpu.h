@@ -38,13 +38,16 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Declaration
 ==============================================*/
-#define CPURQSTIRQ      0x0001
-#define CPUFREEIRQ      0x0002
-#define CPUBOOT         0x0003
-#define CPUSRST         0x0010
+#define CPURQSTIRQ         0x0001
+#define CPUFREEIRQ         0x0002
+#define CPUBOOT            0x0003
+#define CPULOWPWR          0x0010
+#define CPUSRST            0x0020
+
 // $BM Watchdog
-#define CPUWDGREFRESH     0x0004
-#define CPUWDGINIT        0x0005
-#define CPUWDGDISABLE     0x0006
+#define CPUWDGREFRESH     0x1004
+#define CPUWDGINIT        0x1005
+#define CPUWDGDISABLE     0x1006
+
 
 #endif

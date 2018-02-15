@@ -132,6 +132,14 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
          if(_trylock_io(pthread_ptr,ofile_lst[desc].desc,O_RDONLY)!=EBUSY) {
             //__atomic_in();
             {
+               //begin of section: protection from io interrupt
+               __disable_interrupt_section_in();
+                //for head of streams.
+                ofile_lst[desc].owner_pthread_ptr_read = pthread_ptr;
+               //end of section: protection from io interrupt
+               __disable_interrupt_section_out();
+               
+               //for streams: set explicit desc from ofile_lst[desc].desc
                desc_t _desc=ofile_lst[desc].desc;
                //
                if(ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr) {
@@ -167,6 +175,14 @@ int select(int nfds, fd_set *readfds, fd_set *writefds, fd_set *errorfds, struct
          if(_trylock_io(pthread_ptr,desc,O_WRONLY)!=EBUSY) {
             __atomic_in();
             {
+               //begin of section: protection from io interrupt
+               __disable_interrupt_section_in();
+               //for head of streams.
+                ofile_lst[desc].owner_pthread_ptr_write = pthread_ptr;
+               //end of section: protection from io interrupt
+               __disable_interrupt_section_out();
+               
+               //for streams: set explicit desc from ofile_lst[desc].desc
                desc_t _desc=ofile_lst[desc].desc;
                //
                if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr) {

@@ -132,11 +132,13 @@ static sSdHalFunctions sdHal = {
 /** \addtogroup mcid_functions
  *@{
  */
-
 static void hsmci_callback(uint32_t channel, sMcid *pMcid)
 {
     channel = channel;
 	sSdmmcCommand *pCmd = pMcid->pCmd;
+   //lepton workaround
+   SCB_CleanInvalidateDCache();
+   //
 	SCB_InvalidateDCache_by_Addr((uint32_t *)&pCmd->pData[0],
 								 pCmd->wBlockSize * pCmd->wNbBlocks);
 }
@@ -228,7 +230,7 @@ static uint32_t _MciDMA(sMcid *pMcid, uint32_t bFByte, uint8_t bRd)
 								 | XDMAC_CC_MBSIZE_SINGLE
 								 | XDMAC_CC_DSYNC_PER2MEM
 								 | XDMAC_CC_CSIZE_CHK_1
-								 | XDMAC_CC_DWIDTH_WORD
+								 | XDMAC_CC_DWIDTH_WORD 
 								 | XDMAC_CC_SIF_AHB_IF1
 								 | XDMAC_CC_DIF_AHB_IF1
 								 | XDMAC_CC_SAM_FIXED_AM
@@ -820,6 +822,7 @@ void MCID_Handler(sMcid *pMcid)
 		HSMCI_DisableIt(pHw, HSMCI_GetItMask(pHw));
 		/* Disable peripheral */
 		//_PeripheralDisable(pMcid->bID);
+      
 		/* Command is finished */
 		_FinishCmd(pMcid, pCmd->bStatus);
 	}

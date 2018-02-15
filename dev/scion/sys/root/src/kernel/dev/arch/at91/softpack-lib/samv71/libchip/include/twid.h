@@ -44,6 +44,8 @@
 
 /** TWI driver is currently busy. */
 #define TWID_ERROR_BUSY              1
+/** TWI driver timeout (added for lepton) */
+#define TWID_ERROR_TIMEOUT           2
 
 /** Transfer is still pending.*/
 #define ASYNC_STATUS_PENDING        0xFF

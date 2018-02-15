@@ -42,7 +42,9 @@ either the MPL or the [eCos GPL] License."
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+   
+sem_t * sem_open(const char* name,int oflag,...);
+int sem_close(const char* name);
 int sem_init(sem_t *sem, int pshared, unsigned int value);
 int sem_destroy(sem_t *sem);
 int sem_wait(sem_t *sem);

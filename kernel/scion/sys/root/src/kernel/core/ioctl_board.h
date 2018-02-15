@@ -49,6 +49,9 @@ Declaration
 #define BRDPWRSAVESET   0x0800
 #define BRDPWRSAVETRIGG 0x1000
 #define BRDSTANDBY      0x2000
+#define BRDPWRDWNPERPH  0x4001
+#define BRDPWRUPPERPH   0x4002
+#define BRDRESETPERPH   0x4004
 
 
 typedef enum {

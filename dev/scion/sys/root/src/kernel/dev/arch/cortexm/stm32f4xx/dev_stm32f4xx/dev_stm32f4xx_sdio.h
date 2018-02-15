@@ -53,7 +53,8 @@ typedef struct board_stm32f4xx_sdio_info_st {
    
    //
    SD_HandleTypeDef hsd;
-   HAL_SD_CardInfoTypedef SDCardInfo;
+   //HAL_SD_CardInfoTypedef SDCardInfo; //old cube mx version
+   HAL_SD_CardInfoTypeDef SDCardInfo;
    //
    uint8_t  sd_state;
    uint32_t BlockSize;

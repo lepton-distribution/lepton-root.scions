@@ -99,7 +99,7 @@ tmr_t kernel_tmr;
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM4__))
    #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM4
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ ==  __tauon_cpu_core_arm_cortexM7__))
-   #define KERNEL_STACK_SIZE  2560//2048 //CORTEXM7
+   #define KERNEL_STACK_SIZE  4096//2048 //CORTEXM7
 #elif ( (__tauon_compiler__==__compiler_iar_arm__)    && (__tauon_cpu_core__ == __tauon_cpu_core_arm_arm926ejs__))
    #define KERNEL_STACK_SIZE  2048 //ARM926EJS
 #elif ( (__tauon_compiler__==__compiler_keil_arm__)   && (__tauon_cpu_core__ == __tauon_cpu_core_arm_cortexM3__))
@@ -611,12 +611,16 @@ void _kernel_warmup_dev(void){
 
          //strcat(ref,pdev_lst[dev]->dev_name);
          _vfs_mknod(ref,(int16_t)pdev_lst[dev]->dev_attr,dev);
-      }else if(pdev_lst[dev]->dev_name[0]=='i'
+      }
+#if defined (__KERNEL_WARMUP_I2C) && (__KERNEL_WARMUP_I2C==1)
+      else if(pdev_lst[dev]->dev_name[0]=='i'
                && pdev_lst[dev]->dev_name[1]=='2'
                && pdev_lst[dev]->dev_name[2]=='c'
                && pdev_lst[dev]->dev_name[3]=='0') {
          //already mount see _kernel_warmup_i2c
-      }else if(pdev_lst[dev]->dev_name[0]=='s'
+      }
+#endif
+       else if(pdev_lst[dev]->dev_name[0]=='s'
          && pdev_lst[dev]->dev_name[1]=='p'
          && pdev_lst[dev]->dev_name[2]=='i'
          && pdev_lst[dev]->dev_name[3]=='0'){
@@ -663,7 +667,7 @@ void _kernel_warmup_tty(void){
 #ifdef __KERNEL_DEV_TTY
    desc_t desc_1;
    desc_t desc_2;
-   desc_t desc_tty;
+   desc_t desc_tty=INVALID_DESC;
 
    if((desc_1 = _vfs_open(__KERNEL_DEV_TTY,O_RDWR,0))<0)
       return;
@@ -692,32 +696,77 @@ void _kernel_warmup_tty(void){
 }
 
 /*--------------------------------------------
-| Name:        _kernel_warmup_stream
+| Name:        _kernel_warmup_mount_streams
 | Description:
 | Parameters:  none
 | Return Type: none
 | Comments:
 | See:
 ----------------------------------------------*/
-void _kernel_warmup_stream(void){
-   /*
-   desc_t desc_1;
-   desc_t desc_2;
-   //to remove: test stream with ftl
-   if((desc_1 = _vfs_open("/dev/ftl",O_RDWR,0))<0)
-      return;
+int _kernel_warmup_mount_streams(char* streams_up, char* streams_bottom, char* streams_attached,...){
+   va_list ap;
+   int arglist;
+   volatile int dummy_fd;
+   volatile int argc=0;
+   volatile char* argv[ARG_MAX];
+   
+   desc_t desc_up;
+   desc_t desc_bottom;
+  
+   //
+   //preserve compatibility with system call iotcl(fd1,I_LINK,fd2,argc,argv). 
+   //argc argv from main(argc,argv)  argv[0]="command"
+   argv[argc++]="_kernel_warmup_mount_streams"; 
+   argv[argc++]=streams_up;
+   argv[argc++]=streams_bottom;
+   argv[argc++]=streams_attached;
+   
+   //
+   va_list ptr;
+   va_start(ptr, streams_attached);
+   //
+   for(;argc<ARG_MAX;argc++){
+      argv[argc]=va_arg( ptr, char*);
+      if(argv[argc]==(char*)0)
+         break;
+   }
+   
+   //arguments exceed limit
+   if(argc==ARG_MAX){
+      return -1;
+   }
+   
+   //
+   va_end(ptr);
+   //
+   if((desc_up = _vfs_open(streams_up,O_RDWR,0))<0){
+      return-1;
+   }
+   //
+   if((desc_bottom = _vfs_open(streams_bottom,O_RDWR,0))<0){
+      _vfs_close(desc_up);
+      return -1;
+   }
+   //
+   if(_vfs_ioctl(desc_up,I_LINK,desc_bottom,ap)<0){
+      _vfs_close(desc_up);
+      _vfs_close(desc_bottom);
+      return -1;
+   }
 
-   if((desc_2 = _vfs_open("/dev/hd/hdd",O_RDWR,0))<0)
-      return;
+   //
+   if(_vfs_fattach(desc_up,streams_attached)<0){
+      _vfs_ioctl(desc_up,I_UNLINK,desc_bottom);
+      _vfs_close(desc_up);
+      _vfs_close(desc_bottom);
+      return -1;
+   }
 
-   if(_vfs_ioctl(desc_1,I_LINK,desc_2)<0)
-      return;
-
-   if(_vfs_fattach(desc_1,"/dev/hd/hdd0")<0)
-      return;
-
-   */
-
+   //
+   _vfs_close(desc_up);
+   _vfs_close(desc_bottom);
+   //
+   return 0;
 }
 
 /*--------------------------------------------
@@ -745,11 +794,17 @@ int _kernel_warmup_object_manager(void){
 ---------------------------------------------*/
 int _kernel_warmup_rtc(void){
    desc_t desc = -1;
+
+#if defined(__KERNEL_RTC_DEV_NAME__) && defined(__KERNEL_DEV_RTC_I2C_BUS_NAME__) && defined(__KERNEL_RTC_I2C_ADDR__)
+   _kernel_warmup_mount_streams(__KERNEL_RTC_DEV_NAME__,__KERNEL_DEV_RTC_I2C_BUS_NAME__,"/dev/rtc0",__KERNEL_RTC_I2C_ADDR__);
+#endif
+   
    //specific rtc
    //set kernel time from rtc
-   if((desc = _vfs_open("/dev/rtc0",O_RDONLY,0))<0) //ST m41t81
+   if((desc = _vfs_open("/dev/rtc0",O_RDONLY,0))<0){ //ST m41t81
       desc = _vfs_open("/dev/rtc1",O_RDONLY,0);
-
+   }
+   //
    if(desc>=0) {
       char buf[8]={0};
       struct tm _tm={ 0, 0, 12, 28, 0, 103 }; //init for test
@@ -787,8 +842,10 @@ int _kernel_warmup_rtc(void){
 
    //specific rtt
    //set kernel time from rtt
-   if((desc = _vfs_open("/dev/rtt0",O_RDONLY,0))<0) //ST m41t81
+   if((desc = _vfs_open("/dev/rtt0",O_RDONLY,0))<0){ //ST m41t81
       return -1;
+   }
+   //
    if(desc>=0) {
       time_t time=0;
 
@@ -800,8 +857,8 @@ int _kernel_warmup_rtc(void){
 
       return 0;
    }
-
-   return 0;
+   //
+   return -1;
 }
 
 /*-------------------------------------------
@@ -1156,15 +1213,15 @@ void _start_kernel(char* arg){
    //
    _kernel_warmup_load_mount_cpufs();
    //
+#if defined (__KERNEL_WARMUP_I2C) && (__KERNEL_WARMUP_I2C==1)
    _kernel_warmup_i2c();
+#endif
    //
    _kernel_warmup_spi();
    //
    _kernel_warmup_dev();
    //
    _kernel_warmup_tty();
-   //
-   _kernel_warmup_stream();
    //
    _kernel_warmup_object_manager();
    //

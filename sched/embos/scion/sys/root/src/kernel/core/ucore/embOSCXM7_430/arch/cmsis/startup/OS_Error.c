@@ -229,6 +229,10 @@ void OS_Error(int ErrCode) {
   OS_DICnt = 0u;         /* Allow interrupts so we can communicate */
   OS_EI();
   OS_Status = (OS_U8) ErrCode;
+  //lepton force reset
+  RSTC_SetExtResetLength(0x0f);
+  RSTC_ExtReset();
+  //
   while (OS_Status) {
     /* Endless loop may be left by setting OS_Status to 0. */
   }

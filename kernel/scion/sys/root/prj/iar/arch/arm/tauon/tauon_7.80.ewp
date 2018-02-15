@@ -979,6 +979,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <configuration>
     <name>tauon-kernel-cortex-m4-debug</name>
@@ -1957,6 +1962,11 @@
     </settings>
     <settings>
       <name>BILINK</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
+    <settings>
+      <name>Coder</name>
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
@@ -2940,6 +2950,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <configuration>
     <name>tauon-kernel-cortex-m3-debug</name>
@@ -3918,6 +3933,11 @@
     </settings>
     <settings>
       <name>BILINK</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
+    <settings>
+      <name>Coder</name>
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
@@ -4903,6 +4923,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <configuration>
     <name>tauon-kernel-arm926ejs-freertos-debug</name>
@@ -5885,6 +5910,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <configuration>
     <name>tauon-kernel-cortex-m0+-freertos-debug</name>
@@ -6858,6 +6888,11 @@
     </settings>
     <settings>
       <name>BILINK</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
+    <settings>
+      <name>Coder</name>
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
@@ -7842,6 +7877,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <configuration>
     <name>tauon-kernel-cortex-m7-debug</name>
@@ -8817,6 +8857,11 @@
       <archiveVersion>0</archiveVersion>
       <data/>
     </settings>
+    <settings>
+      <name>Coder</name>
+      <archiveVersion>0</archiveVersion>
+      <data/>
+    </settings>
   </configuration>
   <group>
     <name>bin</name>
@@ -8829,6 +8874,9 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\bin\net\telnetd.c</name>
       </file>
     </group>
+    <file>
+      <name>$PROJ_DIR$\..\..\..\..\..\src\bin\test2.c</name>
+    </file>
   </group>
   <group>
     <name>kernel</name>
@@ -10162,10 +10210,28 @@
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_cpu.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_encoder.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_eth.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_fb.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_hd.h</name>
       </file>
       <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_i2c.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_if.h</name>
+      </file>
+      <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_keyb.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_modem.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_proc.h</name>
@@ -10175,6 +10241,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_spi.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\ioctl_usb.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kal.h</name>
@@ -10459,6 +10528,9 @@
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_mqueue.h</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_object.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\core\kernel_printk.c</name>
@@ -12792,6 +12864,33 @@
           </group>
           <group>
             <name>i2c</name>
+            <group>
+              <name>bq</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\bq\dev_bq24161_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\bq\dev_bq24161_x.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\bq\dev_bq27510_g3_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\bq\dev_bq27510_g3_x.h</name>
+              </file>
+            </group>
+            <group>
+              <name>rtc</name>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\rtc\dev_rtc_nxp_pca8565.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\rtc\dev_rtc_nxp_pca8565.h</name>
+              </file>
+            </group>
+            <group>
+              <name>sensor</name>
+            </group>
             <file>
               <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\i2c\dev_eeprom_24xxx.c</name>
             </file>
@@ -12823,6 +12922,9 @@
               <name>ublox</name>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\modem\ublox\dev_modem_ublox_sarag3.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\src\kernel\dev\arch\all\modem\ublox\dev_modem_ublox_sarag3.h</name>
               </file>
             </group>
           </group>

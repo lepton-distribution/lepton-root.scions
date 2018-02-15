@@ -62,11 +62,11 @@ extern "C" {
 	uint32_t SystemCoreClock = CHIP_FREQ_MAINCK_RC_4MHZ;
 #define USBCLK_DIV          10
 
-	/**
-	 * \brief Setup the microcontroller system.
-	 * Initialize the System and update the SystemFrequency variable.
-	 */
-	void SystemInit(void)
+/**
+ * \brief Setup the microcontroller system.
+ * Initialize the System and update the SystemFrequency variable.
+ */
+void SystemInit(void)
 {
 	uint32_t read_MOR;
 	/* Set FWS according to SYS_BOARD_MCKR configuration */
@@ -76,7 +76,8 @@ extern "C" {
 	 * disable at the same time RC OSC in case of if MAIN OSC is still using RC
 	 * OSC
 	 */
-
+   //phlb: chaudriconcept card work around
+#if 0
 	read_MOR = PMC->CKGR_MOR;
 	/* enable external crystal - enable RC OSC */
 	read_MOR |= (CKGR_MOR_KEY_PASSWD | CKGR_MOR_XT32KFME);
@@ -88,6 +89,7 @@ extern "C" {
 
 		while (!(SUPC->SUPC_SR & SUPC_SR_OSCSEL));
 	}
+#endif
 
 	/* Initialize main oscillator */
 	if (!(PMC->CKGR_MOR & CKGR_MOR_MOSCSEL)) {

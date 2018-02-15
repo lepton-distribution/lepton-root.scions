@@ -103,8 +103,8 @@ static modem_core_info_t g_modem_core_info={
 };
 
 //
-#define MODEM_CORE_KERNEL_THREAD_STACK_SIZE  2048 //1024//1024
-#define MODEM_CORE_KERNEL_THREAD_PRIORITY    10 //10 //20//10 //140
+#define MODEM_CORE_KERNEL_THREAD_STACK_SIZE  4096 //1024//1024
+#define MODEM_CORE_KERNEL_THREAD_PRIORITY    80 //10 //20//10 //140
 // request: mqueue from user socket connection thread to kernel modem core thread (1 mqueue).
 #define MODEM_CORE_KERNEL_MQUEUE_BUFFER_SIZE (32*(sizeof(kernel_mqueue_header_t)+sizeof(modem_core_message_t)))
 
@@ -164,6 +164,20 @@ static int modem_core_parser_init(modem_at_parser_context_t* modem_at_parser_con
    //
    modem_at_parser_context->at_response_callback_list_size=0;
    modem_at_parser_context->at_response_callback_list=(void*)0;
+   //
+   return 0;
+}
+
+/*--------------------------------------------
+| Name:        modem_core_parser_reset
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+static int modem_core_parser_reset(modem_at_parser_context_t* modem_at_parser_context){
+   modem_at_parser_context->state = PARSER_STATE_WAIT_CR;
    //
    return 0;
 }
@@ -247,14 +261,14 @@ static int modem_core_parser_recv_cme_error(struct modem_core_info_st* p_modem_c
 }
 
 /*--------------------------------------------
-| Name:        modem_core_parser_recv_at_command
+| Name:        modem_core_parser_recv_at_response_ex
 | Description:
 | Parameters:  none
 | Return Type: none
 | Comments:
 | See:
 ----------------------------------------------*/
-int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_info,const char* expected_response,int nonblock_mode,int silent_mode){
+int modem_core_parser_recv_at_response_ex(struct modem_core_info_st* p_modem_core_info,const char* expected_response,int nonblock_mode,int silent_mode,int timeout){
    modem_at_parser_context_t* modem_at_parser_context = &p_modem_core_info->modem_at_parser_context;
    //
    char c;
@@ -279,8 +293,22 @@ int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_i
    if(expected_response!=(char*)0 && strcmp(expected_response,"*")==0){
       flag_exit_jocker=1;
    }
+   //arm read timeout
+   if(timeout>0){
+      __kernel_io_read_set_timeout(modem_at_parser_context->desc_r,timeout,0);
+   }else{
+      __kernel_io_read_unset_timeout(modem_at_parser_context->desc_r);
+   }
    //
    while((cb=kernel_io_read(modem_at_parser_context->desc_r,&c,1))>0){
+      //
+      //rearm read timeout
+      if(timeout>0){
+         __kernel_io_read_set_timeout(modem_at_parser_context->desc_r,timeout,0);
+      }else{
+         __kernel_io_read_unset_timeout(modem_at_parser_context->desc_r);
+      }
+      //
       //kernel trace for debug
       if(silent_mode==0){
          kernel_io_write(__get_kernel_tty_desc(),&c,1);
@@ -410,6 +438,47 @@ int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_i
 }
 
 /*--------------------------------------------
+| Name:        modem_core_parser_recv_at_response
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_info,const char* expected_response,int nonblock_mode,int silent_mode){
+   return modem_core_parser_recv_at_response_ex(p_modem_core_info,expected_response,nonblock_mode,silent_mode,MODEM_CORE_DEV_READ_TIMEOUT);
+}
+
+/*--------------------------------------------
+| Name:        modem_core_parser_send_recv_at_command_ex
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+extern char trap_lion_flag;
+int modem_core_parser_send_recv_at_command_ex(struct modem_core_info_st* p_modem_core_info,const char* command,const char* expected_response,int silent_mode,int timeout){
+   modem_at_parser_context_t* modem_at_parser_context = &p_modem_core_info->modem_at_parser_context;
+   //ublox inter command delay
+   __kernel_usleep(50000); //20ms
+   //
+   if(command!=(char*)0 && strlen(command)>0){
+      trap_lion_flag+=50;
+      kernel_io_write(modem_at_parser_context->desc_w,command,strlen(command));
+       //ublox inter command delay
+      __kernel_usleep(50000); //20ms
+      //
+      kernel_io_write(modem_at_parser_context->desc_w,"\r",1);
+      //
+      p_modem_core_info->last_cme_error_code = NO_CME_ERROR_CODE;
+   }
+   trap_lion_flag++;
+   //
+   return modem_core_parser_recv_at_response_ex(p_modem_core_info,expected_response,0,silent_mode,timeout);
+}
+
+/*--------------------------------------------
 | Name:        modem_core_parser_send_recv_at_command
 | Description:
 | Parameters:  none
@@ -418,16 +487,7 @@ int modem_core_parser_recv_at_response(struct modem_core_info_st* p_modem_core_i
 | See:
 ----------------------------------------------*/
 int modem_core_parser_send_recv_at_command(struct modem_core_info_st* p_modem_core_info,const char* command,const char* expected_response,int silent_mode){
-   modem_at_parser_context_t* modem_at_parser_context = &p_modem_core_info->modem_at_parser_context;
-   //
-   if(command!=(char*)0 && strlen(command)>0){
-      kernel_io_write(modem_at_parser_context->desc_w,command,strlen(command));
-      kernel_io_write(modem_at_parser_context->desc_w,"\r",1);
-      //
-      p_modem_core_info->last_cme_error_code = NO_CME_ERROR_CODE;
-   }
-   //
-   return modem_core_parser_recv_at_response(p_modem_core_info,expected_response,0,silent_mode);
+   return modem_core_parser_send_recv_at_command_ex(p_modem_core_info,command,expected_response,silent_mode,MODEM_CORE_DEV_READ_TIMEOUT);
 }
 
 /*--------------------------------------------
@@ -441,8 +501,14 @@ int modem_core_parser_send_recv_at_command(struct modem_core_info_st* p_modem_co
 int modem_core_parser_send_at_command(struct modem_core_info_st* p_modem_core_info,const char* command,int silent_mode){
    modem_at_parser_context_t* modem_at_parser_context = &p_modem_core_info->modem_at_parser_context;
    //
+   //ublox inter command delay
+   __kernel_usleep(50000); //20ms
+   //
    if(command!=(char*)0 && strlen(command)>0){
       kernel_io_write(modem_at_parser_context->desc_w,command,strlen(command));
+       //ublox inter command delay
+      __kernel_usleep(50000); //20ms
+      //
       kernel_io_write(modem_at_parser_context->desc_w,"\r",1);
       //
       p_modem_core_info->last_cme_error_code = NO_CME_ERROR_CODE;
@@ -476,6 +542,10 @@ int modem_core_parser_get_last_cme_error(struct modem_core_info_st* p_modem_core
 static void* modem_core_routine(void* arg){
    modem_core_info_t* p_modem_core_info = (modem_core_info_t*)arg;
    //
+   struct timespec read_modem_timeout={
+      .tv_sec=1,
+      .tv_nsec=0
+   };
    kernel_pthread_t* pthread_ptr = kernel_pthread_self();
 
    //
@@ -487,7 +557,10 @@ static void* modem_core_routine(void* arg){
    //end of section: protection from io interrupt
    __disable_interrupt_section_out();
    //
+   p_modem_core_info->status=MODEM_CORE_STATUS_STARTED;
+   //
    __atomic_out();
+   
    
    //
    kernel_printk("\r\nmodem_core_routine...\r\n");
@@ -496,7 +569,7 @@ static void* modem_core_routine(void* arg){
       //wait on sem_io of this thread. Just one thread for connection command and receive data from modem / ttys 
       if(kernel_mqueue_isempty(&g_modem_core_info.kernel_mqueue_request) 
           && ofile_lst[g_modem_core_info.modem_ttys_desc_r].pfsop->fdev.fdev_isset_read(g_modem_core_info.modem_ttys_desc_r)!=0){
-         __wait_io_int(pthread_ptr); //wait incomming data
+         __wait_io_int2(pthread_ptr,&read_modem_timeout); //wait incomming data
       }
       
       //check data available in kernel_mqueue and in uart driver
@@ -505,14 +578,13 @@ static void* modem_core_routine(void* arg){
       if(!ofile_lst[g_modem_core_info.modem_ttys_desc_r].pfsop->fdev.fdev_isset_read(g_modem_core_info.modem_ttys_desc_r)){   
          
          //
-         if(modem_core_parser_recv_at_response(&g_modem_core_info,(char*)0,1,0)>0){
+         if(modem_core_parser_recv_at_response(&g_modem_core_info,(char*)0,1,__KERNEL_MODEM_CORE_SILENT_MODE)>0){
             char* at_response;
             at_response = modem_core_parser_get_last_at_response(&g_modem_core_info);
             if(at_response!=(char*)0){
             }
          }
       }
-      
       
       //2: if data available in mqueue
       if(!kernel_mqueue_isempty(&g_modem_core_info.kernel_mqueue_request)){
@@ -523,16 +595,16 @@ static void* modem_core_routine(void* arg){
          if(kernel_mqueue_get(&g_modem_core_info.kernel_mqueue_request,&p_modem_core_info->modem_core_message,sizeof(modem_core_message_t))<0){
             continue;
          }
-         //
-         p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info;
-         if(p_modem_core_connection_info==(void*)0){
-            continue;
-         }
          
          //
          switch(p_modem_core_info->modem_core_message.operation_request_code){
             //
             case MODEM_CORE_OPERATION_SOCKET_CREATE_REQUEST:
+               //
+               if((p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info)==(void*)0){
+                  break;
+               }
+               //
                if (g_modem_core_info.modem_at_command_op.at_command_socket_create == __pfn_at_command_not_implemented) {
                   p_modem_core_info->modem_core_message.operation_response_code = MODEM_CORE_OPERATION_NOT_IMPLEMENTED;
                   //
@@ -546,6 +618,11 @@ static void* modem_core_routine(void* arg){
 
             //
             case MODEM_CORE_OPERATION_SOCKET_CONNECT_REQUEST:
+               //
+                if((p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info)==(void*)0){
+                  break;
+               }
+               //
                if (g_modem_core_info.modem_at_command_op.at_command_socket_connect == __pfn_at_command_not_implemented) {
                   p_modem_core_info->modem_core_message.operation_response_code = MODEM_CORE_OPERATION_NOT_IMPLEMENTED;
                   //
@@ -559,6 +636,11 @@ static void* modem_core_routine(void* arg){
             
             //
             case MODEM_CORE_OPERATION_SOCKET_CLOSE_REQUEST:
+               //
+                if((p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info)==(void*)0){
+                  break;
+               }
+               //
                if (g_modem_core_info.modem_at_command_op.at_command_socket_close == __pfn_at_command_not_implemented) {
                   p_modem_core_info->modem_core_message.operation_response_code = MODEM_CORE_OPERATION_NOT_IMPLEMENTED;
                }else {
@@ -575,6 +657,11 @@ static void* modem_core_routine(void* arg){
             
             //
             case MODEM_CORE_OPERATION_SOCKET_SEND_REQUEST:
+               //
+               if((p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info)==(void*)0){
+                  break;
+               }
+               //
                if (g_modem_core_info.modem_at_command_op.at_command_socket_send == __pfn_at_command_not_implemented) {
                   p_modem_core_info->modem_core_message.operation_response_code = MODEM_CORE_OPERATION_NOT_IMPLEMENTED;
                   //
@@ -589,6 +676,9 @@ static void* modem_core_routine(void* arg){
             //
             case MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST:
                //for gethostbyname p_modem_core_connection_info is a pointer on server name
+               if((p_modem_core_connection_info = (modem_core_connection_info_t*)p_modem_core_info->modem_core_message.p_modem_core_connection_info)==(void*)0){
+                  break;
+               }
                if (g_modem_core_info.modem_at_command_op.at_command_gethostbyname == __pfn_at_command_not_implemented) {
                   //
                   modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST, MODEM_CORE_OPERATION_NOT_IMPLEMENTED);
@@ -596,7 +686,54 @@ static void* modem_core_routine(void* arg){
                   //
                   modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST, MODEM_CORE_OPERATION_FAILED);
                }
-               break;
+            break;
+               
+            //
+            case MODEM_CORE_OPERATION_IFUP_REQUEST:
+               //modem power up
+               //modem reset
+               if(g_modem_core_info.modem_at_command_op.at_command_modem_reset(&g_modem_core_info, (void*)0)<0){
+                  modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_IFUP_REQUEST , MODEM_CORE_OPERATION_FAILED);
+                  break;
+               }
+               //modem init gsm/gprs context 
+               if(g_modem_core_info.modem_at_command_op.at_command_modem_init(&g_modem_core_info, (void*)0)<0){
+                  modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_IFUP_REQUEST, MODEM_CORE_OPERATION_FAILED);
+                  break;
+               }
+               //
+               g_modem_core_info.if_status=IFF_UP;
+               //
+               modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_IFUP_REQUEST, MODEM_CORE_OPERATION_DONE);
+            break;
+               
+            //
+            case MODEM_CORE_OPERATION_IFDOWN_REQUEST:
+               //shutdown all connection
+               for(int modem_core_connexion_index=0;
+                  modem_core_connexion_index<MODEM_CONNECTION_MAX;
+                  modem_core_connexion_index++){
+                  //
+                  if(g_modem_core_connection_info_list[modem_core_connexion_index].status==CONNECTION_STATUS_CLOSE)
+                     continue;
+                  //
+                  desc_t desc_r = g_modem_core_connection_info_list[modem_core_connexion_index].socket_desc;
+                  if(desc_r!=INVALID_DESC && ofile_lst[desc_r].owner_pthread_ptr_read)
+                     __fire_io(ofile_lst[desc_r].owner_pthread_ptr_read);
+                  //
+                  kernel_mqueue_flush(&g_modem_core_connection_info_list[modem_core_connexion_index].kernel_mqueue);
+               }
+               //
+               g_modem_core_info.if_status=IFF_DOWN;
+               
+               //modem stop gsm/gprs context 
+               if(g_modem_core_info.modem_at_command_op.at_command_modem_stop!=__pfn_at_command_not_implemented){
+                  g_modem_core_info.modem_at_command_op.at_command_modem_stop(&g_modem_core_info, (void*)0);
+               }
+              
+               //
+               modem_core_mq_post_unconnected_response((void*)0, MODEM_CORE_OPERATION_IFDOWN_REQUEST, MODEM_CORE_OPERATION_DONE);
+            break;
                
             case MODEM_CORE_OPERATION_UNDEFINED_REQUEST:
                //simcom_at_response_callback_gethostbyname("+CDNSGIP: 1,\"collector.o10ee.com\",\"217.182.129.15\"");
@@ -614,9 +751,9 @@ static void* modem_core_routine(void* arg){
       }
       
    }
+   //
    return(void*)0;
 }
-
 
 /*--------------------------------------------
 | Name: modem_core_mq_post_unconnected_request
@@ -629,6 +766,10 @@ static void* modem_core_routine(void* arg){
 static int modem_core_mq_post_unconnected_request(void* data, uint8_t operation_request_code) {
    modem_core_message_t modem_core_message;
    //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
    modem_core_message.operation_request_code = operation_request_code;
    modem_core_message.operation_response_code = MODEM_CORE_OPERATION_INPROCESS;
    modem_core_message.p_modem_core_connection_info = data;
@@ -637,7 +778,8 @@ static int modem_core_mq_post_unconnected_request(void* data, uint8_t operation_
       return -1;
    }
    //force unblock read
-   __fire_io(ofile_lst[g_modem_core_info.modem_ttys_desc_r].owner_pthread_ptr_read);
+   kernel_pthread_t* p_kernel_pthread = &g_modem_core_info.kernel_thread;
+   __fire_io(p_kernel_pthread);
    //
    return 0;
 }
@@ -672,14 +814,24 @@ int modem_core_mq_post_unconnected_response(void* data, uint8_t operation_reques
 | Comments:
 | See:
 ----------------------------------------------*/
-static int modem_core_mq_wait_unconnected_response(void** data, uint8_t* operation_response_code) {
+static int modem_core_mq_wait_unconnected_response(void** data, uint8_t* operation_response_code,const struct timespec* request_timeout) {
    modem_core_message_t modem_core_message;
    //
-   if (kernel_mqueue_get(&g_modem_core_info.kernel_mqueue_response, &modem_core_message, sizeof(modem_core_message_t))<0) {
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
       return -1;
    }
    //
-   *data = modem_core_message.p_modem_core_connection_info;
+   if (kernel_mqueue_get_timedwait(&g_modem_core_info.
+                                   kernel_mqueue_response, 
+                                   &modem_core_message, 
+                                   sizeof(modem_core_message_t),
+                                   request_timeout)<=0) { //==0 timeout
+      return -1;
+   }
+   //
+   if(data!=(void*)0){
+      *data = modem_core_message.p_modem_core_connection_info;
+   }
    //
    *operation_response_code = modem_core_message.operation_response_code;
    //
@@ -697,15 +849,22 @@ static int modem_core_mq_wait_unconnected_response(void** data, uint8_t* operati
 static int modem_core_mq_post_request(modem_core_connection_info_t* p_modem_core_connection_info,uint8_t operation_request_code){
    modem_core_message_t modem_core_message;
    //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
    modem_core_message.operation_request_code = operation_request_code;
    modem_core_message.operation_response_code = MODEM_CORE_OPERATION_INPROCESS;
    modem_core_message.p_modem_core_connection_info=p_modem_core_connection_info;
    //
-   if(kernel_mqueue_put(&g_modem_core_info.kernel_mqueue_request,&modem_core_message,sizeof(modem_core_message_t))<0){
+   if(kernel_mqueue_put(&g_modem_core_info.kernel_mqueue_request,
+                        &modem_core_message,
+                        sizeof(modem_core_message_t))<0){
       return -1;
    }
    //force unblock read
-   __fire_io(ofile_lst[g_modem_core_info.modem_ttys_desc_r].owner_pthread_ptr_read);
+   kernel_pthread_t* p_kernel_pthread = &g_modem_core_info.kernel_thread;
+   __fire_io(p_kernel_pthread);
    //
    return 0;
 }
@@ -721,7 +880,14 @@ static int modem_core_mq_post_request(modem_core_connection_info_t* p_modem_core
 static int modem_core_mq_wait_response(modem_core_connection_info_t* p_modem_core_connection_info,uint8_t* operation_response_code){
    modem_core_message_t modem_core_message;
    //
-   if(kernel_mqueue_get(&p_modem_core_connection_info->kernel_mqueue,&modem_core_message,sizeof(modem_core_message_t))<0){
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(kernel_mqueue_get_timedwait(&p_modem_core_connection_info->kernel_mqueue,
+                                  &modem_core_message,
+                                  sizeof(modem_core_message_t),
+                                  &p_modem_core_connection_info->request_timeout)<=0){ //==0 timeout
       return -1;
    }
    //
@@ -766,38 +932,8 @@ static int modem_core_link(desc_t desc_r,desc_t desc_w, dev_modem_info_t* p_dev_
    //
    memcpy(&g_modem_core_info.modem_at_command_op, &p_dev_modem_info->modem_at_command_op, sizeof(modem_at_command_op_t));
                           
-   //modem power up
-   //modem reset
-   if(g_modem_core_info.modem_at_command_op.at_command_modem_reset(&g_modem_core_info, (void*)0)<0){
-      return -1;
-   }
-   //modem init gsm/gprs context 
-   if(g_modem_core_info.modem_at_command_op.at_command_modem_init(&g_modem_core_info, (void*)0)<0){
-      return -1;
-   }
    //
 #if defined (__KERNEL_NET_IPSTACK) && defined(USE_MODEMIP)
-   
-   //request queue
-   kernel_mqueue_attr.buffer = modem_core_mqueue_request_buffer;
-   kernel_mqueue_attr.size = sizeof(modem_core_mqueue_request_buffer);
-   kernel_mqueue_init(&g_modem_core_info.kernel_mqueue_request, &kernel_mqueue_attr);
-
-   //response queue
-   kernel_mqueue_attr.buffer = modem_core_mqueue_response_buffer;
-   kernel_mqueue_attr.size = sizeof(modem_core_mqueue_response_buffer);
-   kernel_mqueue_init(&g_modem_core_info.kernel_mqueue_response, &kernel_mqueue_attr);
-
-   
-   //
-   thread_attr.stacksize = MODEM_CORE_KERNEL_THREAD_STACK_SIZE;
-   thread_attr.stackaddr = (void*)&kernel_thread_modem_stack;
-   thread_attr.priority  = MODEM_CORE_KERNEL_THREAD_PRIORITY;
-   thread_attr.timeslice = 0;
-   thread_attr.name = "kernel_pthread_modem_core_serial";
-   //
-   kernel_pthread_create(&g_modem_core_info.kernel_thread,&thread_attr,modem_core_routine,&g_modem_core_info);
-   
    //init modem core connection
    int modem_core_connexion_index;
    for(modem_core_connexion_index=0;
@@ -825,6 +961,30 @@ static int modem_core_link(desc_t desc_r,desc_t desc_w, dev_modem_info_t* p_dev_
    }
 #endif
    
+   //request queue protect mutex
+   pthread_mutexattr_t mutex_attr=0;
+   kernel_pthread_mutex_init(&g_modem_core_info.kernel_mqueue_mutex,&mutex_attr);
+   
+   //request queue
+   kernel_mqueue_attr.buffer = modem_core_mqueue_request_buffer;
+   kernel_mqueue_attr.size = sizeof(modem_core_mqueue_request_buffer);
+   kernel_mqueue_init(&g_modem_core_info.kernel_mqueue_request, &kernel_mqueue_attr);
+
+   //response queue
+   kernel_mqueue_attr.buffer = modem_core_mqueue_response_buffer;
+   kernel_mqueue_attr.size = sizeof(modem_core_mqueue_response_buffer);
+   kernel_mqueue_init(&g_modem_core_info.kernel_mqueue_response, &kernel_mqueue_attr);
+
+   //kernel thread
+   thread_attr.stacksize = MODEM_CORE_KERNEL_THREAD_STACK_SIZE;
+   thread_attr.stackaddr = (void*)&kernel_thread_modem_stack;
+   thread_attr.priority  = MODEM_CORE_KERNEL_THREAD_PRIORITY;
+   thread_attr.timeslice = 1;
+   thread_attr.name = "kernel_pthread_modem_core_serial";
+   //
+   kernel_pthread_create(&g_modem_core_info.kernel_thread,&thread_attr,modem_core_routine,&g_modem_core_info);
+   //grouik code: yield to wait pthread modem core start
+   __kernel_usleep(100000); //100ms
    //
    return 0;
 }
@@ -837,12 +997,106 @@ static int modem_core_link(desc_t desc_r,desc_t desc_w, dev_modem_info_t* p_dev_
 | Comments:
 | See:
 ----------------------------------------------*/
-static  int modem_core_unlink(void){
-   //to do: shutdown the modem. shutdown all connections. 
-   //to do: modem power down
+static int modem_core_unlink(void){
    return 0;
 }
 
+/*--------------------------------------------
+| Name: modem_core_ifup
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+static int modem_core_ifup(void){
+   uint8_t operation_request_code;
+   struct timespec* p_request_timeout=(struct timespec*)0;
+   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //already up
+   if(g_modem_core_info.if_status==IFF_UP){
+      return -1;
+   }
+   
+   //to do check if all socket connection are closed
+   
+   //
+   kernel_pthread_mutex_lock(&g_modem_core_info.kernel_mqueue_mutex);
+   //
+   operation_request_code = MODEM_CORE_OPERATION_IFUP_REQUEST;
+   //
+   if (modem_core_mq_post_unconnected_request((void*)0, operation_request_code)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+      //
+      return -1;
+   }
+   //
+   if (modem_core_mq_wait_unconnected_response((void*)0, &operation_request_code,p_request_timeout)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+      //
+      return -1;
+   }
+   //
+   kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+   //
+   if (operation_request_code != MODEM_CORE_OPERATION_DONE) {
+      return -1;
+   }
+   return 0;
+}
+
+/*--------------------------------------------
+| Name: modem_core_ifdown
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+static int modem_core_ifdown(void){
+   uint8_t operation_request_code;
+   struct timespec* p_request_timeout=(struct timespec*)0;
+   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //already down
+   if(g_modem_core_info.if_status==IFF_DOWN){
+      return -1;
+   }
+   //
+   operation_request_code = MODEM_CORE_OPERATION_IFDOWN_REQUEST;
+   //
+   kernel_pthread_mutex_lock(&g_modem_core_info.kernel_mqueue_mutex);  
+   //
+   if (modem_core_mq_post_unconnected_request((void*)0, operation_request_code)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+      //
+      return -1;
+   }
+   //
+   if (modem_core_mq_wait_unconnected_response((void*)0, &operation_request_code,p_request_timeout)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+      //
+      return -1;
+   }
+   //
+   kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex); 
+   //
+   if (operation_request_code != MODEM_CORE_OPERATION_DONE) {
+      return -1;
+   }
+   return 0;
+}
 
 /*--------------------------------------------
 | Name:        dev_modem_core_load
@@ -853,6 +1107,12 @@ static  int modem_core_unlink(void){
 | See:
 ----------------------------------------------*/
 static int dev_modem_core_load(void){
+   
+   g_modem_core_info.status=MODEM_CORE_STATUS_STOPPED;
+   g_modem_core_info.if_status=IFF_DOWN;
+   g_modem_core_info.modem_ttys_desc_r=INVALID_DESC;
+   g_modem_core_info.modem_ttys_desc_w=INVALID_DESC;
+   
    return 0;
 }
 
@@ -916,67 +1176,96 @@ static int dev_modem_core_close(desc_t desc){
 static int dev_modem_core_ioctl(desc_t desc,int request,va_list ap){
    switch(request) {
 
-   case I_LINK: {
-      //must be open in O_RDWR mode
-      if((ofile_lst[desc].oflag&O_RDWR)!=O_RDWR)
-         return -1;
-
-      //link modem ip stack with serial peripheral.
-      if(!(ofile_lst[desc].p)){
-         desc_t desc_link_r = ofile_lst[desc].desc_nxt[0];
-         if (desc_link_r < 0) {
+      case I_LINK: {
+         //must be open in O_RDWR mode
+         if((ofile_lst[desc].oflag&O_RDWR)!=O_RDWR)
             return -1;
-         }
-         //
-         if(modem_core_link(ofile_lst[desc].desc_nxt[0],ofile_lst[desc].desc_nxt[1], ofile_lst[desc_link_r].p)<0){
-            return -1;
-         }
-         //
-         ofile_lst[desc].p=&g_modem_core_info;
-      }
 
-   }
-   break;
+         //link modem ip stack with serial peripheral.
+         if(!(ofile_lst[desc].p)){
+            desc_t desc_link_r = ofile_lst[desc].desc_nxt[0];
+            if (desc_link_r < 0) {
+               return -1;
+            }
+            //
+            if(modem_core_link(ofile_lst[desc].desc_nxt[0],ofile_lst[desc].desc_nxt[1], ofile_lst[desc_link_r].p)<0){
+               return -1;
+            }
+            //
+            //if(modem_core_ifup()<0){
+            //   return -1;
+            //}
+            //
+            ofile_lst[desc].p=&g_modem_core_info;
+         }
 
-   case I_UNLINK: {
-      if(!(ofile_lst[desc].p)){
-         return -1;
       }
+      break;
       //
-      if(modem_core_unlink()<0){
-         return -1;
+      case I_UNLINK: {
+         if(!(ofile_lst[desc].p)){
+            return -1;
+         }
+         //
+         if(modem_core_unlink()<0){
+            return -1;
+         }
       }
-   }
-   break;
+      break;
+      //
+      case IFGETCFG: {
+         if_config_t* p_if_config= va_arg( ap, if_config_t*);
+         if(!p_if_config)
+            return -1;
+         if(!(ofile_lst[desc].p))
+            return -1;
+         //to do
+         //memcpy(p_if_config,&((lwip_if_t*)ofile_lst[desc].p)->if_config,sizeof(if_config_t));
+      }
+      break;
+      //
+      case IFSETCFG: {
+         if_config_t* p_if_config= va_arg( ap, if_config_t*);
+         if(!p_if_config)
+            return -1;
+         if(!(ofile_lst[desc].p))
+            return -1;
+         //to do
+         //memcpy(&((lwip_if_t*)ofile_lst[desc].p)->if_config,p_if_config,sizeof(if_config_t));
+         //config_lwip_if(((lwip_if_t*)ofile_lst[desc].p));
+      }
+      break;
+      
+      //
+      case IFUP:{
+         int* p_status= va_arg( ap, int*);
+         //
+         if(modem_core_ifup()<0){
+            *p_status=g_modem_core_info.if_status;
+            return -1;
+         }
+         //
+         *p_status=g_modem_core_info.if_status;
+      }
+      break;
+      
+      //
+      case IFDOWN:{
+         int* p_status= va_arg( ap, int*);
+         //
+         if(modem_core_ifdown()<0){
+            *p_status=g_modem_core_info.if_status;
+            return -1;
+         }
+         //
+         *p_status=g_modem_core_info.if_status;
+      }
+      break;
 
 
-   case IFGETCFG: {
-      if_config_t* p_if_config= va_arg( ap, if_config_t*);
-      if(!p_if_config)
+      //
+      default:
          return -1;
-      if(!(ofile_lst[desc].p))
-         return -1;
-      //to do
-      //memcpy(p_if_config,&((lwip_if_t*)ofile_lst[desc].p)->if_config,sizeof(if_config_t));
-   }
-   break;
-
-   case IFSETCFG: {
-      if_config_t* p_if_config= va_arg( ap, if_config_t*);
-      if(!p_if_config)
-         return -1;
-      if(!(ofile_lst[desc].p))
-         return -1;
-      //to do
-      //memcpy(&((lwip_if_t*)ofile_lst[desc].p)->if_config,p_if_config,sizeof(if_config_t));
-      //config_lwip_if(((lwip_if_t*)ofile_lst[desc].p));
-   }
-   break;
-
-
-   //
-   default:
-      return -1;
    }
 
    return 0;
@@ -992,6 +1281,16 @@ static int dev_modem_core_ioctl(desc_t desc,int request,va_list ap){
 ----------------------------------------------*/
 int modem_core_api_socket(desc_t desc,int domain, int type, int protocol){
    int modem_core_connexion_index;
+   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return -1;
+   }
+   //
    for(modem_core_connexion_index=0;
       modem_core_connexion_index<MODEM_CONNECTION_MAX;
       modem_core_connexion_index++){
@@ -1016,6 +1315,10 @@ int modem_core_api_socket(desc_t desc,int domain, int type, int protocol){
          g_modem_core_connection_info_list[modem_core_connexion_index].domain     = domain;
          g_modem_core_connection_info_list[modem_core_connexion_index].type       = type;
          g_modem_core_connection_info_list[modem_core_connexion_index].protocol   = protocol;
+         //
+         g_modem_core_connection_info_list[modem_core_connexion_index].request_timeout.tv_sec=MODEM_CORE_REQUEST_TIMEOUT;
+         g_modem_core_connection_info_list[modem_core_connexion_index].request_timeout.tv_nsec=0;
+         
 
          //
          if (g_modem_core_info.modem_at_command_op.at_command_socket_create) {
@@ -1053,6 +1356,16 @@ int modem_core_api_socket(desc_t desc,int domain, int type, int protocol){
 | See:
 ----------------------------------------------*/
 int modem_core_api_bind(int modem_core_connexion_index, struct sockaddr *name, socklen_t namelen) {
+   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return -1;
+   }
+   //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
    }
@@ -1108,6 +1421,14 @@ int modem_core_api_accepted(desc_t desc,int modem_core_connexion_index) {
 int modem_core_api_connect(int modem_core_connexion_index, struct sockaddr *name, socklen_t namelen) {
    uint8_t operation_request_code;
    //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return -1;
+   }
+   //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
    }
@@ -1115,7 +1436,7 @@ int modem_core_api_connect(int modem_core_connexion_index, struct sockaddr *name
    if(g_modem_core_connection_info_list[modem_core_connexion_index].status==CONNECTION_STATUS_CLOSE){
       return -1;
    }
-   //alredy connected?
+   //alreday connected?
    if (g_modem_core_connection_info_list[modem_core_connexion_index].status == CONNECTION_STATUS_CONNECTED) {
       return -1;
    }
@@ -1169,11 +1490,15 @@ int modem_core_api_listen(int modem_core_connexion_index, int backlog) {
 int modem_core_api_shutdown(int modem_core_connexion_index, int how) {
    uint8_t operation_request_code;
    //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
    }
    //
-   if(g_modem_core_connection_info_list[modem_core_connexion_index].status!=CONNECTION_STATUS_CONNECTED){
+   if(g_modem_core_connection_info_list[modem_core_connexion_index].status==CONNECTION_STATUS_CLOSE){
       return -1;
    }
    //
@@ -1204,7 +1529,10 @@ int modem_core_api_shutdown(int modem_core_connexion_index, int how) {
 ----------------------------------------------*/
 int modem_core_api_close(int modem_core_connexion_index) { 
    modem_core_recv_packet_parameters_t* p_rcv_packet_head;
-   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
    //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
@@ -1243,6 +1571,13 @@ int modem_core_api_close(int modem_core_connexion_index) {
 ----------------------------------------------*/
 int  modem_core_api_isset_read(int modem_core_connexion_index){
    //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return 0;//return 0 to not stay blocked in __wait_io
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return 0;//return 0 to not stay blocked in __wait_io
+   }
    //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
@@ -1292,7 +1627,14 @@ int modem_core_api_read(int modem_core_connexion_index,char* buf, int size){
    modem_core_recv_packet_parameters_t* p_rcv_packet_head;
    int data_available=0;
    
-    
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return -1;
+   }
    //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
@@ -1360,7 +1702,14 @@ int modem_core_api_read(int modem_core_connexion_index,char* buf, int size){
 int modem_core_api_write(int modem_core_connexion_index,char* buf, int len){
    uint8_t operation_request_code;
    desc_t  desc_w = INVALID_DESC;
-    
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return -1;
+   }
    //
    if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
       return -1;
@@ -1385,6 +1734,7 @@ int modem_core_api_write(int modem_core_connexion_index,char* buf, int len){
    }
    //
    desc_w = g_modem_core_connection_info_list[modem_core_connexion_index].socket_desc;
+   //
    __fire_io(ofile_lst[desc_w].owner_pthread_ptr_write)
    //
    if(operation_request_code!=MODEM_CORE_OPERATION_DONE){
@@ -1404,7 +1754,7 @@ int modem_core_api_write(int modem_core_connexion_index,char* buf, int len){
 ----------------------------------------------*/
 int modem_core_api_getpeername(int modem_core_connexion_index, struct sockaddr *name, socklen_t *namelen) {
    // not yet supported
-   return -1;;
+   return -1;
 }
 
 /*--------------------------------------------
@@ -1417,7 +1767,7 @@ int modem_core_api_getpeername(int modem_core_connexion_index, struct sockaddr *
 ----------------------------------------------*/
 int modem_core_api_getsockname(int modem_core_connexion_index, struct sockaddr *name, socklen_t *namelen) {
    // not yet supported
-   return -1;;
+   return -1;
 }
 
 /*--------------------------------------------
@@ -1429,8 +1779,35 @@ int modem_core_api_getsockname(int modem_core_connexion_index, struct sockaddr *
 | See:
 ----------------------------------------------*/
 int modem_core_api_getsockopt(int modem_core_connexion_index, int level, int optname, void *optval, socklen_t *optlen) {
-   // not yet supported
-   return -1;;
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
+      return -1;
+   }
+   //
+   if(g_modem_core_connection_info_list[modem_core_connexion_index].status!=CONNECTION_STATUS_CONNECTED){
+      return -1;
+   }
+   
+   //
+   if(level!=SOL_SOCKET){
+      return -1;
+   } 
+   
+   //SO_RCVTIMEO or SO_SNDTIMEO 
+   if(optname==SO_RCVTIMEO && optval){
+      struct timespec* p_rcv_timeout=(struct timespec*)optval;
+      *optlen==sizeof(struct timespec);
+      //
+      __kernel_io_read_get_timeout(g_modem_core_connection_info_list[modem_core_connexion_index].socket_desc,p_rcv_timeout->tv_sec,p_rcv_timeout->tv_nsec);
+      return 0;
+   }
+   
+   //
+   return -1;
 }
 
 /*--------------------------------------------
@@ -1442,8 +1819,33 @@ int modem_core_api_getsockopt(int modem_core_connexion_index, int level, int opt
 | See:
 ----------------------------------------------*/
 int modem_core_api_setsockopt(int modem_core_connexion_index, int level, int optname, const void *optval, socklen_t optlen) {
-  // not yet supported
-  return -1;
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return -1;
+   }
+   //
+   if(modem_core_connexion_index<0 || modem_core_connexion_index>(MODEM_CONNECTION_MAX-1)){
+      return -1;
+   }
+   //
+   if(g_modem_core_connection_info_list[modem_core_connexion_index].status!=CONNECTION_STATUS_CONNECTED){
+      return -1;
+   }
+   
+   //
+   if(level!=SOL_SOCKET){
+      return -1;
+   } 
+   
+   //SO_RCVTIMEO or SO_SNDTIMEO 
+   if(optname==SO_RCVTIMEO && optval && optlen==sizeof(struct timespec)){
+      struct timespec* p_rcv_timeout=(struct timespec*)optval;
+      __kernel_io_read_set_timeout(g_modem_core_connection_info_list[modem_core_connexion_index].socket_desc,p_rcv_timeout->tv_sec,p_rcv_timeout->tv_nsec);
+      return 0;
+   }
+   
+   //
+   return -1;
 }
 
 /*--------------------------------------------
@@ -1470,19 +1872,47 @@ int modem_core_api_ioctl(int modem_core_connexion_index, long cmd, void *argp) {
 struct hostent* modem_core_api_gethostbyname(struct hostent* host, const char *name) {
    // to do with: AT+CDNSGIP 
    uint8_t operation_request_code;
-
+   //
    struct hostent* p_hostent;
-  
+   struct timespec request_timeout;
+   struct timespec* p_request_timeout=(struct timespec*)0;
+   
+   //
+   if(g_modem_core_info.status!=MODEM_CORE_STATUS_STARTED){
+      return (struct hostent*)0;
+   }
+   //
+   if(g_modem_core_info.if_status!=IFF_UP){
+      return (struct hostent*)0;
+   }
+   
+#ifdef MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST_TIMEOUT
+   //
+   request_timeout.tv_sec = MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST_TIMEOUT;
+   request_timeout.tv_nsec = 0;
+   p_request_timeout = &request_timeout;
+   
+#endif
+   //
+   kernel_pthread_mutex_lock(&g_modem_core_info.kernel_mqueue_mutex);
    //
    operation_request_code = MODEM_CORE_OPERATION_GETHOSTBYNAME_REQUEST;
    //
    if (modem_core_mq_post_unconnected_request((char*)name, operation_request_code)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex);
+      //
       return (struct hostent*)0;
    }
    //
-   if (modem_core_mq_wait_unconnected_response(&p_hostent, &operation_request_code)<0) {
+   if (modem_core_mq_wait_unconnected_response(&p_hostent, &operation_request_code,p_request_timeout)<0) {
+      //
+      kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex);
+      //
       return (struct hostent*)0;
    }
+   //
+   kernel_pthread_mutex_unlock(&g_modem_core_info.kernel_mqueue_mutex);
    //
    if (operation_request_code != MODEM_CORE_OPERATION_DONE) {
       return (struct hostent*)0;

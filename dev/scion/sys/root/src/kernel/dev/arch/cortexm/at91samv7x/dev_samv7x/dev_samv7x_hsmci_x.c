@@ -72,14 +72,14 @@ void HSMCI_Handler(void)
 {
    samv71x_hsmci_info_t* samv71x_hsmci_info=g_list_samv71x_hsmci_info;
    //
-   __hw_enter_interrupt();
+   //__hw_enter_interrupt();
    //
    while(samv71x_hsmci_info!=(samv71x_hsmci_info_t*)0){
       MCID_Handler(&samv71x_hsmci_info->samv7x_mci_drv);
       samv71x_hsmci_info = samv71x_hsmci_info->next_samv71x_hsmci_info;
    }
    //
-   __hw_leave_interrupt();
+   //__hw_leave_interrupt();
 }
 
 
@@ -112,7 +112,7 @@ int dev_samv71x_hsmci_x_load(samv71x_hsmci_info_t* samv71x_hsmci_info){
    
 	/* Enable MCI interrupt and give it priority lower than DMA*/
 	NVIC_ClearPendingIRQ(HSMCI_IRQn);
-	NVIC_SetPriority(HSMCI_IRQn, (1u << __NVIC_PRIO_BITS) - 3u);
+	NVIC_SetPriority(HSMCI_IRQn, (1u << __NVIC_PRIO_BITS) - 3u);//-3u
 	NVIC_EnableIRQ(HSMCI_IRQn);
    
    /* Initialize SD driver */
@@ -147,6 +147,8 @@ int dev_samv71x_hsmci_x_open(desc_t desc, int o_flag, samv71x_hsmci_info_t* samv
       while (retry--) {
          error = SD_Init(&samv71x_hsmci_info->samv7x_sd_drv);
          if (error == SDMMC_OK) break;
+         //
+         SD_DeInit(&samv71x_hsmci_info->samv7x_sd_drv);
       }
       //
       if (error != SDMMC_OK) 
@@ -251,12 +253,14 @@ int dev_samv71x_hsmci_x_read(desc_t desc, char* buf,int size){
    //
    samv71x_hsmci_info->result = MED_Read(&samv71x_hsmci_info->samv7x_sd_media, 
                                          ofile_lst[desc].offset/samv71x_hsmci_info->samv7x_sd_media.blockSize, 
-                                         (void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer, 
+                                         (void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer/*(void*)buf*/, 
                                          size/samv71x_hsmci_info->samv7x_sd_media.blockSize, NULL, NULL);
    //
    if( samv71x_hsmci_info->result != MED_STATUS_SUCCESS ){
      return -1;
    }
+   //
+   SCB_InvalidateDCache_by_Addr((uint32_t *)samv71x_hsmci_info->p_rw_aligned_dma_buffer,size);
    //
    memcpy(buf,(void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer,size);
    
@@ -297,9 +301,11 @@ int dev_samv71x_hsmci_x_write(desc_t desc, const char* buf,int size){
    //
    memcpy((void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer,buf,size);
    //
+   SCB_InvalidateDCache_by_Addr((uint32_t *)samv71x_hsmci_info->p_rw_aligned_dma_buffer,size);
+   //
    samv71x_hsmci_info->result = MED_Write(&samv71x_hsmci_info->samv7x_sd_media, 
                                           ofile_lst[desc].offset/samv71x_hsmci_info->samv7x_sd_media.blockSize, 
-                                          (void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer, 
+                                          (void*)samv71x_hsmci_info->p_rw_aligned_dma_buffer/*(void*)buf*/, 
                                           size/samv71x_hsmci_info->samv7x_sd_media.blockSize, NULL, NULL);
    //
    if( samv71x_hsmci_info->result != MED_STATUS_SUCCESS ){
@@ -392,8 +398,14 @@ int dev_samv71x_hsmci_x_ioctl(desc_t desc,int request,va_list ap){
          }
          
       }
-      
       break;
+      
+      case HDSD_STOP:{
+         //
+         SD_DeInit(&samv71x_hsmci_info->samv7x_sd_drv);
+      }
+      break;
+      
       //
       default:
       return -1;

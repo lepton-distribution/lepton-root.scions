@@ -471,7 +471,12 @@ Declaration
 #ifndef __BOOT_DEVICE
    #define __BOOT_DEVICE "/dev/hd/hda" //must be hda cpufs
 #endif
-
+       
+//kernel warmup directive
+#ifndef __KERNEL_WARMUP_I2C
+   #define __KERNEL_WARMUP_I2C     0  
+#endif
+       
 //tty terminal font
 #ifndef __tauon_tty_font_map_full_sz__    
    #define __tauon_tty_font_map_full_sz__ 0   

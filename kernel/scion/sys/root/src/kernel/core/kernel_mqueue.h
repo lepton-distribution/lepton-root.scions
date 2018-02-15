@@ -66,6 +66,7 @@ typedef struct kernel_mqueue_attr_st{
 int kernel_mqueue_isempty(kernel_mqueue_t* kernel_mqueue);
 //
 int kernel_mqueue_put(kernel_mqueue_t* kernel_mqueue,void* buf, int size);
+int kernel_mqueue_get_timedwait(kernel_mqueue_t* kernel_mqueue, void* buf, int size, const struct timespec * abs_timeout);
 int kernel_mqueue_get(kernel_mqueue_t* kernel_mqueue,void* buf, int size);
 int kernel_mqueue_flush(kernel_mqueue_t* kernel_mqueue);
 int kernel_mqueue_init(kernel_mqueue_t* kernel_mqueue, kernel_mqueue_attr_t* attr);

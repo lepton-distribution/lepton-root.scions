@@ -605,55 +605,55 @@ int _sys_fcntl(pid_t pid, int fd, unsigned int cmd, unsigned int argc,void* argv
       return -EBADF;
 
    switch (cmd) {
-   case F_DUPFD: {
-      int limit=0;
-      if(argc>0)
-         limit = (int)argv[0];
-      result = _sys_dup(pid,fd,limit);
-   }
-   break;
-
-   case F_GETFD:
-      //to do: fcntl: F_GETFD(close on exec)
-      //result = test_bit(fd, &fils->close_on_exec);
-      break;
-
-   case F_SETFD:
-      //fcntl: F_SETFD(close on exec)
-      if(((unsigned int)argv[0])&FD_CLOEXEC)
-         result = _set_cloexec(pid,fd);
-      else
-         result = _unset_cloexec(pid,fd);
-      break;
-
-   case F_GETFL:
-      result = ofile_lst[desc].oflag;
-      break;
-
-   case F_SETFL: {
-      int oflag=0;
-      if(argc>0)
-         oflag = (int)argv[0];
-
-      /*
-       * In the case of an append-only file, O_APPEND
-       * cannot be cleared
-       */
-      result = -EPERM;
-      if (ofile_lst[desc].oflag&O_APPEND || oflag & O_APPEND) {
-         ofile_lst[desc].oflag &= ~(O_APPEND | O_NONBLOCK);
-         ofile_lst[desc].oflag |= oflag & (O_APPEND | O_NONBLOCK);
-         result = 0;
-      }else{
-         ofile_lst[desc].oflag = oflag;
-         result = 0;
+      case F_DUPFD: {
+         int limit=0;
+         if(argc>0)
+            limit = (int)argv[0];
+         result = _sys_dup(pid,fd,limit);
       }
-   }
-   break;
-
-   default:
-      result = EINVAL;
       break;
+
+      case F_GETFD:
+         //to do: fcntl: F_GETFD(close on exec)
+         //result = test_bit(fd, &fils->close_on_exec);
+         break;
+
+      case F_SETFD:
+         //fcntl: F_SETFD(close on exec)
+         if(((unsigned int)argv[0])&FD_CLOEXEC)
+            result = _set_cloexec(pid,fd);
+         else
+            result = _unset_cloexec(pid,fd);
+         break;
+
+      case F_GETFL:
+         result = ofile_lst[desc].oflag;
+         break;
+
+      case F_SETFL: {
+         int oflag=0;
+         if(argc>0)
+            oflag = (int)argv[0];
+
+         /*
+          * In the case of an append-only file, O_APPEND
+          * cannot be cleared
+          */
+         result = -EPERM;
+         if (ofile_lst[desc].oflag&O_APPEND || oflag & O_APPEND) {
+            ofile_lst[desc].oflag &= ~(O_APPEND | O_NONBLOCK);
+            ofile_lst[desc].oflag |= oflag & (O_APPEND | O_NONBLOCK);
+            result = 0;
+         }else{
+            ofile_lst[desc].oflag = oflag;
+            result = 0;
+         }
+      }
+      break;
+
+      default:
+         result = EINVAL;
+         break;
    }
 
    return result;

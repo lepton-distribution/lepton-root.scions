@@ -58,7 +58,7 @@ struct sockaddr{
 #define SOCK_STREAM     ((int)(04)) // Byte-stream socket.
 
 // The <sys/socket.h> header shall define the following macro for use as the level argument of setsockopt() and getsockopt().
-#define SOL_SOCKET
+#define SOL_SOCKET      ((int)(01))
 
 // Options to be accessed at socket level, not protocol level.
 // The <sys/socket.h> header shall define the following macros, with distinct integer values, for use as the option_name argument in getsockopt() or setsockopt() calls:

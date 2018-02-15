@@ -47,6 +47,8 @@ Declaration
 #define HDSD_SENDCOMMAND   0x10
 #define HDSD_CHECKBUSY     0x11
 #define HDSD_SETSPEED      0x12
+//
+#define HDSD_STOP          0x22
 
 //io informations
 typedef unsigned long hdio_addr_t;

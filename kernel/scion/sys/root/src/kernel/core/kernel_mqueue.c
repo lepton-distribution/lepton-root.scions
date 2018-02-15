@@ -52,14 +52,14 @@ Implementation
 =============================================*/
 
 /*-------------------------------------------
-| Name: kernel_mqueue_get
+| Name: kernel_mqueue_get_timedwait
 | Description:
 | Parameters:
 | Return Type:
 | Comments:
 | See:
 ---------------------------------------------*/
-int kernel_mqueue_get(kernel_mqueue_t* kernel_mqueue, void* buf, int size){
+int kernel_mqueue_get_timedwait(kernel_mqueue_t* kernel_mqueue, void* buf, int size, const struct timespec * abs_timeout){
    kernel_mqueue_header_t kernel_mqueue_header={0};
    kernel_ring_buffer_attr_t kernel_ring_buffer_attr;
    
@@ -75,7 +75,9 @@ int kernel_mqueue_get(kernel_mqueue_t* kernel_mqueue, void* buf, int size){
       //no data available
       kernel_pthread_mutex_unlock(&kernel_mqueue->mutex);
       //wait
-      kernel_sem_wait(&kernel_mqueue->sem_get);
+      if(kernel_sem_timedwait(&kernel_mqueue->sem_get,0,abs_timeout)<0){
+         return 0;
+      }
       //   
    }
    
@@ -96,6 +98,17 @@ int kernel_mqueue_get(kernel_mqueue_t* kernel_mqueue, void* buf, int size){
    return kernel_mqueue_header.size;
 }
 
+/*-------------------------------------------
+| Name: kernel_mqueue_get
+| Description:
+| Parameters:
+| Return Type:
+| Comments:
+| See:
+---------------------------------------------*/
+int kernel_mqueue_get(kernel_mqueue_t* kernel_mqueue, void* buf, int size){
+   return kernel_mqueue_get_timedwait(kernel_mqueue,buf,size,(const struct timespec*)0);
+}
 
 /*-------------------------------------------
 | Name: kernel_mqueue_put

@@ -465,7 +465,6 @@ ssize_t read(int fildes, void *buf, size_t nbyte){
 | Comments:
 | See:
 ---------------------------------------------*/
-int dev_ioflag;
 #if defined(__GNUC__)
 ssize_t __attribute__ ((visibility("hidden")))
 write(int fildes, const void *buf, size_t nbyte){

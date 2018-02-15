@@ -10,7 +10,7 @@ specific language governing rights and limitations under the License.
 The Original Code is Lepton.
 
 The Initial Developer of the Original Code is Philippe Le Boulanger.
-Portions created by Philippe Le Boulanger are Copyright (C) 2015 <lepton.phlb@gmail.com>.
+Portions created by Philippe Le Boulanger are Copyright (C) 2011 <lepton.phlb@gmail.com>.
 All Rights Reserved.
 
 Contributor(s): Jean-Jacques Pitrolle <lepton.jjp@gmail.com>.
@@ -29,8 +29,8 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Compiler Directive
 ==============================================*/
-#ifndef __DEV_SAMV7X_UART_X_H__
-#define __DEV_SAMV7X_UART_X_H__
+#ifndef __DEV_STM32F4XX_I2C_X_H__
+#define __DEV_STM32F4XX_I2C_X_H__
 
 
 /*============================================
@@ -42,60 +42,40 @@ either the MPL or the [eCos GPL] License."
 | Declaration
 ==============================================*/
 
-typedef struct samv71x_uart_info_st {
-   uint32_t dwBaseId; //ex:ID_UART4
-   Uart *BaseUart;  // ex:UART4
+typedef struct board_stm32f4xx_i2c_info_st {
+   uint32_t bus_speed;
+   uint8_t own_address;
    //
-   const Pin* base_uart_pins;
-   //
-   int desc_r;
-   int desc_w;
-   //
-   unsigned long baudrate;
+   uint8_t current_slave_address;
    
-   //Dma Buffer
-   uint16_t RxDmaBufferSize;
-   uint8_t* pRxDmaBuffer;
    //
-   uint16_t TxDmaBufferSize;
-   uint8_t* pTxDmaBuffer;
+   desc_t desc_r;
+   desc_t desc_w;
    
-   //private
-   /** Global DMA driver for all transfer */
-   UartDma Uartd;
+   //I2C
+   I2C_HandleTypeDef i2c_handle;
    //
-   UartChannel UartRx;
-   UartChannel UartTx; 
-   //
-   uint16_t  rx_dma_buf_w;
-   uint16_t  rx_dma_buf_r;
-     //
-#if USE_SAMV7_UART_USER_KERNEL_RING_BUFFER
-   //
-   kernel_ring_buffer_t kernel_ring_buffer_rx;
-   kernel_ring_buffer_t kernel_ring_buffer_tx;
    
-   //Ring Buffer
-   uint16_t RxRingBufferSize;
-   uint8_t* pRxRingBuffer;
+   //DMA
    //
-   uint16_t TxRingBufferSize;
-   uint8_t* pTxRingBuffer;
-#endif
-} samv71x_uart_info_t;
+   DMA_Stream_TypeDef * rx_dma_stream;
+   IRQn_Type rx_dma_stream_irq_no;
+   uint32_t rx_dma_channel;
+  
+   //
+   DMA_Stream_TypeDef * tx_dma_stream;
+   IRQn_Type tx_dma_stream_irq_no;
+   uint32_t tx_dma_channel;
+   //
+   int i2c_rxtx_buffer_size;
+   uint8_t* p_i2c_rxtx_buffer; 
+   //
+   DMA_HandleTypeDef hdma_tx;
+   DMA_HandleTypeDef hdma_rx;
+   
+   //
+   kernel_pthread_mutex_t mutex;
+} board_stm32f4xx_i2c_info_t;
 
 
-int dev_samv71x_uart_x_load(samv71x_uart_info_t * uart_info);
-int dev_samv71x_uart_x_open(desc_t desc, int o_flag, samv71x_uart_info_t* uart_info);
-
-int dev_samv71x_uart_x_close(desc_t desc);
-int dev_samv71x_uart_x_isset_read(desc_t desc);
-int dev_samv71x_uart_x_isset_write(desc_t desc);
-int dev_samv71x_uart_x_read(desc_t desc, char* buf,int size);
-int dev_samv71x_uart_x_write(desc_t desc, const char* buf,int size);
-int dev_samv71x_uart_x_seek(desc_t desc,int offset,int origin);
-int dev_samv71x_uart_x_ioctl(desc_t desc,int request,va_list ap);
- 
-
-
-#endif //__DEV_SAMV7X_UART_X_H__
+#endif //__DEV_STM32F4XX_UART_H__

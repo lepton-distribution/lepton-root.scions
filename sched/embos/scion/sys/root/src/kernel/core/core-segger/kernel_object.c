@@ -47,7 +47,11 @@ static unsigned char kernel_object_id_vector[(__KERNEL_OBJECT_ID_LIMIT/8)+1]={0}
 typedef int (*pfn_kernel_object_constructor_t)(kernel_object_t* p, va_list ap);
 typedef int (*pfn_kernel_object_destructor_t)(kernel_object_t* p);
 
-static kernel_object_t*  kernel_object_pool_head = (kernel_object_t*)0;
+//global kernel object pool head (ex: for inter process kernel object named semaphore) 
+kernel_object_t*  g_kernel_object_pool_head = (kernel_object_t*)0;
+
+//internal kernel_object pool head;
+static kernel_object_t* kernel_object_pool_head;
 
 typedef struct kernel_object_op_st {
    pfn_kernel_object_constructor_t kernel_object_constructor;
@@ -157,10 +161,16 @@ int kernel_object_destructor_pthread_mutex(kernel_object_t* p){
 ----------------------------------------------*/
 int kernel_object_constructor_sem(kernel_object_t* p,va_list ap){
    int init_count=-1;
+   char* name;
+   int oflag;
    //
+   name = va_arg( ap, char*);
+   oflag = va_arg( ap, int);
    init_count = va_arg( ap, int);
    //
+   p->object.kernel_object_sem.name=name;
    p->object.kernel_object_sem.init_count = init_count;
+   p->object.kernel_object_sem.ref_count=0;
    //
    if(kernel_sem_init(&p->object.kernel_object_sem.kernel_sem,0,p->object.kernel_object_sem.init_count)<0)
       return -1;
@@ -526,6 +536,41 @@ kernel_object_t* kernel_object_manager_put_all(kernel_object_t** pp_kernel_objec
    return (*pp_kernel_object_head);
 }
 
+/*--------------------------------------------
+| Name:        kernel_object_manager_iterator_init
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+void kernel_object_manager_iterator_init(kernel_object_iterator_t* p_kernel_object_iterator,kernel_object_t** pp_kernel_object_head){
+   p_kernel_object_iterator->pp_kernel_object_head = pp_kernel_object_head;
+   p_kernel_object_iterator->p_current_kernel_object=*pp_kernel_object_head;
+}
+
+/*--------------------------------------------
+| Name:        kernel_object_manager_iterator
+| Description:
+| Parameters:  none
+| Return Type: none
+| Comments:
+| See:
+----------------------------------------------*/
+kernel_object_t* kernel_object_manager_iterator(kernel_object_iterator_t* p_kernel_object_iterator){
+   kernel_object_t* p_kernel_object;
+   //
+   if(!p_kernel_object_iterator)
+      return (kernel_object_t*)0;
+   if(!(p_kernel_object=p_kernel_object_iterator->p_current_kernel_object))
+      return (kernel_object_t*)0;
+   
+   //next object placed in iterator
+   p_kernel_object_iterator->p_current_kernel_object=p_kernel_object_iterator->p_current_kernel_object->next;
+   
+   //return current kernel object
+   return p_kernel_object;
+}
 
 
 

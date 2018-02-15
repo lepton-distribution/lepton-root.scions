@@ -195,6 +195,7 @@ static dev_modem_info_t dev_modem_simcom_info = {
    .at_response_callback_list =( modem_at_parser_response_callback_t*) modem_simcom_at_parser_response_callback_list,
    .modem_at_command_op.at_command_modem_reset     = simcom_at_command_modem_reset,
    .modem_at_command_op.at_command_modem_init      = simcom_at_command_modem_init,
+   .modem_at_command_op.at_command_modem_stop      = __pfn_at_command_not_implemented,
    .modem_at_command_op.at_command_socket_create   = __pfn_at_command_not_implemented,
    .modem_at_command_op.at_command_socket_connect  = simcom_at_command_socket_connect,
    .modem_at_command_op.at_command_socket_close    = simcom_at_command_socket_close,
@@ -757,7 +758,7 @@ int simcom_at_command_modem_init(void* pv_modem_core_info,void * data) {
       //
       kernel_printk("trace: %s\r\n", modem_at_command_list[i].command);
       //
-      if (modem_core_parser_send_recv_at_command(p_modem_core_info, modem_at_command_list[i].command, modem_at_command_list[i].response, 0)<0)
+      if (modem_core_parser_send_recv_at_command(p_modem_core_info, modem_at_command_list[i].command, modem_at_command_list[i].response, __KERNEL_MODEM_CORE_SILENT_MODE)<0)
          return -1;
       //
       __kernel_usleep(1000000);
@@ -825,7 +826,7 @@ static int simcom_at_command_socket_connect(void* pv_modem_core_info,modem_core_
    strcat(g_at_send_buffer, "\"");
 
    //
-   if (modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, 0)<0)
+   if (modem_core_parser_send_at_command(p_modem_core_info, g_at_send_buffer, __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    return 0;
@@ -860,7 +861,7 @@ static int simcom_at_command_socket_close(void* pv_modem_core_info,modem_core_co
    //
    strcat(g_at_send_buffer, ",0");
    //
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "CLOSE OK", 0)<0)
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "CLOSE OK", __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    p_modem_core_connection_info->status = CONNECTION_STATUS_SHUTDOWN;
@@ -902,7 +903,7 @@ static int simcom_at_command_socket_send(void* pv_modem_core_info,modem_core_con
    //
    strcat(g_at_send_buffer, ltostr(ltostr_buffer, sizeof(ltostr_buffer), snd_packet_len, 10, 0));
    //   
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, ">", 0)<0)
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, ">", __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    while (len<snd_packet_len) {
@@ -944,7 +945,7 @@ static int simcom_at_command_gethostbyname(void* pv_modem_core_info, void* data)
    strcat(g_at_send_buffer, hostname);
 
    //
-   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", 0)<0)
+   if (modem_core_parser_send_recv_at_command(p_modem_core_info, g_at_send_buffer, "OK", __KERNEL_MODEM_CORE_SILENT_MODE)<0)
       return -1;
    //
    return 0;

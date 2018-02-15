@@ -73,7 +73,7 @@ dev_map_t dev_mem_map={
 };
 
 //
-typedef unsigned long vector_listener_t;
+typedef unsigned long long vector_listener_t;
 typedef struct {
    int addr;
    int len;

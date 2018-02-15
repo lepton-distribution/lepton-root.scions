@@ -68,18 +68,29 @@ ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte,uint8_t args_fl
    //
    pid_t pid = -1;
    kernel_pthread_t* pthread_ptr = (void*)0;
+   int oflag;
+  
    //
    if (desc<0)
+      return -1; 
+   
+   //for streams: get oflag on head desc if it's a streams
+   oflag=ofile_lst[desc].oflag;
+   //for streams: get real descriptor of stream. 
+   // nothing change for normal device desc is equal  to ofile_lst[desc].desc.
+   desc = ofile_lst[desc].desc;
+   if (desc<0)
       return -1;
-
+   
+   //
    if (nbyte <= 0)
       return -1;
-
+   //
    if ((pthread_ptr = kernel_pthread_self())) {
       pid = pthread_ptr->pid;
    }
-
-   if (!(ofile_lst[desc].oflag&O_RDONLY))
+   //
+   if (!(oflag&O_RDONLY))
       return -1;
 
    //is not implemented for this device dev?
@@ -91,36 +102,51 @@ ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte,uint8_t args_fl
    //check thread owner
    __atomic_in();
    {
-      desc_t _desc = ofile_lst[desc].desc;
       //
-      if (ofile_lst[_desc].owner_pthread_ptr_read != pthread_ptr) {
-         do {
-            //check
-            if (ofile_lst[_desc].used <= 0) {
-               __atomic_out();
-               __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
-               return -1; //error, stream not coherent :(
-            }
-            //
-            //begin of section: protection from io interrupt
-            __disable_interrupt_section_in();
-            //
-            ofile_lst[_desc].owner_pthread_ptr_read = pthread_ptr;
-            ofile_lst[_desc].owner_pid = pid;
-            //end of section: protection from io interrupt
-            __disable_interrupt_section_out();
-            //
-            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         } while ((_desc = ofile_lst[_desc].desc_nxt[0]) >= 0);
+      //begin of section: protection from io interrupt
+      __disable_interrupt_section_in();
+      //for head of streams.
+      ofile_lst[desc].owner_pthread_ptr_read = pthread_ptr;
+      //end of section: protection from io interrupt
+      __disable_interrupt_section_out();
+
+      //streams iteration
+      desc_t _desc=desc;
+      //
+      while((_desc=ofile_lst[_desc].desc_nxt[0])>=0 
+            && ofile_lst[_desc].owner_pthread_ptr_read!=pthread_ptr)
+      {
+         //check
+         if (ofile_lst[_desc].used <= 0) {
+            __atomic_out();
+            __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+            return -1; //error, stream not coherent :(
+         }
+         //
+         //begin of section: protection from io interrupt
+         __disable_interrupt_section_in();
+         //
+         ofile_lst[_desc].owner_pthread_ptr_read = pthread_ptr;
+         ofile_lst[_desc].owner_pid = pid;
+         //end of section: protection from io interrupt
+         __disable_interrupt_section_out();
+         //
+         //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
       }
+      
    }
    __atomic_out();
 
    //
-   if ((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK)) {
+   if ((ofile_lst[desc].attr&S_IFCHR) && !(oflag&O_NONBLOCK)) {
       while (ofile_lst[desc].pfsop->fdev.fdev_isset_read
          && ofile_lst[desc].pfsop->fdev.fdev_isset_read(desc)) {
-         __wait_io_int(pthread_ptr); //wait incomming data
+         // 
+         if(__wait_io_int2(pthread_ptr,ofile_lst[desc].p_read_timeout)<0){
+            __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
+            return -1;
+         }
+         // 
       }
       //profiler
       __io_profiler_start(desc);
@@ -140,7 +166,7 @@ ssize_t kernel_io_read_args(desc_t desc, void *buf, size_t nbyte,uint8_t args_fl
       __unlock_io(pthread_ptr, ofile_lst[desc].desc, O_RDONLY);
       return nbyte;
    }
-   else if ((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
+   else if ((ofile_lst[desc].attr&S_IFCHR) && (oflag&O_NONBLOCK)) {
       //profiler
       __io_profiler_start(desc);
       //
@@ -205,21 +231,33 @@ ssize_t kernel_io_read(desc_t desc, void *buf, size_t nbyte){
 ---------------------------------------------*/
 ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t args_flags, ...) {
    va_list ap;
-   pid_t pid=-1;
-   kernel_pthread_t* pthread_ptr=(void*)0;
-   int cb=-1;
-
-   if(desc<0)
+   //
+   pid_t pid = -1;
+   kernel_pthread_t* pthread_ptr = (void*)0;
+   int oflag;
+   int cb=0;
+  
+   //
+   if (desc<0)
+      return -1; 
+   
+   //for streams: get oflag on head desc if it's a streams
+   oflag=ofile_lst[desc].oflag;
+   //for streams: get real descriptor of stream. 
+   // nothing change for normal device desc is equal  to ofile_lst[desc].desc.
+   desc = ofile_lst[desc].desc;
+   if (desc<0)
       return -1;
-    
+   
+   //
    if(nbyte<=0)
       return -1;
-
+   //
    if((pthread_ptr = kernel_pthread_self())){
       pid = pthread_ptr->pid;
    }
-
-   if(!(ofile_lst[desc].oflag&O_WRONLY))
+   //
+   if(!(oflag&O_WRONLY))
       return -1;
 
    //is not implemented for this device dev?
@@ -231,35 +269,47 @@ ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t 
    //check thread owner
    __atomic_in();
    {
-      desc_t _desc=ofile_lst[desc].desc;
       //
-      if(ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr) {
-         do {
-            //check
-            if(ofile_lst[_desc].used<=0) {
-               __atomic_out();
-               __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
-               return -1; //error, stream not coherent :(
-            }
-            //
-            //begin of section: protection from io interrupt
-            __disable_interrupt_section_in();
-            //
-            ofile_lst[_desc].owner_pthread_ptr_write=pthread_ptr;
-            ofile_lst[_desc].owner_pid=pid;
-            //end of section: protection from io interrupt
-            __disable_interrupt_section_out();
-            //
-            //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
-         } while((_desc=ofile_lst[_desc].desc_nxt[1])>=0);
+      //begin of section: protection from io interrupt
+      __disable_interrupt_section_in();
+      //for head of streams.
+       ofile_lst[desc].owner_pthread_ptr_write = pthread_ptr;
+      //end of section: protection from io interrupt
+      __disable_interrupt_section_out();
+       
+      //streams iteration
+      desc_t _desc=desc;
+      //
+      while((_desc=ofile_lst[_desc].desc_nxt[1])>=0 
+            && ofile_lst[_desc].owner_pthread_ptr_write!=pthread_ptr)
+      {
+         //check
+         if(ofile_lst[_desc].used<=0) {
+            __atomic_out();
+            __unlock_io(pthread_ptr,ofile_lst[desc].desc,O_WRONLY);
+            return -1; //error, stream not coherent :(
+         }
+         //
+         //begin of section: protection from io interrupt
+         __disable_interrupt_section_in();
+         //
+         ofile_lst[_desc].owner_pthread_ptr_write=pthread_ptr;
+         ofile_lst[_desc].owner_pid=pid;
+         //end of section: protection from io interrupt
+         __disable_interrupt_section_out();
+         //
+         //aware: continue operation on original desc (see fattach() and _vfs_open() note 1)
       }
+      
    }
    __atomic_out();
 
    //
-   if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK) && !(ofile_lst[desc].oflag&O_NSYNC) ) {
+   if((ofile_lst[desc].attr&S_IFCHR) && !(oflag&O_NONBLOCK) && !(oflag&O_NSYNC) ) {
       //profiler
       __io_profiler_start(desc);
+      //
+      __atomic_in();
       //
       if (args_flags) {
          va_start(ap, args_flags);
@@ -269,6 +319,8 @@ ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t 
       else {
          cb = ofile_lst[desc].pfsop->fdev.fdev_write(desc, (void*)buf, nbyte);
       }
+      //
+      __atomic_out();
       //
       if(cb <0) {
          //profiler
@@ -290,7 +342,7 @@ ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t 
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
       //
       //printf("__wait_io_int ok\n");
-   }else if((ofile_lst[desc].attr&S_IFCHR) && !(ofile_lst[desc].oflag&O_NONBLOCK) && (ofile_lst[desc].oflag&O_NSYNC) ) {
+   }else if((ofile_lst[desc].attr&S_IFCHR) && !(oflag&O_NONBLOCK) && (oflag&O_NSYNC) ) {
       //profiler
       __io_profiler_start(desc);
       //write operation is possible?
@@ -324,7 +376,7 @@ ssize_t kernel_io_write_args(desc_t desc, const void *buf, size_t nbyte,uint8_t 
       __io_profiler_add_result(desc,O_WRONLY,nbyte,__io_profiler_get_counter(desc));
       //
       //printf("__wait_io_int ok\n");
-   }else if((ofile_lst[desc].attr&S_IFCHR) && (ofile_lst[desc].oflag&O_NONBLOCK)) {
+   }else if((ofile_lst[desc].attr&S_IFCHR) && (oflag&O_NONBLOCK)) {
       //profiler
       __io_profiler_start(desc);
       //

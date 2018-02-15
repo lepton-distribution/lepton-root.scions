@@ -37,7 +37,7 @@
 /*----------------------------------------------------------------------------
  *        Definition
  *----------------------------------------------------------------------------*/
-#define TWITIMEOUTMAX 400
+#define TWITIMEOUTMAX 1000 //400
 static uint32_t dmaWriteChannel, dmaReadChannel;
 
 extern uint32_t twi_send_stop;
@@ -376,7 +376,8 @@ uint8_t TWID_Read(
 			while (!TWI_ByteReceived(pTwi)) {
 				if ((GetDelayInTicks(startTime, GetTicks())) > TWITIMEOUTMAX) {
 					TRACE_ERROR("TWID Timeout BR\n\r");
-					break;
+               return TWID_ERROR_TIMEOUT;
+					//break;
 				}
 			}
 
@@ -390,7 +391,8 @@ uint8_t TWID_Read(
 		while (!TWI_TransferComplete(pTwi)) {
 			if ((GetDelayInTicks(startTime, GetTicks())) > TWITIMEOUTMAX) {
 				TRACE_ERROR("TWID Timeout TC\n\r");
-				break;
+            return TWID_ERROR_TIMEOUT;
+				//break;
 			}
 		}
 	}
@@ -462,7 +464,8 @@ uint8_t TWID_Write(
 			while (!TWI_ByteSent(pTwi)) {
 				if ((GetDelayInTicks(startTime, GetTicks())) > TWITIMEOUTMAX) {
 					TRACE_ERROR("TWID Timeout BS\n\r");
-					break;
+               return TWID_ERROR_TIMEOUT;
+					//break;
 				}
 			}
 
@@ -478,7 +481,8 @@ uint8_t TWID_Write(
 		while (!TWI_TransferComplete(pTwi)) {
 			if ((GetDelayInTicks(startTime, GetTicks())) > TWITIMEOUTMAX) {
 				TRACE_ERROR("TWID Timeout TC2\n\r");
-				break;
+            return TWID_ERROR_TIMEOUT;
+				//break;
 			}
 		}
 	}
@@ -507,7 +511,7 @@ void TWID_DmaInitialize(TwihsDma *pTwidma, Twihs *pTwi, uint8_t bPolling)
 	/* Initialize driver. */
 	pTwidma->pTwid->pTwi = pTwi;
 	pTwidma->pTwid->pTransfer = 0;
-
+#if 0 //lepton patch: already configured in dev_samc7x_cpu_x.c
 	if (!bPolling) {
 		/* Enable XDMA interrupt and give it priority over any other peripheral
 		interrupt */
@@ -515,9 +519,10 @@ void TWID_DmaInitialize(TwihsDma *pTwidma, Twihs *pTwi, uint8_t bPolling)
 		NVIC_SetPriority(XDMAC_IRQn, 1);
 		NVIC_EnableIRQ(XDMAC_IRQn);
 	}
+#endif
 
-	/* Initialize XDMA driver instance with polling mode */
-	XDMAD_Initialize(pTwidma->pTwiDma, bPolling);
+	/* Initialize XDMA driver instance with polling mode: lepton already initialize */
+	//XDMAD_Initialize(pTwidma->pTwiDma, bPolling);
 }
 
 /**

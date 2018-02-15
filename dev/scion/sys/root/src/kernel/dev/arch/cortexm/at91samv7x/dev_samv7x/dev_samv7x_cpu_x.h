@@ -43,5 +43,7 @@ either the MPL or the [eCos GPL] License."
 ==============================================*/
 extern sXdmad g_samv7x_dmad;
 
+#define CPUSLEEPMODE   0
+#define CPUBCKUPMODE   5
 
 #endif //__DEV_SAMV7X_CPU_X_H__

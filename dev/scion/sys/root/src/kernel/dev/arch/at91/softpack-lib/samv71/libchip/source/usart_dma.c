@@ -375,7 +375,7 @@ uint32_t USARTD_Configure(UsartDma *pUsartd ,
 	USART_Configure (pUsartd->pUsartHw, UsartMode, BaudRate, UsartClk);
 
 	/* Driver initialize */
-	XDMAD_Initialize(pUsartd->pXdmad, 0);
+	//XDMAD_Initialize(pUsartd->pXdmad, 0);
 
 	/* Check if DMA IRQ is enable; if not clear pending IRQs in init it */
 	if (!(NVIC_GetActive(XDMAC_IRQn)))

@@ -295,6 +295,7 @@ typedef struct {
 
 typedef struct {
    char* name; //input parameter
+   int oflag; //input parameter
    sem_t* psem; //input output parameter
    int pshared; //input parameter
    unsigned int value; //input parameter
@@ -302,6 +303,7 @@ typedef struct {
 }sem_init_t;
 
 typedef struct {
+   char* name; //input parameter
    sem_t* psem; //input parameter
    int ret; //output parameter
 }sem_destroy_t;

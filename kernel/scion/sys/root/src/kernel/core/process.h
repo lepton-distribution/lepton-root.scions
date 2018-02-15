@@ -76,7 +76,12 @@ extern const char __fds_size;
 extern const unsigned char __shl_fds_bits;
 
 //
-#define ARG_LEN_MAX 64
+#ifdef __KERNEL_ARG_LEN_MAX
+   #define ARG_LEN_MAX __KERNEL_ARG_LEN_MAX
+#else
+   #define ARG_LEN_MAX 64
+#endif
+
 #define ARG_MAX   20
 
 //

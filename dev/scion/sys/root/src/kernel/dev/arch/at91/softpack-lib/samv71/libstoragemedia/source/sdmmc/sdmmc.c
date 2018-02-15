@@ -2537,13 +2537,14 @@ uint8_t SD_Read(sSdCard        *pSd,
     /*dummy*/
     pCallback = pCallback;
     pArgs = pArgs;
+    int error;
     
 	pSd->bState = SDMMC_STATE_DATA_RD;
 	TRACE_DEBUG("MMCT_ReadFun(pSd,0x%x,%d,pBuffer); \n\r", address, length);
 	TRACE_DEBUG("R %x,%x ", address, length);
-	MoveToTransferState(pSd, address, length, (uint8_t *)pData, 1);
+	error=MoveToTransferState(pSd, address, length, (uint8_t *)pData, 1);
 	TRACE_DEBUG("SDrd(%u,%u)\n\r", address, length);
-	return 0;
+	return error;
 }
 
 /**

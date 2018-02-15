@@ -350,6 +350,7 @@ typedef uint8_t file_status_t;
 #define MSK_FSTATUS_MODIFIED 0x01
 #define IS_FSTATUS_MODIFIED(__status)  (__status&MSK_FSTATUS_MODIFIED)
 
+
 //Open file list
 typedef void*  hext_t;
 typedef off_t vfs_off_t;
@@ -397,7 +398,9 @@ typedef struct ofile_s {
    //kernel_pthread_mutex_t  mutex;
    kernel_sem_t sem_read;
    kernel_sem_t sem_write;
-
+   //
+   struct timespec read_timeout;// timeout on read blocking operation
+   struct timespec* p_read_timeout;//pointer on internal read_timeout structure
 
 #ifdef KERNEL_PROFILER
    unsigned short _profile_counter;
