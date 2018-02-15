@@ -62,11 +62,64 @@ Includes
 /*===========================================
 Global Declaration
 =============================================*/
+
+
+#define HTTP_PARSER_STATE_WAIT_CR   0x01  // '\r'
+#define HTTP_PARSER_STATE_WAIT_LF   0x02  // '\n'
+#define HTTP_PARSER_STATE_PARSE     0x03  //
+#define HTTP_PARSER_STATE_DATA      0x04  //
+
+//
+#define HTTP_HEADER_FIELD_LENGTH_MAX 256
+
+//http field parsing callbak
+typedef int(*pfn_parser_http_field_callback_t)(void* http_parser_context, char *http_field_name, char* http_field_value);
+typedef struct http_field_callback_entry_st {
+   const char* http_field_name;
+   pfn_parser_http_field_callback_t http_field_callback;
+}http_field_callback_entry_t;
+
+//
+typedef struct http_parser_context_st{
+   char http_field_buffer[HTTP_HEADER_FIELD_LENGTH_MAX];
+   //
+   unsigned long state;
+   char* field_buffer;
+   int field_buffer_size_max;
+   char* p_field_buffer;
+   int field_length;
+
+   //
+   char* field_name;
+   char* field_value;
+   //
+   int data_length;
+   char* data;
+   int data_length_processed;
+   //
+   int body_length;
+   //
+   int http_field_callback_list_size;
+   http_field_callback_entry_t * http_field_callback_list;
+
+}http_parser_context_t;
+
+//
+static int http_field_callback_content_length(void* pv_http_parser_context, char *http_field_name, char* http_field_value);
+
+static const http_field_callback_entry_t http_field_callback_list[] = {
+   "Content-Length",http_field_callback_content_length
+};
+
+static const int http_field_callback_list_size = sizeof(http_field_callback_list) / sizeof(http_field_callback_entry_t);
+
+
+//
 #define TANK_ID  "22beb489-2ba9-44c8-b189-5855e1d4-1-1"
 #define CASE_ID  "22baf683-2cd1-28f4-a593-5391e1d4-1-1"
 
 /* ---- Base64 Encoding/Decoding Table --- */
-const char b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const char b64[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 //
 static const char format_http_request_get[] = "GET /api/v1/parameters HTTP/1.1\r\n\
@@ -151,6 +204,8 @@ static const char format_senml_low_switch[] = "\
 \"vs\": \"%s\"\
 }";
 
+
+//
 static char g_http_request_buffer[512];
 static char g_http_request_content_buffer[2048];
 
@@ -164,7 +219,7 @@ static char* g_ptr_http_content_buffer = g_http_request_urlencoded_content_buffe
 Implementation
 =============================================*/
 
-void error(const char *msg) { 
+static void error(const char *msg) { 
    perror(msg); exit(0); 
 }
 
@@ -179,7 +234,7 @@ void error(const char *msg) {
 
 
 /* decodeblock - decode 4 '6-bit' characters into 3 8-bit binary bytes */
-void decodeblock(unsigned char in[], char *clrstr) {
+static void decodeblock(unsigned char in[], char *clrstr) {
    unsigned char out[4];
    out[0] = in[0] << 2 | in[1] >> 4;
    out[1] = in[1] << 4 | in[2] >> 2;
@@ -188,7 +243,7 @@ void decodeblock(unsigned char in[], char *clrstr) {
    strncat(clrstr, out, sizeof(out));
 }
 
-void b64_decode(char *clrdst, char *b64src) {
+static void b64_decode(char *clrdst, char *b64src) {
    int c, phase, i;
    unsigned char in[4];
    char *p;
@@ -215,7 +270,7 @@ void b64_decode(char *clrdst, char *b64src) {
 }
 
 /* encodeblock - encode 3 8-bit binary bytes as 4 '6-bit' characters */
-void encodeblock(unsigned char in[], char b64str[], int len) {
+static void encodeblock(unsigned char in[], char b64str[], int len) {
    unsigned char out[5];
    out[0] = b64[in[0] >> 2];
    out[1] = b64[((in[0] & 0x03) << 4) | ((in[1] & 0xf0) >> 4)];
@@ -226,7 +281,7 @@ void encodeblock(unsigned char in[], char b64str[], int len) {
 }
 
 /* encode - base64 encode a stream, adding padding if needed */
-int b64_encode(char *b64dst, char *clrstr) {
+static int b64_encode(char *b64dst, char *clrstr) {
    unsigned char in[3];
    int i, len = 0;
    int j = 0;
@@ -254,19 +309,19 @@ int b64_encode(char *b64dst, char *clrstr) {
 }
 
 /* Converts a hex character to its integer value */
-char from_hex(char ch) {
+static char from_hex(char ch) {
    return isdigit(ch) ? ch - '0' : tolower(ch) - 'a' + 10;
 }
 
 /* Converts an integer value to its hex character*/
-char to_hex(char code) {
+static char to_hex(char code) {
    static char hex[] = "0123456789abcdef";
    return hex[code & 15];
 }
 
 /* Returns a url-encoded version of str */
 /* IMPORTANT: be sure to free() the returned string after use */
-int url_encode(char*buf, int size, char *str) {
+static int url_encode(char*buf, int size, char *str) {
    char *pstr = str, *pbuf = buf;
 
    //
@@ -289,7 +344,7 @@ int url_encode(char*buf, int size, char *str) {
 
 /* Returns a url-decoded version of str */
 /* IMPORTANT: be sure to free() the returned string after use */
-int url_decode(char*buf, int size, char *str) {
+static int url_decode(char*buf, int size, char *str) {
    char *pstr = str, *pbuf = buf;
 
    //
@@ -317,7 +372,7 @@ int url_decode(char*buf, int size, char *str) {
 }
 
 
-int construct_http_request_post_add(char* http_request_buffer, int size, const char* format, ...) {
+static int construct_http_request_post_add(char* http_request_buffer, int size, const char* format, ...) {
    int r;
    char* p_start_buffer;
    int len;
@@ -345,6 +400,198 @@ int construct_http_request_post_add(char* http_request_buffer, int size, const c
    return r;
 }
 
+
+/*-------------------------------------------
+| Name: http_field_callback_content_length
+| Description:
+| Parameters:
+| Return Type:
+| Comments:  
+| See:
+---------------------------------------------*/
+static int http_field_callback_content_length(void* pv_http_parser_context, char *http_field_name, char* http_field_value) {
+   http_parser_context_t *http_parser_context = (http_parser_context_t *)pv_http_parser_context;
+   //
+   while (*http_field_value == ' ')http_field_value++;
+   //
+   http_parser_context->data_length = atoi(http_field_value);
+   //
+   return 0;
+}
+
+/*-------------------------------------------
+| Name: http_data_processing
+| Description:
+| Parameters:
+| Return Type:
+| Comments:  
+| See:
+---------------------------------------------*/
+static int http_data_processing(void* http_parser_context, char* data, int length) {
+   return 0;
+}
+
+/*-------------------------------------------
+| Name: http_header_parser
+| Description:
+| Parameters:
+| Return Type:
+| Comments:  
+| See:
+---------------------------------------------*/
+static int http_header_parser(http_parser_context_t *http_parser_context, int fd_sock,char* buffer,int size) {
+   int i=0;
+   int cb;
+   pfn_parser_http_field_callback_t http_field_callback= (pfn_parser_http_field_callback_t)0;
+
+   while ((cb = read(fd_sock, buffer, size)) > 0) {
+
+      if (http_parser_context->state == HTTP_PARSER_STATE_DATA) {
+         //
+         http_data_processing(http_parser_context, buffer, cb);
+         //
+         http_parser_context->data_length_processed += cb;
+         if (http_parser_context->data_length_processed >= http_parser_context->data_length)
+            return 0;
+         //
+         continue;
+      }
+      //
+      for (i = 0; i < cb; i++) {
+         //
+         write(1, &buffer[i], 1);
+         //
+         if (http_parser_context->state == HTTP_PARSER_STATE_DATA) {
+            http_data_processing(http_parser_context,&buffer[i], cb - i);
+            //
+            http_parser_context->data_length_processed = cb - i;
+            if (http_parser_context->data_length_processed >= http_parser_context->data_length)
+               return 0;
+            //
+            break;
+         }
+
+         //
+         char c = buffer[i];
+
+         if (http_parser_context->state == HTTP_PARSER_STATE_WAIT_CR && c == ':') {
+            http_parser_context->field_name = http_parser_context->field_buffer;
+            *http_parser_context->p_field_buffer++ = '\0';
+            http_parser_context->field_value = http_parser_context->p_field_buffer;
+            //
+            http_parser_context->field_length++;
+            //
+         }else if (http_parser_context->state == HTTP_PARSER_STATE_WAIT_CR && c == '\r') {
+            http_parser_context->state = HTTP_PARSER_STATE_WAIT_LF;
+         }else if (http_parser_context->state == HTTP_PARSER_STATE_WAIT_LF && c == '\n') {
+            http_parser_context->state = HTTP_PARSER_STATE_PARSE;
+         }else {
+            if (http_parser_context->field_length < http_parser_context->field_buffer_size_max)
+               *http_parser_context->p_field_buffer++ = c;
+            //
+            http_parser_context->field_length++;
+            //
+            *http_parser_context->p_field_buffer = '\0';
+         }
+
+         //
+         if (http_parser_context->state != HTTP_PARSER_STATE_PARSE) {
+            continue;
+         }
+
+         //parse now
+         //restore initial state of parser
+         http_parser_context->state = HTTP_PARSER_STATE_WAIT_CR;
+         //
+         http_parser_context->p_field_buffer = http_parser_context->field_buffer;
+         //
+         if (http_parser_context->field_length >= http_parser_context->field_buffer_size_max) {
+            http_parser_context->field_name = (char*)0;
+            http_parser_context->field_value = (char*)0;
+            http_parser_context->field_length = 0;
+            //error this field is too large, drop it. tot do call error call back management
+            continue;
+         }
+
+         //
+         if (!http_parser_context->field_name || !http_parser_context->field_value) {
+            if (http_parser_context->field_length == 0) {
+               //to do call data callback
+               http_parser_context->state = HTTP_PARSER_STATE_DATA;
+            }
+            http_parser_context->field_name = (char*)0;
+            http_parser_context->field_value = (char*)0;
+            http_parser_context->field_length = 0;
+            continue;
+         }
+
+         //
+         http_field_callback = (pfn_parser_http_field_callback_t)0;
+         //
+         for (int j = 0; j < http_parser_context->http_field_callback_list_size; j++) {
+            if (strstr(http_parser_context->field_name, http_parser_context->http_field_callback_list[j].http_field_name) != (char*)0) {
+               http_field_callback = http_parser_context->http_field_callback_list[j].http_field_callback;
+               break;
+            }
+         }
+
+         //
+         if (http_field_callback != (pfn_parser_http_field_callback_t)0) {
+            http_field_callback(http_parser_context, http_parser_context->field_name, http_parser_context->field_value);
+         }
+
+         //reinit all
+         http_parser_context->field_name = (char*)0;
+         http_parser_context->field_value = (char*)0;
+         http_parser_context->field_length = 0;
+
+      }
+   }
+   //
+   return -1;
+}
+
+/*-------------------------------------------
+| Name: http_header_parser_set_callback
+| Description:
+| Parameters:
+| Return Type:
+| Comments:  
+| See:
+---------------------------------------------*/
+static int http_header_parser_set_callback(http_parser_context_t *http_parser_context,
+   http_field_callback_entry_t* http_field_callback_list,
+   int http_field_callback_list_size) {
+   //
+   http_parser_context->http_field_callback_list = http_field_callback_list;
+   http_parser_context->http_field_callback_list_size = http_field_callback_list_size;
+   //
+   return 0;
+}
+
+/*-------------------------------------------
+| Name: http_header_parser_set_callback
+| Description:
+| Parameters:
+| Return Type:
+| Comments:  
+| See:
+---------------------------------------------*/
+static int http_header_parser_init(http_parser_context_t *http_parser_context) {
+   http_parser_context->field_buffer_size_max = sizeof(http_parser_context->http_field_buffer);
+   http_parser_context->field_buffer = http_parser_context->http_field_buffer;
+
+   http_parser_context->field_length = 0;
+
+   http_parser_context->state = HTTP_PARSER_STATE_WAIT_CR;
+   http_parser_context->p_field_buffer = http_parser_context->field_buffer;
+
+   http_parser_context->field_name = (char*)0;
+   http_parser_context->field_value = (char*)0;
+   //
+   return 0;
+}
+
 /*-------------------------------------------
 | Name:httpc_main
 | Description:
@@ -360,24 +607,82 @@ int construct_http_request_post_add(char* http_request_buffer, int size, const c
 int httpc_main(int argc, char *argv[]){
    int socket_fd;
    int cb = 0;
+   int i = 1;
 
+   http_parser_context_t http_parser_context;
+   
    struct hostent *server;
    struct sockaddr_in serv_addr;
    char  response[4096];
    int portno = 36194; 
-   char *host;
-   char* request_type = argc > 3 ? argv[3] : "POST";
+   char *host=(char*)0;
+   char* request_type = "POST";
 
-   if (argc > 1) {
-      host = strlen(argv[1]) > 0 ? argv[1] : "collector.o10ee.com";
-   }else {
-      host = "collector.o10ee.com";
+   float senml_latitude = (float)48.813682;
+   float senml_longitude = (float)-3.449426;
+   float senml_pressure = (float)1.1;
+   float senml_temperature_ext = (float)19.2;
+
+
+   // arg parser
+   for(i=1;i<argc;i++){
+      if (!strcmp(argv[i], "gnss")) {
+         i++;
+         //get latitude,longitude
+         char* pbuf = argv[i];
+         char* str_latitude;
+         char* str_longitude;
+
+         //get latitude:
+         str_latitude = pbuf;
+         while (*pbuf != ',' && *pbuf != '\0') {
+            pbuf++;
+         }
+         //error no longitude
+         if (*pbuf == '\0') {
+            return -1;
+         }
+         //
+         pbuf++;
+         str_longitude = pbuf;
+         //
+         senml_latitude = atof(str_latitude);
+         senml_longitude = atof(str_longitude);
+
+      }else if (!strcmp(argv[i], "press")) {
+         i++;
+         if (argv[i]) {
+            senml_pressure = atof(argv[i]);
+         }
+      }else if (!strcmp(argv[i], "t_ext")) {
+         i++;
+         if (argv[i]) {
+            senml_temperature_ext = atof(argv[i]);
+         }
+      }else  if (!strcmp(argv[i], "POST")) {
+         request_type = "POST";
+      }else  if (!strcmp(argv[i], "GET")) {
+         request_type = "GET";
+      }else {
+         //
+         if (argv[i] && !host) {
+            //host
+            host = strlen(argv[i]) > 0 ? argv[i] : "collector.o10ee.com";
+         }else  if (argv[i] && host) {
+            //port number
+            portno = atoi(argv[i]) > 0 ? atoi(argv[i]) : 80;
+         }
+      }
+
    }
    //
-   if (argc > 2) {
-      portno = atoi(argv[2]) > 0 ? atoi(argv[2]) : 80;
+   if (!host) {
+      host = "collector.o10ee.com";
    }
   
+   //http parser
+   http_header_parser_init(&http_parser_context);
+   http_header_parser_set_callback(&http_parser_context, (http_field_callback_entry_t*)http_field_callback_list, http_field_callback_list_size);
 
    //
    time_t senml_time = time(NULL);
@@ -395,8 +700,21 @@ int httpc_main(int argc, char *argv[]){
    else if (!strcmp(request_type, "POST")) {
       memset(g_http_request_content_buffer, 0, sizeof(g_http_request_content_buffer));
       construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_begin);
+      // tank id and case id
       construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_identification, TANK_ID, CASE_ID, 1);
-      construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_temperature_external, (int)senml_time, (float)18.1);
+      //gnss location (latitude:48.813682, longitude:-3.449426)
+      construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_gnss_location, 
+         (int)senml_time,
+         (float)senml_latitude, (float)senml_longitude);
+      // pressure (bar)
+      construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_pressure,
+         (int)senml_time,
+         (float)senml_pressure);
+      //external temperature (degree C)
+      construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_temperature_external, 
+         (int)senml_time, 
+         (float)senml_temperature_ext);
+      //
       construct_http_request_post_add(g_http_request_content_buffer, sizeof(g_http_request_content_buffer), format_senml_end);
       content_length = strlen(g_http_request_content_buffer);
 
@@ -413,18 +731,8 @@ int httpc_main(int argc, char *argv[]){
       header_length = strlen(g_http_request_buffer);
    }
 
-   /* create the socket */
-
-   //Create a socket
-   if ((socket_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) <0)
-   {
-      printf("--> error: could not create socket\r\n");
-      return -1;
-   }
-   //
-   printf("--> socket created\n");
-
-   //
+ 
+   //resolve hostname
    server = gethostbyname(host);
    //
    if(server==(struct hostent *)0){
@@ -436,10 +744,27 @@ int httpc_main(int argc, char *argv[]){
    serv_addr.sin_family = AF_INET;
    serv_addr.sin_port = htons(portno);
    memcpy(&serv_addr.sin_addr.s_addr, server->h_addr, server->h_length);
+   
+   
+   //Create a socket
+   printf("--> create socket\n");
+   if ((socket_fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) <0)
+   {
+      printf("--> error: could not create socket\r\n");
+      return -1;
+   }
+   //
+   printf("--> socket created\n");
+
+   //
+   printf("--> socket connect...\n");
    //Connect to remote server
    if (connect(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
    {
       printf("--> error: connect failed with error code\r\n");
+      //
+      close(socket_fd);
+      //
       return 1;
    }
 
@@ -450,24 +775,41 @@ int httpc_main(int argc, char *argv[]){
    if (send(socket_fd, g_http_request_buffer, strlen(g_http_request_buffer), 0) < 0)
    {
       printf("--> error: send failed with error code\r\n");
+      //
+      close(socket_fd);
+      //
       return 1;
    }
    printf("--> header sent %d\r\n\r\n", strlen(g_http_request_buffer));
 
+   //
+   printf("--> send content: %d bytes\r\n", content_length);
+   //
+   content_length = strlen(g_ptr_http_content_buffer);
+   //
    if (content_length > 0) {
-      //
-      printf("--> send content: %s\r\n", g_ptr_http_content_buffer);
-      if (send(socket_fd, g_ptr_http_content_buffer, strlen(g_ptr_http_content_buffer), 0) < 0)
-      {
-         printf("--> error: send failed\r\n");
-         return 1;
+      int sent_length=0;
+      cb = 0;
+      //fragmentation management
+      while (sent_length < content_length) {
+         if ((cb = send(socket_fd, g_ptr_http_content_buffer + sent_length, content_length - sent_length, 0)) < 0) {
+            printf("--> error: send failed\r\n");
+            //
+            close(socket_fd);
+            //
+            return 1;
+         }
+         //
+         sent_length += cb;
+         printf("--> content sent %d on %d bytes \r\n", sent_length, content_length);
       }
-      printf("--> content sent %d\r\n", strlen(g_ptr_http_content_buffer));
+         
    }
-
 
    //
    puts("--> reply received:\r\n");
+   http_header_parser(&http_parser_context, socket_fd, response, sizeof(response));
+#if 0   
    while ((cb = recv(socket_fd, response, sizeof(response), 0)) > 0) {
       //Add a NULL terminating character to make it a proper string before printing
       //response[cb] = '\0';
@@ -476,9 +818,11 @@ int httpc_main(int argc, char *argv[]){
       }
       //puts(response);
    }
-
+#endif
    //
+   puts("--> close socket...\r\n");
    close(socket_fd);
+   puts("--> socket closed. bye!\r\n");
 
    return 0;
 }
