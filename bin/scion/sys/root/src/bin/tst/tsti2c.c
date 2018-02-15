@@ -39,19 +39,27 @@ either the MPL or the [eCos GPL] License."
 /*============================================
 | Includes
 ==============================================*/
+#include <stdint.h>
 #include <stdlib.h>
-#include "kernel/signal.h"
-#include "kernel/libstd.h"
-#include "kernel/devio.h"
-#include "kernel/fcntl.h"
-#include "kernel/wait.h"
-#include "kernel/time.h"
-#include "kernel/wait.h"
-#include "kernel/fcntl.h"
-#include "kernel/select.h"
+#include <string.h>
 
-#include "stdio/stdio.h"
-#include "misc/prsopt.h"
+#include "kernel/core/kernel.h"
+#include "kernel/core/system.h"
+#include "kernel/core/signal.h"
+#include "kernel/core/libstd.h"
+#include "kernel/core/wait.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/time.h"
+#include "kernel/core/fcntl.h"
+#include "kernel/core/ioctl.h"
+#include "kernel/core/select.h"
+
+#include "kernel/core/ioctl_board.h"
+
+#include "lib/libc/unistd.h"
+#include "lib/libc/stdio/stdio.h"
+
+#include "lib/libc/misc/prsopt.h"
 
 /*============================================
 | Global Declaration
@@ -262,11 +270,12 @@ int tsti2c_main(int argc,char* argv[]){
       //execute command
       if(!rw) {
          //read i2c
-         if(i2c_address_sz=1)
+         if(i2c_address_sz==1)
             printf("read 0x%x @ 0x%x len=%d...",i2c_id,i2c_buffer[2],i2c_data_length);
          else
             printf("read 0x%x @ 0x%x%x len=%d...",i2c_id,i2c_buffer[2],i2c_buffer[3],
                    i2c_data_length);
+         //
          if(read(fd,i2c_buffer,i2c_data_length+i2c_address_sz+2)<0) {
             printf("error!\r\n");
          }else{
