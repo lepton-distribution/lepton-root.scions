@@ -3061,6 +3061,9 @@
                   </file>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\source\timetick.c</name>
+                    <excluded>
+                      <configuration>samv71-freertos-debug</configuration>
+                    </excluded>
                   </file>
                   <file>
                     <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\at91\softpack-lib\samv71\libchip\source\trng.c</name>
@@ -3138,6 +3141,12 @@
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_hsmci_x.h</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_i2c_x.c</name>
+              </file>
+              <file>
+                <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_i2c_x.h</name>
               </file>
               <file>
                 <name>$PROJ_DIR$\..\..\..\..\..\..\src\kernel\dev\arch\cortexm\at91samv7x\dev_samv7x\dev_samv7x_uart_x.c</name>
