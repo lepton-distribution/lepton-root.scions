@@ -140,7 +140,7 @@ void socket_client_tcp(void)
    mc_port     = 80;
 
    /* create a socket for sending to the multicast address */
-   if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
+   if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
       printf("socket() failed");
       exit(1);
    }
@@ -206,14 +206,14 @@ int socket_test(void){
    struct sockaddr acc_sin;
    int sin_len=sizeof(struct sockaddr);
 
-   sock=socket(PF_INET,SOCK_STREAM,0);
+   sock=socket(AF_INET,SOCK_STREAM,0);
    if(sock<0)
    {
       return(ERR_NO_SOCKET);
    }
 
    memset(&addr,0,sizeof(addr));
-   addr.sin_family=PF_INET;
+   addr.sin_family=AF_INET;
    addr.sin_port=htons(TCP_PORT_SERVER);
    //addr.sin_addr.s_addr=INADDR_ANY;
    //addr.sin_addr.s_addr=inet_addr("14.2.211.157");
