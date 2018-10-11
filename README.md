@@ -39,16 +39,15 @@ We are ready to accommodate contributions to improve Lepton and support
 new features.
 
 Supported platforms:
+   -. ARM Cortex-M7: Atmel SMART SAM V71 Xplained Ultra (Atmel)
+   -. ARM Cortex-M4: STM32F4 Discovery (ST stm32F407)
+   -. ARM Cortex-M4: STM32F4 nuodio project (ST stm32F429)
+   -. ARM Cortex-M4: Olimex P407 (ST stm32F407)
+   -. ARM Cortex-M0+: ATSAMD20 Xplained Pro (Atmel)
+   -. ARM Cortex-M4: TWR-K60N512 (Freescale)
    -. ARM7: AT91M55800A (Atmel)
    -. ARM9: AT91SAM9261-EK (Atmel)
    -. ARM9: AT91SAM9260-EK (Atmel)
-   -. ARM Cortex-M0+: ATSAMD20 Xplained Pro (Atmel)
-   -. ARM Cortex-M4: TWR-K60N512 (Freescale)
-   -. ARM Cortex-M4: Olimex P407 (ST stm32F407)
-   -. ARM Cortex-M4: STM32F4 Discovery (ST stm32F407)
-   -. ARM Cortex-M4: STM32F4 nuodio project (ST stm32F429)
-   -. ARM Cortex-M7: Atmel SMART SAM V71 Xplained Ultra (Atmel)
-
    -. PC (32bits simulation for GNU/Linux and MS Windows)
 
 Lepton provides more than 150 POSIX functions over a real-time
