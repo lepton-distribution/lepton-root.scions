@@ -3,8 +3,7 @@ prerequisite scions for lepton operating system construction (python 3, windows 
 STILL UNDER CONSTRUCTION
 
 1) Install scion tool:
-pip install -i https://testpypi.python.org/pypi scion
-pip install --upgrade -i https://testpypi.python.org/pypi scion
+pip install git+https://github.com/lepton-distribution/seed.scions.git#egg=scion
 
 2) Open windows console with administrator rigths.
 
