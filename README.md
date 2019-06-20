@@ -8,7 +8,7 @@ pip install --upgrade -i https://testpypi.python.org/pypi scion
 
 2) Open windows console with administrator rigths.
 
-3) Create lepton rootstock
+3) Create lepton rootstock:
 scion rootstock-install  c:/lepton/scion-install
 
 4) Plant the seed of the lepton graft seeds:
